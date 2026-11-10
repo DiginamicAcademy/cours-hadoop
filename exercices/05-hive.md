@@ -1,6 +1,6 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **Exercice 05 : Hive**
+# Exercice 05 : Hive
 
 > **Type** : exercice guidé (parties I-II) + exercices autonomes (partie III)
 > **Prérequis** : séquence 05 (Hive), EX 04 (MapReduce) — on réutilise les données Spotify
@@ -281,7 +281,7 @@ GROUP BY artist_name;
 
 Les corrigés sont dans [`corriges/05-hive.md`](corriges/05-hive.md) — cherchez avant de regarder.
 
-### **Exercice 1 : Top 5 artistes par nombre de titres**
+### Exercice 1 : Top 5 artistes par nombre de titres
 
 Écrire la requête qui classe les artistes par nombre de titres présents dans le dataset (attention aux artistes multiples dans un champ : on reste au niveau simple — une ligne = un titre).
 
@@ -297,13 +297,13 @@ Harry Styles    17
 
 > 🤔 **Question de contrôle** : refaites le comptage en **éclatant** les duos sur chaque artiste (`split` + `explode`, hors périmètre ici — mentionnez la méthode). Le classement change, et Bad Bunny passe en tête avec **40** titres. Pourquoi le même dataset et la même question donnent-ils deux réponses justes et différentes, et laquelle écririez-vous dans un rapport ?
 
-### **Exercice 2 : Streams moyens par année de sortie**
+### Exercice 2 : Streams moyens par année de sortie
 
 Moyenne de `streams` groupée par `released_year`, triée par année croissante.
 
 **Résultat attendu** : une ligne par année `année  moyenne_streams`. C'est l'exercice 2 de l'EX 04 (MapReduce) en SQL : vous y accumuliez somme et compte, la moyenne se calcule à la fin de chaque groupe. Comparez les deux sorties — même plage 1930 → 2023, mêmes ordres de grandeur.
 
-### **Exercice 3 : Quand Hive plutôt que MapReduce ?**
+### Exercice 3 : Quand Hive plutôt que MapReduce ?
 
 Question de réflexion, réponse en 3-5 lignes dans votre rapport de TP : votre équipe doit (a) explorer un dataset inconnu différent chaque semaine, (b) produire chaque nuit un rapport agrégé avec un SQL de 20 lignes déjà validé par le métier, (c) parser un format binaire propriétaire avec une machine à états de 300 lignes de logique. Pour chaque cas, Hive ou job MapReduce à la main ? Justifiez en une phrase par cas.
 

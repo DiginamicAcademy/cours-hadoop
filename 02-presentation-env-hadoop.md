@@ -2,24 +2,26 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **Présentation de l'environnement Hadoop**
+# Présentation de l'environnement Hadoop
 
 > **Objectifs** : comprendre l'architecture de l'environnement de TP (cluster Docker local, conteneurs, services) · connaître les scripts de manipulation et leur usage.
 > **Prérequis** : séquence 01 · **Durée** : ~2 h · **Type** : cours (environnement)
 > **Mise en pratique** : [exercices/02 — Lancement de Hadoop](exercices/02-lancement-de-hadoop.md)
 
-## **Sommaire**
+## Sommaire
 
-- [Où se trouve l'environnement Hadoop ?](#où-se-trouve-lenvironnement-hadoop-)
-- [Architecture de l'environnement](#architecture-de-lenvironnement)
-- [Scripts de configuration & manipulation](#scripts-de-configuration--manipulation)
-- [Accéder à l'environnement à distance](#accéder-à-lenvironnement-à-distance)
+- [I. Où se trouve l'environnement Hadoop ?](#i-où-se-trouve-lenvironnement-hadoop-)
+- [II. Architecture de l'environnement](#ii-architecture-de-lenvironnement)
+  - [A. Pourquoi Docker ?](#a-pourquoi-docker-)
+  - [B. L'environnement Hadoop de Diginamic](#b-lenvironnement-hadoop-de-diginamic)
+  - [C. Configurations logicielles](#c-configurations-logicielles)
+- [III. Scripts de configuration & manipulation](#iii-scripts-de-configuration--manipulation)
+  - [A. Sur la machine hôte (Docker)](#a-sur-la-machine-hôte-docker)
+  - [B. Dans le conteneur master (dans /home)](#b-dans-le-conteneur-master-dans-home)
+  - [C. Arrêter les services](#c-arrêter-les-services)
+- [IV. Accéder à l'environnement à distance](#iv-accéder-à-lenvironnement-à-distance)
 
----
-
-## **Où se trouve l'environnement Hadoop ?**
-
----
+## I. Où se trouve l'environnement Hadoop ?
 
 L'environnement de TP est un **cluster Docker local** : il tourne sur la machine du formateur ou sur votre propre poste, piloté par Docker Compose. Il se compose de **quatre conteneurs** — un master Hadoop, deux slaves, et un conteneur NiFi — construits à partir d'un projet de déploiement fourni avec le cours.
 
@@ -27,13 +29,9 @@ Contrairement à un vrai cluster, tout tient sur une seule machine : les mêmes
 
 La procédure complète (lancer les conteneurs, démarrer les services, ouvrir les interfaces web) est détaillée dans l'exercice 02. La section [« Accéder à l'environnement à distance »](#accéder-à-lenvironnement-à-distance) couvre le cas d'un cluster hébergé sur une VM distante.
 
----
+## II. Architecture de l'environnement
 
-## **Architecture de l'environnement**
-
----
-
-### **Pourquoi Docker ?**
+### A. Pourquoi Docker ?
 
 Docker permet de créer facilement des conteneurs et des applications basées sur les conteneurs. On les utilise ici pour virtualiser notre environnement Hadoop :
 
@@ -41,7 +39,7 @@ Docker permet de créer facilement des conteneurs et des applications basées su
 * Le conteneur **partage le kernel de son OS** avec d'autres conteneurs ;
 * Un conteneur est plus léger et plus simple qu'une machine virtuelle.
 
-### **L'environnement Hadoop de Diginamic**
+### B. L'environnement Hadoop de Diginamic
 
 L'environnement est virtualisé avec Docker et se compose de :
 
@@ -79,7 +77,7 @@ L'environnement est virtualisé avec Docker et se compose de :
 
 > **Note sur NiFi :** NiFi vit dans son propre conteneur (image officielle `apache/nifi`, branche **2.x** — Java 21 et client Hadoop 3.x, cohérents avec notre Hadoop 3.3.6). Aucun script à lancer : il démarre avec les conteneurs et se pilote à l'interface web. Détails en cours 07, section « NiFi dans l'environnement du cours ».
 
-### **Configurations logicielles**
+### C. Configurations logicielles
 
 | Composant | Version | Remarque |
 |---|---|---|
@@ -100,17 +98,13 @@ Python **3.11** supporte les syntaxes modernes (f-strings y compris). Les biblio
 | pandas | manipulation de données |
 | thriftpy2 | support Thrift pour happybase |
 
----
-
-## **Scripts de configuration & manipulation**
-
----
+## III. Scripts de configuration & manipulation
 
 Plusieurs scripts facilitent les manipulations — deux familles : ceux de **l'hôte** (votre machine, au niveau Docker) et ceux **du master** (dans le conteneur, au niveau des services Hadoop).
 
 > Je recommande de **regarder le contenu des scripts** pour voir les vraies commandes lancées.
 
-### **Sur la machine hôte (Docker)**
+### A. Sur la machine hôte (Docker)
 
 | Script / commande | Rôle | Utilisé quand |
 |---|---|---|
@@ -121,7 +115,7 @@ Plusieurs scripts facilitent les manipulations — deux familles : ceux de **l'
 
 > Les conteneurs démarrent **froids** : SSH est actif, mais **aucun service Hadoop n'est lancé**. C'est voulu — les services se démarrent à la main depuis le master, et vous apprendrez à le faire à l'exercice 02.
 
-### **Dans le conteneur master (dans /home)**
+### B. Dans le conteneur master (dans /home)
 
 | Script | Rôle | Utilisé quand |
 |---|---|---|
@@ -138,15 +132,11 @@ Plusieurs scripts facilitent les manipulations — deux familles : ceux de **l'
 
 > **Vérifier ce qui tourne** : dans le master ou un slave, la commande `jps` liste les processus Java actifs (NameNode, DataNode, ResourceManager, HMaster, ThriftServer, HiveServer2…).
 
-### **Arrêter les services**
+### C. Arrêter les services
 
 Depuis le master : `pkill -f '<nom du service>'` (ex. `pkill -f 'NameNode'`), puis `docker compose down` sur l'hôte. L'ordre des services importe peu pour l'arrêt.
 
----
-
-## **Accéder à l'environnement à distance**
-
----
+## IV. Accéder à l'environnement à distance
 
 Le cluster décrit ci-dessus tourne **localement** (formateur ou poste apprenant). Pour une session où le cluster serait hébergé sur une **VM distante** (VPN, salle de formation, cloud), seuls les points d'accès changent :
 

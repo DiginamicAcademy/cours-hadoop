@@ -1,6 +1,6 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **TP final : Analyse des ventes par ville — toute la pipeline**
+# TP final : Analyse des ventes par ville — toute la pipeline
 
 > **Type** : TP projet de synthèse (évalué) — le seuil TP du cursus
 > **Prérequis** : séquences 02 à 07 (environnement, HDFS, MapReduce, Hive, HBase, NiFi)
@@ -17,7 +17,7 @@ _Exemple : utilisation d'une structure minimale._
 
 ---
 
-## **Sommaire**
+## Sommaire
 
 - [I. Objectif — les questions du TP](#i-objectif--les-questions-du-tp)
 - [II. HDFS — accueillir le fichier](#ii-hdfs--accueillir-le-fichier)
@@ -33,7 +33,7 @@ _Exemple : utilisation d'une structure minimale._
 
 ---
 
-## **I. Objectif — les questions du TP**
+## I. Objectif — les questions du TP
 
 Les fichiers `dataw_fro03_*.csv` enregistrent des **commandes** d'articles (catalogue : « Tête de menagere », « Drap de bain », « Montre »…). Quatre colonnes vous intéressent (index de la colonne dans la ligne CSV, en partant de 0) :
 
@@ -65,7 +65,7 @@ Vous utiliserez **Hadoop MapReduce** pour calculer, **HappyBase** pour stocker, 
 
 ---
 
-## **II. HDFS — accueillir le fichier**
+## II. HDFS — accueillir le fichier
 
 > Exercice d'origine : [`../exercices/03-hdfs.md`](../exercices/03-hdfs.md).
 
@@ -89,7 +89,7 @@ hdfs dfs -ls input
 
 ---
 
-## **III. Question 1 — le classement des villes (MapReduce)**
+## III. Question 1 — le classement des villes (MapReduce)
 
 > Exercices d'origine : [`../exercices/04-mapreduce.md`](../exercices/04-mapreduce.md) (prise en main et exercices 1-3).
 
@@ -136,7 +136,7 @@ hdfs dfs -cat output/ventes_ville/part-00000 | sort -t $'\t' -k2,2nr | head -5
 
 ---
 
-## **IV. Question 2 — la clé composite ville#année (MapReduce)**
+## IV. Question 2 — la clé composite ville#année (MapReduce)
 
 > Exercice d'origine : [`../exercices/04-mapreduce.md`](../exercices/04-mapreduce.md) — le geste de la clé composite.
 
@@ -175,7 +175,7 @@ DOUDEVILLE#2006   15
 
 ---
 
-## **V. Question 3 — le même résultat en SQL (Hive)**
+## V. Question 3 — le même résultat en SQL (Hive)
 
 > Exercice d'origine : [`../exercices/05-hive.md`](../exercices/05-hive.md).
 
@@ -213,7 +213,7 @@ SELECT ville, annee, SUM(qte) AS total FROM ventes_db.ventes
 
 ---
 
-## **VI. Question 4 — stocker le résultat en clé/valeur (HBase)**
+## VI. Question 4 — stocker le résultat en clé/valeur (HBase)
 
 > Exercice d'origine : [`../exercices/06-hbase.md`](../exercices/06-hbase.md) — partie IV (exercices 4-5).
 
@@ -253,7 +253,7 @@ hbase shell
 
 ---
 
-## **VII. Question 5 — ingérer au lieu d'un `put` (NiFi)**
+## VII. Question 5 — ingérer au lieu d'un `put` (NiFi)
 
 > Exercice d'origine : [`../exercices/07-nifi.md`](../exercices/07-nifi.md).
 
@@ -290,7 +290,7 @@ SELECT ville, SUM(qte) AS total FROM ventes_db.ventes
 
 ---
 
-## **VIII. Visualisation — le top 10 des villes**
+## VIII. Visualisation — le top 10 des villes
 
 **1.** Créez le graphique avec Matplotlib : un script python **séparé** qui lit HBase (via HappyBase) et génère le PDF du top 10 des villes (référence : [`../annexes/utils/13-graph-ventes-hbase.py`](../annexes/utils/13-graph-ventes-hbase.py)).
 
@@ -312,7 +312,7 @@ docker cp hadoop-master:/home/resultats.txt ./
 
 ---
 
-## **Bilan — la chaîne complète**
+## Bilan — la chaîne complète
 
 Vous venez d'enchaîner, avec **une seule donnée**, les cinq étapes de la pipeline :
 
@@ -335,7 +335,7 @@ ventes                                    # table HBase (scan / get)
 
 ---
 
-## **Bonus — le fichier complet**
+## Bonus — le fichier complet
 
 Refaites **Q1, Q2 et Q3** sur le fichier complet `../data/dataw_fro03.csv` (~135 000 lignes de données) en réutilisant exactement les mêmes scripts — le pipeline **ne change pas**, c'est la taille qui change.
 
@@ -349,7 +349,7 @@ Refaites **Q1, Q2 et Q3** sur le fichier complet `../data/dataw_fro03.csv` (~135
 
 ---
 
-## **Livrables attendus**
+## Livrables attendus
 
 Le rendu est une **documentation des actions et de leurs retours**, enrichie des résultats observés :
 

@@ -2,48 +2,44 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **MapReduce et YARN**
+# MapReduce et YARN
 
 > **Objectifs** : modéliser le pipeline MapReduce (bloc → split → map → partition → shuffle/sort → reduce) · connaître le contrat d'exécution (processus par tâche, tri, partition) · développer un MapReduce en Python via Hadoop Streaming · tester en local, lancer, suivre et diagnostiquer un job sur le cluster.
 > **Prérequis** : séquence 03 (HDFS) · **Durée** : ~6 h · **Type** : cours + code
 > **La vérité vient de la mesure** : tous les chiffres de ce chapitre (nombre de splits, de reducers, latences, compteurs) ont été reproduits sur le cluster du cours (Hadoop 3.3.6). Quand une règle de la littérature ne colle pas à notre cluster, c'est la mesure qui fait foi.
 > **Mise en pratique** : [exercices/04 — MapReduce & YARN](exercices/04-mapreduce.md)
 
-## **Sommaire**
+## Sommaire
 
-* [Temps 1 — Le modèle](#temps-1--le-modèle)
-  * [Le pipeline complet](#le-pipeline-complet)
-  * [Bloc → Split : combien de mappers ?](#bloc--split--combien-de-mappers-)
-  * [Map](#map)
-  * [Partition, shuffle et sort](#partition-shuffle-et-sort)
-  * [Reduce](#reduce)
-* [Temps 2 — Le contrat d'exécution](#temps-2--le-contrat-dexécution)
-  * [Un processus par tâche](#un-processus-par-tâche)
-  * [L'en-tête n'existe que dans le premier split](#len-tête-nexiste-que-dans-le-premier-split)
-  * [Tri lexicographique](#tri-lexicographique)
-  * [Combien de reducers ?](#combien-de-reducers-)
-  * [Le combiner ne sait pas moyenner](#le-combiner-ne-sait-pas-moyenner)
-* [Temps 3 — Le geste](#temps-3--le-geste)
-  * [Hadoop Streaming : le contrat clé/valeur](#hadoop-streaming--le-contrat-clévaleur)
-  * [Tester son code en local avant le cluster](#tester-son-code-en-local-avant-le-cluster)
-  * [Lancer un job et lire les résultats](#lancer-un-job-et-lire-les-résultats)
-  * [Suivre une application](#suivre-une-application)
-  * [Quand un job échoue : les compteurs se lisent ailleurs](#quand-un-job-échoue--les-compteurs-se-lisent-ailleurs)
-  * [`yarn logs` : la preuve dans les journaux](#yarn-logs--la-preuve-dans-les-journaux)
-  * [La latence réelle d'un job](#la-latence-réelle-dun-job)
-  * [Script d'automatisation](#script-dautomatisation)
-* [YARN](#yarn)
-  * [Présentation de YARN](#présentation-de-yarn)
-  * [Fonctionnement de YARN](#fonctionnement-de-yarn)
-  * [Allouer de la mémoire à MapReduce](#allouer-de-la-mémoire-à-mapreduce)
+- [I. Temps 1 — Le modèle](#i-temps-1--le-modèle)
+  - [A. Le pipeline complet](#a-le-pipeline-complet)
+  - [B. Bloc → Split : combien de mappers ?](#b-bloc--split--combien-de-mappers-)
+  - [C. Map](#c-map)
+  - [D. Partition, shuffle et sort](#d-partition-shuffle-et-sort)
+  - [E. Reduce](#e-reduce)
+- [II. Temps 2 — Le contrat d'exécution](#ii-temps-2--le-contrat-dexécution)
+  - [A. Un processus par tâche](#a-un-processus-par-tâche)
+  - [B. L'en-tête n'existe que dans le premier split](#b-len-tête-nexiste-que-dans-le-premier-split)
+  - [C. Tri lexicographique](#c-tri-lexicographique)
+  - [D. Combien de reducers ?](#d-combien-de-reducers-)
+  - [E. Le combiner ne sait pas moyenner](#e-le-combiner-ne-sait-pas-moyenner)
+- [III. Temps 3 — Le geste](#iii-temps-3--le-geste)
+  - [A. Hadoop Streaming : le contrat clé/valeur](#a-hadoop-streaming--le-contrat-clévaleur)
+  - [B. Tester son code en local avant le cluster](#b-tester-son-code-en-local-avant-le-cluster)
+  - [C. Lancer un job et lire les résultats](#c-lancer-un-job-et-lire-les-résultats)
+  - [D. Suivre une application](#d-suivre-une-application)
+  - [E. Quand un job échoue : les compteurs se lisent ailleurs](#e-quand-un-job-échoue--les-compteurs-se-lisent-ailleurs)
+  - [F. `yarn logs` : la preuve dans les journaux](#f-yarn-logs--la-preuve-dans-les-journaux)
+  - [G. La latence réelle d'un job](#g-la-latence-réelle-dun-job)
+  - [H. Script d'automatisation](#h-script-dautomatisation)
+- [IV. YARN](#iv-yarn)
+  - [A. Présentation de YARN](#a-présentation-de-yarn)
+  - [B. Fonctionnement de YARN](#b-fonctionnement-de-yarn)
+  - [C. Allouer de la mémoire à MapReduce](#c-allouer-de-la-mémoire-à-mapreduce)
 
----
+## I. Temps 1 — Le modèle
 
-## **Temps 1 — Le modèle**
-
----
-
-### **Le pipeline complet**
+### A. Le pipeline complet
 
 MapReduce est le modèle de programmation du framework Hadoop : il permet d'analyser des volumes de données massifs en traitement **parallèle**. Les données sont découpées, traitées indépendamment sur plusieurs serveurs, puis les résultats partiels sont agrégés en un résultat consolidé.
 
@@ -68,7 +64,7 @@ bloc ──> split ──> map ──> partition ──> shuffle / sort ──> 
 
 ![MR](assets/mr.png)
 
-### **Bloc → Split : combien de mappers ?**
+### B. Bloc → Split : combien de mappers ?
 
 > **La règle à retenir de tout ce chapitre : le nombre de mappers se *lit*, il ne se devine pas.** La littérature dit « le nombre de splits = taille / taille de bloc ». Sur **notre** cluster, c'est faux : la vraie commande est lue dans le log du job, ligne `number of splits:`.
 
@@ -99,7 +95,7 @@ hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
 
 > Le `2>&1 | grep "number of splits"` met en évidence la ligne — le job se lance comme d'habitude, la sortie du *launcher* est juste filtrée.
 
-### **Map**
+### C. Map
 
 - Le mapper reçoit les lignes de **son** split sur l'entrée standard, **une par tour de boucle**.
 - Il émet sur la sortie standard des paires `clé\tvaleur` — **une paire par ligne**.
@@ -107,7 +103,7 @@ hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
 
 ![mapper](assets/mapper.png)
 
-### **Partition, shuffle et sort**
+### D. Partition, shuffle et sort
 
 Après la map, trois étapes intermédiaires préparent les données pour les reducers :
 
@@ -119,7 +115,7 @@ Après la map, trois étapes intermédiaires préparent les données pour les re
 
 > Le tri est **lexicographique** (ordre des chaînes, pas des nombres) : `"10"` passe **avant** `"2"`. Conséquence concrète : les années sortent comme `1930, 1931, …, 2023` tant que les années ont 4 chiffres (alignement par hasard correct), mais `"2023" < "897"`. Et en HBase, on retrouvera le même tri — une clé `"1975"` arrive avant `"2023"` uniquement parce que `'1' < '2'`, pas parce que 1975 < 2023 (cf. séquence 06).
 
-### **Reduce**
+### E. Reduce
 
 - Le reducer reçoit sur `stdin` des lignes `clé\tvaleur` **déjà groupées et triées par clé**.
 - Il agrée les valeurs de chaque groupe et émet le résultat final, toujours en `clé\tvaleur`.
@@ -127,13 +123,9 @@ Après la map, trois étapes intermédiaires préparent les données pour les re
 
 ![MR-word-count](assets/mr-word-count.jpeg)
 
----
+## II. Temps 2 — Le contrat d'exécution
 
-## **Temps 2 — Le contrat d'exécution**
-
----
-
-### **Un processus par tâche**
+### A. Un processus par tâche
 
 La conséquence la plus importante du modèle — et celle qu'on oublie le premier jour — : **chaque tâche (map comme reduce) est un processus isolé, lancé de zéro**. Un mapper ne connaît que ce qui passe sur son `stdin`, un reducer de même.
 
@@ -143,17 +135,17 @@ Trois corollaires concrets :
 - **Le graphe (EX 04, exercice 3) ne sort qu'à la fin du reducer** : le reducer lit **tout** son `stdin` avant de produire le PDF, puis `plt.savefig()` est appelé **après** la boucle — jamais pendant. Une sortie avant la fin produit un PDF vide.
 - **« Retenir la clé précédente »** est le seul état toléré : on le porte dans des variables *locales* au processus (le pattern `current_key`), pas dans un fichier externe.
 
-### **L'en-tête n'existe que dans le premier split**
+### B. L'en-tête n'existe que dans le premier split
 
 Notre CSV a une ligne d'en-tête. Elle n'est **lue qu'une fois** — par le premier mapper à lire la première ligne du premier split. **Les autres mappers ne la voient jamais.**
 
 >C'est pourquoi on écarte l'en-tête *par la valeur* (`if row[0] == 'track_name': continue`), **et jamais** par un `next(csv.reader(...))`. Mesuré sur le cluster : avec `next()`, le job **réussit**, `Map input records` est **identique** (954), et le résultat diffère d'**une paire** (1480 contre 1481) — impossible à distinguer avec les compteurs, dénombrable seulement en comparant à une valeur attendue.
 
-### **Tri lexicographique**
+### C. Tri lexicographique
 
 Voir [Temps 1 — Partition, shuffle et sort](#partition-shuffle-et-sort) : le tri est sur les **clés sous forme de chaînes**. Vérifiez toujours, sur un petit échantillon, que vos clés trient dans l'ordre que votre reducer suppose.
 
-### **Combien de reducers ?**
+### D. Combien de reducers ?
 
 Par défaut : **1 reducer** — et donc **un seul fichier de sortie** : `part-00000`. Le `ls` du répertoire de sortie montre exactement un fichier de données plus le `_SUCCESS` :
 
@@ -174,7 +166,7 @@ Pour obtenir plusieurs fichiers (`part-00000`, `part-00001`, …), demandez plus
 
 ![MR-word-count-2](assets/mr-word-count-2.png)
 
-### **Le combiner ne sait pas moyenner**
+### E. Le combiner ne sait pas moyenner
 
 Le **combiner** est un « mini-reducer » exécuté **sur le serveur du mapper**, avant le shuffle, pour alléger le trafic réseau : il agrée localement ce que le mapper vient d'émettre (souvent le même code que le reducer).
 
@@ -188,13 +180,9 @@ moyenne(15, 30) = 22,5   ≠   20   ✗
 
 Règle : **pour une moyenne, on ne combine jamais des moyennes.** On fait remonter **somme + compte**, et on divise **à la fin du reducer**. C'est exactement le pattern demandé par l'exercice « moyenne par année » de l'EX 04 — et la moyenne des moyennes est la signature d'un bug classique à repérer dans les rendus.
 
----
+## III. Temps 3 — Le geste
 
-## **Temps 3 — Le geste**
-
----
-
-### **Hadoop Streaming : le contrat clé/valeur**
+### A. Hadoop Streaming : le contrat clé/valeur
 
 MapReduce est écrit en Java, mais grâce à **Hadoop Streaming**, on écrit ses mappers et reducers dans **n'importe quel langage** (Python, Ruby, Bash…) : le jar streaming lit l'entrée sur `stdin` de vos programmes et collecte leur `stdout`. Le contrat tient en trois lignes :
 
@@ -248,7 +236,7 @@ if current_key:                     # ne pas oublier la dernière clé
 
 Le jar à utiliser est fourni avec Hadoop : `hadoop-streaming-<version>.jar` (sur le cluster du cours, Hadoop 3.3.6), dans `$HADOOP_HOME/share/hadoop/tools/lib`.
 
-### **Tester son code en local avant le cluster**
+### B. Tester son code en local avant le cluster
 
 Simuler le pipeline MapReduce en local avec des pipes Unix est l'habitude la plus rentable du développement Hadoop :
 
@@ -269,7 +257,7 @@ Le `sort` du shell **simule le shuffle** : sur le cluster, Hadoop regroupe et t
 
 ![mapper](assets/mapper.png)
 
-### **Lancer un job et lire les résultats**
+### C. Lancer un job et lire les résultats
 
 Une fois le code validé en local, on soumet le job :
 
@@ -297,7 +285,7 @@ hdfs dfs -cat output/wordcount/part-00000   # lire le résultat complet
 
 ![MapReduce response](assets/mr-response.png)
 
-### **Suivre une application**
+### D. Suivre une application
 
 Le ResourceManager de YARN expose une interface web : **<http://localhost:8088>**. On y suit l'état (RUNNING, SUCCEEDED, FAILED), la progression, et — réflexe n°1 quand un job échoue — les liens vers les logs détaillés.
 
@@ -305,7 +293,7 @@ Le comportement des nœuds esclaves est visible sur **<http://localhost:8041>** 
 
 ![MapReduce Process](assets/mr-process.jpeg) ![MapReduce Stats](assets/mr-stats.jpeg)
 
-### **Quand un job échoue : les compteurs se lisent ailleurs**
+### E. Quand un job échoue : les compteurs se lisent ailleurs
 
 Un job en échec, c'est un job dont on a le *résultat* — pas forcément le *diagnostic*. Deux cas mesurés sur le cluster :
 
@@ -321,7 +309,7 @@ Le job échoue après plusieurs tentatives. Les compteurs affichent `Map input r
 
 Il y a donc **deux sortes d'échec** : l'échec *visible* (yarn logs, comme le `subprocess failed with code 1`) et l'échec *silencieux* (job vert, résultat faux d'une paire). Le second exige de disposer d'une **valeur de contrôle** écrite avant le job.
 
-### **`yarn logs` : la preuve dans les journaux**
+### F. `yarn logs` : la preuve dans les journaux
 
 Quand l'UI 8088 ne suffit plus, on va chercher la preuve dans les journaux :
 
@@ -334,13 +322,13 @@ yarn logs -applicationId application_1690000000000_0001 2>&1 | grep -n "PipeMapR
 
 > Cette commande manquait au cursus alors que le « réflexe n°1 » y est affirmé : **c'est *le* moyen de voir le `stderr` d'un mapper qui a planté** (exception Python, code de sortie, ligne en cause).
 
-### **La latence réelle d'un job**
+### G. La latence réelle d'un job
 
 Dimensionnez votre journée avec la mesure, pas avec le mythe d'un MapReduce instantané. Sur le cluster du cours, même un « petit » job a un prix fixe : **35 s à 69 s pour un `COUNT(*)` sur un CSV de 154 ko** — allocation des conteneurs, upload des scripts, lancement des JVM, écriture sur HDFS.
 
 Quand un exercice annonce « je lance un job », prévoir : chaque lancement = 1 à 2 minutes de cluster, à multiplier par le nombre d'essais. C'est la raison n°1 de **tester en local d'abord** (section précédente) : chaque aller-retour cluster en échec coûte ce temps-là.
 
-### **Script d'automatisation**
+### H. Script d'automatisation
 
 L'enchaînement « démarrer les services → créer les répertoires HDFS → copier les données → soumettre le job → lire le résultat » est répétitif. Un script shell automatise tout. Exemple complet fourni dans [`annexes/utils/0-job.sh`](annexes/utils/0-job.sh) :
 
@@ -369,18 +357,14 @@ hdfs dfs -cat output/$OUTPUT_FILE/part-00000
 
 Adaptez les noms de fichiers d'entrée/sortie et les services nécessaires à votre job (pas besoin de HBase si votre reducer écrit sur stdout).
 
----
+## IV. YARN
 
-## **YARN**
-
----
-
-### **Présentation de YARN**
+### A. Présentation de YARN
 
 - **YARN** = « **Y**et **A**nother **R**esource **N**egotiator ». C'est le gestionnaire de ressources de Hadoop, devenu sous-projet Apache avec Hadoop 2.0 (2012-2013).
 - Avant YARN, Hadoop ne pouvait exécuter que des applications MapReduce. En découplant la **gestion des ressources** de l'**exécution des traitements**, YARN permet à Hadoop d'héberger d'autres types d'applications (Spark, Hive, Tez…) sur le même cluster.
 
-### **Fonctionnement de YARN**
+### B. Fonctionnement de YARN
 
 Trois rôles :
 
@@ -396,7 +380,7 @@ YARN propose plusieurs politiques de planification : **FIFO Scheduler** (premie
 
 La stratégie est configurée dans `etc/hadoop/yarn-site.xml` (propriété `yarn.resourcemanager.scheduler.class`).
 
-### **Allouer de la mémoire à MapReduce**
+### C. Allouer de la mémoire à MapReduce
 
 Sur le cluster du cours, les conteneurs sont petits — et c'est un choix, pas un oubli : `yarn.nodemanager.resource.memory-mb=256` (mémoire gérée par YARN par NodeManager) et `mapreduce.map.memory.mb=192` (mémoire demandée par chaque tâche map). N'attendez pas des mappers « géants » : avec 192 Mio par tâche, un mapper Python tient, mais le parallélisme (et la taille des données qu'une tâche peut tenir en mémoire) est forcément modeste. Pour un job qui en a besoin, on augmente le nombre de tâches plutôt que la mémoire de chacune.
 

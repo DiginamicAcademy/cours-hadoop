@@ -1,13 +1,13 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **Exercice 04 : MapReduce & YARN**
+# Exercice 04 : MapReduce & YARN
 
 > **Type** : prise en main guidée (partie I) + exercices autonomes (partie II)
 > **Prérequis** : séquence 03 (HDFS), lancement de l'environnement (02)
 > **Durée estimée** : 2 h (partie I) + 1 h à 2 h (partie II)
 > **Lien cours** : [`../04 — MapReduce et YARN`](../04-mapreduce-et-yarn.md)
 
-## **Table des matières**
+## Table des matières
 
 - [I. Map Reduce](#i-map-reduce)
   - [A. Présentation](#a-présentation)
@@ -24,16 +24,16 @@
   - [Exercice 5 : statistiques visuelles des streams par année](#exercice-5--statistiques-visuelles-des-streams-par-année)
 
 
-## **I. Map Reduce**
+## I. Map Reduce
 
 
-### **A. Présentation**
+### A. Présentation
 
 Un Job Map-Reduce se compose principalement de deux types de programmes:
 - **Mappers :** permettent d’extraire les données nécessaires sous forme de clef/valeur, pour pouvoir ensuite les trier selon la clef
 - **Reducers :** prennent un ensemble de données triées selon leur clef, et effectuent le traitement nécessaire sur ces données (somme, moyenne, total...)
 
-### **B. Wordcount**
+### B. Wordcount
 
 Nous allons tester un programme **MapReduce** grâce à un exemple très simple, le **WordCount**, l'équivalent du **Hello World!** pour les applications de traitement de données. Le **WordCount permet de calculer le nombre de mots dans un fichier donné**, en décomposant le calcul en deux étapes:
 - L'étape de **Mapping**, qui permet de **découper le texte** en mots et de délivrer en sortie un flux textuel, où chaque ligne contient le mot trouvé, suivi de la valeur 1 (pour dire que le mot a été trouvé une fois)

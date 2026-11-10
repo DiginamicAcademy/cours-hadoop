@@ -2,32 +2,28 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **NiFi, l'usine à flux de données**
+# NiFi, l'usine à flux de données
 
 > **Objectifs** : comprendre le problème de l'ingestion de données · maîtriser le modèle dataflow de NiFi (FlowFile, processeurs, connections, back pressure) · découvrir l'interface et la Data Provenance · situer NiFi dans l'écosystème 2026.
 > **Prérequis** : séquence 03 (HDFS) · **Durée** : ~3 h · **Type** : cours + démo interactive
 > **Mise en pratique** : [exercices/07 — NiFi](exercices/07-nifi.md)
 
-## **Sommaire**
+## Sommaire
 
-* [NiFi](#nifi)
-  * [Le problème : amener les données jusqu'à Hadoop](#le-problème--amener-les-données-jusquà-hadoop)
-  * [Présentation de NiFi](#présentation-de-nifi)
-  * [Les concepts clés : FlowFile, processeur, connection](#les-concepts-clés--flowfile-processeur-connection)
-  * [L'interface : construire un flux à la souris](#linterface--construire-un-flux-à-la-souris)
-  * [Data Provenance : tracer chaque événement](#data-provenance--tracer-chaque-événement)
-  * [Les processeurs clés pour notre cas d'usage](#les-processeurs-clés-pour-notre-cas-dusage)
-  * [NiFi dans l'environnement du cours](#nifi-dans-lenvironnement-du-cours)
-  * [NiFi en 2026 : 1.x, 2.x et le paysage de l'ingestion](#nifi-en-2026--1x-2x-et-le-paysage-de-lingestion)
-  * [NiFi dans le cursus : la chaîne complète](#nifi-dans-le-cursus--la-chaîne-complète)
+- [I. NiFi](#i-nifi)
+  - [A. Le problème : amener les données jusqu'à Hadoop](#a-le-problème--amener-les-données-jusquà-hadoop)
+  - [B. Présentation de NiFi](#b-présentation-de-nifi)
+  - [C. Les concepts clés : FlowFile, processeur, connection](#c-les-concepts-clés--flowfile-processeur-connection)
+  - [D. L'interface : construire un flux à la souris](#d-linterface--construire-un-flux-à-la-souris)
+  - [E. Data Provenance : tracer chaque événement](#e-data-provenance--tracer-chaque-événement)
+  - [F. Les processeurs clés pour notre cas d'usage](#f-les-processeurs-clés-pour-notre-cas-dusage)
+  - [G. NiFi dans l'environnement du cours](#g-nifi-dans-lenvironnement-du-cours)
+  - [H. NiFi en 2026 : 1.x, 2.x et le paysage de l'ingestion](#h-nifi-en-2026--1x-2x-et-le-paysage-de-lingestion)
+  - [I. NiFi dans le cursus : la chaîne complète](#i-nifi-dans-le-cursus--la-chaîne-complète)
 
----
+## I. NiFi
 
-## **NiFi**
-
----
-
-### **Le problème : amener les données jusqu'à Hadoop**
+### A. Le problème : amener les données jusqu'à Hadoop
 
 Depuis le début de ce cours, vos données arrivent dans HDFS par une seule porte : vous, et votre `hdfs dfs -put`. Réfléchissez à ce que ça donne en entreprise :
 
@@ -38,7 +34,7 @@ Depuis le début de ce cours, vos données arrivent dans HDFS par une seule port
 
 C'est le problème de l'**ingestion** : la porte d'entrée de la plateforme. L'encart « écosystème historique » du cours 01 mentionnait **Sqoop** pour le relationnel — supprimé du cours car désaffecté, remplacé en industrie par Spark JDBC / Kafka Connect. Mais pour l'ingestion de **fichiers** (CSV, logs, JSON), l'outil de référence reste **Apache NiFi**.
 
-### **Présentation de NiFi**
+### B. Présentation de NiFi
 
 **Apache NiFi** est une plateforme de routage et transformation de données visuelle : on construit des **flux de données** (_dataflows_) en assemblant des blocs à la souris, et NiFi garantit leur livraison.
 
@@ -50,7 +46,7 @@ L'outil a une origine peu banale : développé par la **NSA** (projet « Niaga
 
 Usages typiques : collecte de logs, ingestion de fichiers vers un datalake (notre cas : CSV → HDFS), synchronisation entre systèmes, ETL léger, IoT (sensor → plateforme).
 
-### **Les concepts clés : FlowFile, processeur, connection**
+### C. Les concepts clés : FlowFile, processeur, connection
 
 Le modèle mental de NiFi tient en trois objets — le reste en découle :
 
@@ -84,7 +80,7 @@ Un processeur émet son résultat sur des **relationships** : `success` (trait�
 
 > **Le réflexe de conception** : chaque flux doit définir **que faire des échecs** — une relation `failure` vers un funnel ou un simple `PutFile` dans un dossier `_errors/`. C'est la différence entre un flux d'ingestion et un script fragile.
 
-### **L'interface : construire un flux à la souris**
+### D. L'interface : construire un flux à la souris
 
 L'UI web de NiFi présente un **canvas** : on y glisse des processeurs depuis la palette, on les relie en tirant d'un carré de connection à l'autre, on configure chaque processeur via son panneau **Properties** (paramètres) / **Settings** (nom, auto-terminating relationships) / **Scheduling** (fréquence) / **comments**.
 
@@ -98,13 +94,13 @@ L'UI web de NiFi présente un **canvas** : on y glisse des processeurs depuis l
 
 **La couleur des queues** résume l'état du flux : **vide** (fluide), **jaune** (remplissage — back pressure proche), **rouge** (back pressure atteinte — le flux est stoppé proprement en amont, un maillon consomme trop lentement).
 
-### **Data Provenance : tracer chaque événement**
+### E. Data Provenance : tracer chaque événement
 
 La fonctionnalité la plus impressionnante de NiFi pour un data engineer : cliquer sur un événement dans une queue → **View Data Provenance** : l'historique complet de ce FlowFile — heure d'entrée, processeurs traversés, attributs à chaque étape, **contenu avant/après chaque transformation** (visualisables et téléchargeables), durée de chaque saut.
 
 Concrètement, quand la question arrive — _« Il manque les données du 12 mars, que s'est-il passé ? »_ — la réponse est à trois clics : chercher l'événement, voir où il s'est arrêté, **rejouer** (replay) la donnée depuis le point de l'échec. C'est cette garantie-là — reprise sur erreur avec traçabilité — qui justifie NiFi par rapport à un cron + `hdfs dfs -put`.
 
-### **Les processeurs clés pour notre cas d'usage**
+### F. Les processeurs clés pour notre cas d'usage
 
 L'EX 07 construira ce flux :
 
@@ -127,7 +123,7 @@ GetFile ──► ConvertRecord/UpdateRecord ──► PutFile ──► hdfs df
 
 > **Lien pédagogique** : la transformation CSV→TSV que vous avez scriptée en Python à l'EX 05 (`annexes/utils/7`) existe ici en processeur — même logique, deux outils. L'EX 07 vous fera construire ce flux et déposer le TSV **exactement là où** la table externe Hive de l'EX 05 lit ses données.
 
-### **NiFi dans l'environnement du cours**
+### G. NiFi dans l'environnement du cours
 
 NiFi n'est **pas** dans l'image du cluster Hadoop (le conteneur master embarque HDFS, YARN, HBase, Hive — pas d'usine à flux). Il tourne dans un **conteneur dédié** du même `docker-compose.yml` — image officielle `apache/nifi` branche **2.x** :
 
@@ -150,13 +146,13 @@ Deux points d'accès :
 
 > **Pourquoi la branche 2.x ?** Le cluster du cours est Hadoop **3.3.6** : NiFi 2.x (Java 21, client Hadoop 3.x) est le couple cohérent. Sur un vieux cluster Hadoop 2.x, on repartirait sur la branche 1.x (1.28.x, client Hadoop 2.x) — c'est la seule divergence qui impose un choix de version.
 
-### **NiFi en 2026 : 1.x, 2.x et le paysage de l'ingestion**
+### H. NiFi en 2026 : 1.x, 2.x et le paysage de l'ingestion
 
 - **NiFi 2.x** (depuis fin 2024) : UI repensée, Java 21 minimum, TLS 1.3, stratégies de load balancing des connections améliorées, support des nouveaux paramètres de sécurité. La branche **1.x est en fin de vie progressive** (1.28.x est la dernière, maintenance uniquement) — on ne la croise plus que sur les stacks Hadoop 2.x legacy.
 - **Le paysage de l'ingestion 2026** : NiFi n'est pas seul. **Kafka Connect** domine quand la source est un flux Kafka ; **Airbyte** (open source) cible la sync API/SaaS → entrepôt ; **Spark JDBC** a remplacé Sqoop pour le relationnel. NiFi reste la référence pour le **routage et la transformation visuels** multi-sources, et l'IoT/edge (NiFi MiNiFi).
 - **Concurrent historique** : Talend/Pentaho (ETL visuel commercial) — NiFi s'en distingue par son modèle FlowFile/queue orienté streaming continu, sa provenance et son prix (libre).
 
-### **NiFi dans le cursus : la chaîne complète**
+### I. NiFi dans le cursus : la chaîne complète
 
 Avec NiFi, le cursus couvre la chaîne data de bout en bout :
 

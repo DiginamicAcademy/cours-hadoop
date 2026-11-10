@@ -1,6 +1,6 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **Exercice 07 : NiFi**
+# Exercice 07 : NiFi
 
 > **Type** : exercice guidé (parties I-II) + exercices autonomes (partie III)
 > **Prérequis** : séquence 07 (NiFi), EX 05 (Hive) recommandé — on dépose les données de sa table externe
@@ -187,7 +187,7 @@ SELECT COUNT(*) FROM spotify_db.spotify;
 
 Les corrigés sont dans [`corriges/07-nifi.md`](corriges/07-nifi.md) — cherchez avant de regarder.
 
-### **Exercice 1 : Filtrage avant HDFS**
+### Exercice 1 : Filtrage avant HDFS
 
 Ne faire entrer dans le flux que les CSV de plus de 100 Ko — les petits fichiers de test ne doivent pas arriver jusqu'à HDFS.
 
@@ -200,7 +200,7 @@ Deux chemins, du plus simple au plus général :
 
 **Résultat attendu** : un petit fichier test déposé dans l'entrée n'arrive pas jusqu'à `/opt/nifi/output` ; le CSV Spotify (plus lourd) y arrive. Si **rien** n'arrive, ouvrez la fiche du processeur de routage et regardez sur quelle relation sont partis vos FlowFiles.
 
-### **Exercice 2 : Renommer et dater l'ingestion**
+### Exercice 2 : Renommer et dater l'ingestion
 
 Insérez un **UpdateAttribute** entre ConvertRecord et PutFile, pour obtenir un nom de fichier qui dit la vérité sur deux points : le **format** (le contenu est du TSV, le nom dit `.csv` — voir l'encadré de la section II.4) et la **date d'ingestion**.
 
@@ -208,7 +208,7 @@ Un `Filename` de la forme `spotify_${date:format('yyyy-MM-dd')}.tsv` suffit. Les
 
 **Résultat attendu** : `/opt/nifi/output` contient un fichier au nom daté et en `.tsv` ; l'attribut est visible dans la fiche **Data Provenance → Attributes** du FlowFile. Si le fichier écrit garde l'ancien nom, vérifiez que PutFile n'a pas `Filename` figé à une valeur littérale.
 
-### **Exercice 3 : Pourquoi NiFi plutôt qu'un cron + hdfs dfs -put ?**
+### Exercice 3 : Pourquoi NiFi plutôt qu'un cron + hdfs dfs -put ?
 
 Question de réflexion (3-5 lignes dans votre rapport de TP) : votre collègue propose de remplacer tout votre flux NiFi par un cron `*/5 * * * * hdfs dfs -put /input/*.csv /user/root/spotify/clean` et un petit script Python pour le TSV. Quels arguments de data engineer opposez-vous ?
 

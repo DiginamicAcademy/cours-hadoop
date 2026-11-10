@@ -1,19 +1,19 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **Exercice 03 : HDFS**
+# Exercice 03 : HDFS
 
 > **Type** : mémo + mini-exercices · **Prérequis** : séquence 03 (HDFS) · **Durée** : ~1 h
 > **Objectifs** : mémoriser les commandes HDFS essentielles et vérifier leur effet sur le cluster.
 > **Lien cours** : [`../03 — HDFS`](../03-hdfs.md)
 
-## **Sommaire**
+## Sommaire
 
 - [I. Mémo des commandes HDFS](#i-mémo-des-commandes-hdfs)
 - [II. Suite de l'exercice : Manipulation des commandes HDFS](#ii-manipulation-des-commandes-hdfs)
 
 ---
 
-## **I. Mémo des commandes HDFS**
+## I. Mémo des commandes HDFS
 
 ---
 
@@ -67,7 +67,7 @@ Ces commandes sont proche de celles utilisées par le Shell linux comme ls, mkdi
 
 ---
 
-## **II. Manipulation des commandes HDFS**
+## II. Manipulation des commandes HDFS
 
 Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour tous les traitements MapReduce du cursus. C'est le jeu de données de référence du cours (`data/` — le TP final change de jeu), et **les exercices 03 à 07 ne travaillent que sur lui** — gardez-le.
 

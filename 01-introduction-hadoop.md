@@ -2,43 +2,39 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **Introduction à Hadoop**
+# Introduction à Hadoop
 
 > **Objectifs** : situer Hadoop dans l'histoire du Big Data · comprendre son architecture (HDFS, MapReduce, YARN) · connaître les fichiers de configuration · situer l'écosystème historique en 2026.
 > **Prérequis** : aucun · **Durée** : ~3 h · **Type** : cours de contexte
 
-## **Sommaire**
+## Sommaire
 
-- [**Qu'est-ce que Hadoop ?**](#quest-ce-que-hadoop-)
-  - [**Définition**](#définition)
-  - [**Origines de la solution Hadoop**](#origines-de-la-solution-hadoop)
-  - [**Où stocker les données ?**](#où-stocker-les-données-)
-  - [**Comment Hadoop stocke les données ?**](#comment-hadoop-stocke-les-données-)
-  - [**Synthèse visuelle**](#synthèse-visuelle)
-- [**Écosystème de Hadoop**](#écosystème-de-hadoop)
-- [**Fichiers de configuration principaux**](#fichiers-de-configuration-principaux)
-  - [**hadoop-env.sh**](#hadoop-envsh)
-  - [**core-site.xml**](#core-sitexml)
-  - [**hdfs-site.xml**](#hdfs-sitexml)
-  - [**mapred-site.xml**](#mapred-sitexml)
-  - [**yarn-site.xml**](#yarn-sitexml)
-- [**Positionnement de Hadoop dans l'écosystème Big Data**](#positionnement-de-hadoop-dans-lécosystème-big-data)
-- [**Distributions principales d’Hadoop**](#distributions-principales-dhadoop)
-  - [**Principales distributions**](#principales-distributions)
+- [I. Qu'est-ce que Hadoop ?](#i-quest-ce-que-hadoop-)
+  - [A. Définition](#a-définition)
+  - [B. Origines de la solution Hadoop](#b-origines-de-la-solution-hadoop)
+  - [C. Où stocker les données ?](#c-où-stocker-les-données-)
+  - [D. Comment Hadoop stocke les données ?](#d-comment-hadoop-stocke-les-données-)
+  - [E. Synthèse visuelle](#e-synthèse-visuelle)
+- [II. Écosystème de Hadoop](#ii-écosystème-de-hadoop)
+- [III. Fichiers de configuration principaux](#iii-fichiers-de-configuration-principaux)
+  - [A. hadoop-env.sh](#a-hadoop-envsh)
+  - [B. core-site.xml](#b-core-sitexml)
+  - [C. hdfs-site.xml](#c-hdfs-sitexml)
+  - [D. mapred-site.xml](#d-mapred-sitexml)
+  - [E. yarn-site.xml](#e-yarn-sitexml)
+- [IV. Positionnement de Hadoop dans l'écosystème Big Data](#iv-positionnement-de-hadoop-dans-lécosystème-big-data)
+- [V. Distributions principales d’Hadoop](#v-distributions-principales-dhadoop)
+  - [A. Principales distributions](#a-principales-distributions)
 
----
+## I. Qu'est-ce que Hadoop ?
 
-## **Qu'est-ce que Hadoop ?**
-
----
-
-### **Définition**
+### A. Définition
 
 Hadoop est un **framework java open-source** conçu par **Apache** pour le **stockage et le traitement distribué** des **volumes massifs de données** sur des **clusters** de serveurs.
 
 Etant donné qu'il **peut être utilisé avec plusieurs langages de programmation**, **python** s’impose comme un langage clé pour le **Big Data** grâce à sa **simplicité**, sa **richesse en bibliothèques** _(TensorFlow, NumPy, Matplotlib, etc.)_
 
-### **Origines de la solution Hadoop**
+### B. Origines de la solution Hadoop
 
 Face à l’augmentation continue des volumes de données, les entreprises ont d’abord adopté une architecture **client/serveur** reposant sur un **serveur central puissant** et un **SGBDR** pour le stockage et le traitement des données. L’évolution des besoins était gérée par **upsizing**, c’est-à-dire l’augmentation des capacités matérielles du serveur.
 
@@ -54,9 +50,7 @@ Google a été l’une des premières entreprises à identifier ces faiblesses. 
 Cette vision marque une rupture avec l’architecture client/serveur traditionnelle.
 **Hadoop** est aujourd’hui l’implémentation logicielle la plus mature et la plus utilisée pour mettre en œuvre cette stratégie de stockage distribué et de calcul parallèle.
 
----
-
-### **Où stocker les données ?**
+### C. Où stocker les données ?
 
 De la même manière que le **traitement des données** doit être réparti, le **stockage** doit lui aussi être **distribué** afin d’éviter la saturation liée à des volumes de données toujours plus importants.
 
@@ -66,7 +60,7 @@ Pour répondre à ces contraintes, on adopte une approche basée sur la **distri
 
 ![Store Process Scale](assets/sps.jpeg)
 
-### **Comment Hadoop stocke les données ?**
+### D. Comment Hadoop stocke les données ?
 
 Hadoop stocke les données en les **répartissant sur l’ensemble des machines** (nœuds) d’un cluster. Chaque nœud participe à la fois au **stockage** et, potentiellement, au **traitement** des données, ce qui permet de passer à l’échelle efficacement.
 
@@ -75,9 +69,7 @@ Selon les besoins, Hadoop peut s’appuyer sur :
 * un **système de fichiers distribué**, **HDFS**, pour le stockage de fichiers volumineux ;
 * une **base de données NoSQL distribuée**, **HBase**, pour le stockage et l’accès rapide à de grandes quantités de données structurées ou semi-structurées.
 
----
-
-### **Synthèse visuelle**
+### E. Synthèse visuelle
 
 L’ensemble de ces nœuds constitue le **socle de l’architecture distribuée d’Hadoop**, permettant de répartir le stockage et le calcul sur plusieurs machines afin de traiter efficacement de très grands volumes de données.
 
@@ -88,11 +80,7 @@ L’ensemble de ces nœuds constitue le **socle de l’architecture distribuée 
 * **SlaveNode** : nœuds de travail du cluster, chargés de **stocker les données** et d’**exécuter les traitements distribués**.
 * **DataNode** : service exécuté sur les SlaveNodes, responsable du **stockage des blocs de données HDFS** et de la participation aux opérations de traitement.
 
----
-
-## **Écosystème de Hadoop**
-
----
+## II. Écosystème de Hadoop
 
 En plus de **HDFS** et de **HBase**, l’écosystème Hadoop regroupe **plusieurs composants essentiels** permettant le **stockage**, le **traitement** et la **gestion** de données à grande échelle.
 
@@ -108,8 +96,6 @@ Avec l’évolution de Hadoop, l’écosystème s’est considérablement enrich
 * l’ajout de services dédiés à la **coordination et à la gestion des ressources**
 
 ![hadoop-ecosystem](assets/ecosystem-hadoop.jpeg)
-
----
 
 Dans le cadre de ce cours, nous nous concentrerons principalement sur :
 * **HDFS** (Hadoop Distributed File System) : système de fichiers distribué, conçu pour stocker de très grands volumes de données ;
@@ -130,9 +116,7 @@ Dans le cadre de ce cours, nous nous concentrerons principalement sur :
 >
 > **Et maintenant ?** Ce socle (HDFS, YARN, MapReduce, Hive, HBase, NiFi) reste le langage commun du Big Data on-premise et la base conceptuelle des technos actuelles : Spark s’exécute sur YARN, les concepts de shuffle et de parallélisation de MapReduce se retrouvent partout (jusque dans le SQL de Hive), et HBase demeure utilisé en production. Comprendre Hadoop, c’est comprendre le pourquoi de tout ce qui l’a remplacé.
 
-## **Fichiers de configuration principaux**
-
----
+## III. Fichiers de configuration principaux
 
 Pour faire en sorte que les différents composants d'Hadoop communiquent entre eux, il est nécessaire de configurer certains fichiers. Ces fichiers de configuration permettent de définir les paramètres essentiels pour le fonctionnement du cluster Hadoop.
 
@@ -149,7 +133,7 @@ ls -l  $HADOOP_HOME/etc/hadoop
 
 > Tous les fichiers de configuration d'Hadoop sont disponibles dans le répertoire **$HADOOP_HOME/etc/hadoop** (sur le cluster du cours : `/opt/hadoop/etc/hadoop` — pas `/etc/hadoop/conf`, un reliquat d'anciennes distributions).
 
-### [**hadoop-env.sh**](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/UnixShellGuide.html)
+### A. [hadoop-env.sh](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/UnixShellGuide.html)
 
 Permet de définir les **variables d’environnement** utilisées par les démons Hadoop, notamment celles liées au **JDK**. Hadoop étant développé en **Java**, la variable **`JAVA_HOME`** est essentielle pour indiquer l’environnement d’exécution Java utilisé par les services Hadoop.
 
@@ -182,7 +166,7 @@ done
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true"
 ```
 
-### [**core-site.xml**](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml)
+### B. [core-site.xml](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml)
 
 Permet de définir les **paramètres de configuration cœur de Hadoop** et indique notamment l’**emplacement du NameNode dans le cluster**. Il regroupe les **configurations communes** utilisées par **HDFS** et **MapReduce**, telles que les **paramètres d’entrées/sorties**.
 
@@ -198,7 +182,7 @@ La propriété **fs.defaultFS** (avant : fs.default.name) permet de spécifier 
 </configuration>
 ```
 
-### [**hdfs-site.xml**](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
+### C. [hdfs-site.xml](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
 
 Définis l'emplacement du **NameNode** et des **datanode**. Il contient aussi les paramètres de **réplication**.
 
@@ -223,7 +207,7 @@ Définis l'emplacement du **NameNode** et des **datanode**. Il contient aussi le
 </configuration>
 ```
 
-### [**mapred-site.xml**](http://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
+### D. [mapred-site.xml](http://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)
 
 Spécifie la **configuration de MapReduce**, afin de **choisir quel framework doit être utilisé**.
 
@@ -239,7 +223,7 @@ Depuis la version 2.x d'Hadoop avec l'arrivée de **Yarn**, ce fichier de config
 </configuration>
 ```
 
-### [**yarn-site.xml**](http://hadoop.apache.org/docs/r2.3.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
+### E. [yarn-site.xml](http://hadoop.apache.org/docs/r2.3.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
 
 Le fichier `yarn-site.xml` est utilisé pour la configuration de **Yarn**, **Shuffling**, **scheduling policy**...
 
@@ -261,22 +245,16 @@ Le fichier `yarn-site.xml` est utilisé pour la configuration de **Yarn**, **Shu
 </configuration>
 ```
 
----
-
-## **Positionnement de Hadoop dans l'écosystème Big Data**
-
----
+## IV. Positionnement de Hadoop dans l'écosystème Big Data
 
 ![70percent](assets/70percent.png)
 ![skills](assets/skills.jpeg)
 
-## **Distributions principales d’Hadoop**
-
----
+## V. Distributions principales d’Hadoop
 
 Hadoop est composé de multiples briques logicielles, développées et maintenues par différents acteurs. Cette diversité rend la gestion des versions et la configuration complexe. Pour répondre à ce défi, des distributions Hadoop ont émergé : des ensembles pré-packagés, configurés et optimisés pour fonctionner ensemble, offrant un déploiement plus rapide et un support technique.
 
-### **Principales distributions**
+### A. Principales distributions
 
 | Distribution | Statut 2026 | Hadoop livré |
 |---|---|---|

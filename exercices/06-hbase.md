@@ -1,6 +1,6 @@
 ![Diginamic Logo](../assets/diginamic.png) ![HBase Logo](../assets/hbase.jpeg)
 
-# **Exercice 06 : HBase**
+# Exercice 06 : HBase
 
 > **Type** : exercice guidé (parties I-II) + exercices autonomes (parties III-IV)
 > **Prérequis** : séquence 06 (HBase & ZooKeeper), EX 04 (MapReduce)
@@ -16,7 +16,7 @@
 
 ---
 
-## **I. Première manipulation de HBase (shell)**
+## I. Première manipulation de HBase (shell)
 
 ---
 
@@ -24,7 +24,7 @@ De manière générale, vous aurez très peu de retour sur les commandes hbase s
 
 > **ATTENTION:** L'emplacement des **'** et des **"** sont importants, car on aura les 2 dans certaines commandes et que si on ne met pas les bons, la commande ne fonctionnera pas.
 
-### **1. HBase Shell**
+### 1. HBase Shell
 
 Démarrez HBase depuis le master : `./start-hbase.sh` (ZooKeeper doit être démarré avant — `./start-zookeeper.sh`).
 
@@ -41,7 +41,7 @@ Vous pourrez fermer le terminal hbase en faisant `exit`.
 
 ---
 
-### **2. Création de la table**
+### 2. Création de la table
 
 Pour créer une table dans HBase avec deux familles de colonnes différentes et spécifier un namespace :
 
@@ -53,7 +53,7 @@ create 'store', 'customer', 'sales'
 - la table 'store' est créée
 - 'customer' et 'sales' sont les noms des familles de colonnes.
 
-### 3. **Insertion de données (Create)**
+### 3. Insertion de données (Create)
 
 Pour insérer des données dans HBase, utilisez la commande `put`.
 
@@ -84,7 +84,7 @@ put 'store', '1004', 'sales:amount', '$1,600.00'
 
 ---
 
-### 4. **Mise à jour de données (Update)**
+### 4. Mise à jour de données (Update)
 
 Pour mettre à jour une valeur spécifique dans HBase, utilisez à nouveau la commande `put` — même commande que l'insertion : HBase versionne, la dernière valeur écrase.
 
@@ -99,7 +99,7 @@ put 'store', '1002', 'sales:amount', '$850.00'
 #  1002        column=sales:product, timestamp=1720091566425, value=Lamps
 ```
 
-### 5. **Lecture de données (Read)**
+### 5. Lecture de données (Read)
 
 Pour lire une ligne précise, utilisez `get` avec son row_key.
 
@@ -128,7 +128,7 @@ scan 'store'
 
 ---
 
-### 6. **Suppression de données (Delete)**
+### 6. Suppression de données (Delete)
 
 Pour supprimer une valeur spécifique, utilisez la commande `delete`.
 
@@ -153,7 +153,7 @@ deleteall 'store', '1004'
 
 ---
 
-### 7. **Lecture de données filtrées (Read)**
+### 7. Lecture de données filtrées (Read)
 
 Afin d'avoir uniquement ce que l'on souhaite, il existe plusieurs filtres comme LIMIT, COLUMNS, FILTER...
 
@@ -237,11 +237,11 @@ table = connection.table('ma_table')
 
 ---
 
-## **III. Exercices autonomes**
+## III. Exercices autonomes
 
 ---
 
-### **hbase shell**
+### hbase shell
 
 Quelles sont les commandes hbase pour faire ses instructions ?
 
@@ -275,7 +275,7 @@ ROW    COLUMN+CELL
 
 > **Indice (Q7)** : le filtre `SingleColumnValueFilter` accepte d'autres opérateurs que `=` — essayez `>=` avec `binary:2000`. Les valeurs sont comparées en binaire : les dates de 4 chiffres se comparent correctement de gauche à droite (1855 < 2024).
 
-### **Happybase Python**
+### Happybase Python
 
 1. Ecrire le code Python qui permet de réaliser les instructions précédentes depuis l'environnement hadoop.
 2. Adapter le code pour contrôler le HBase distant depuis votre poste local.

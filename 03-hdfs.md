@@ -2,53 +2,49 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **HDFS (Hadoop File System)**
+# HDFS (Hadoop File System)
 
 > **Objectifs** : comprendre l'architecture HDFS (NameNode, DataNode, blocs, réplication) · maîtriser les opérations de base (put, get, ls…) · configurer et démarrer le cluster.
 > **Prérequis** : séquences 01-02 · **Durée** : ~5 h · **Type** : cours + manipulations
 > **Mise en pratique** : [exercices/03 — HDFS](exercices/03-hdfs.md)
 
-## **Sommaire**
+## Sommaire
 
-- [Introduction HDFS](#introduction-hdfs)
-  - [Pourquoi HDFS ?](#pourquoi-hdfs-)
-  - [Présentation de HDFS](#présentation-de-hdfs)
-  - [Accès à HDFS](#accès-à-hdfs)
-  - [Comment utiliser HDFS](#comment-utiliser-hdfs)
-  - [API HDFS](#api-hdfs)
-- [Principes HDFS](#principes-hdfs)
-  - [Caractéristiques générales](#caractéristiques-générales)
-  - [Réplication](#réplication)
-  - [Sous-réplication](#sous-réplication)
-  - [Taille des blocs](#taille-des-blocs)
-  - [Codecs de compression](#codecs-de-compression)
-  - [Permissions](#permissions)
-- [Architecture des services](#architecture-des-services)
-  - [Fonctionnement](#fonctionnement)
-  - [Le NameNode](#le-namenode)
-  - [La communication](#la-communication)
-  - [NameNode (rôle résumé)](#namenode-rôle-résumé)
-  - [DataNode](#datanode)
-  - [Secondary NameNode](#secondary-namenode)
-- [Opérations HDFS](#opérations-hdfs)
-- [Configurer et démarrer HDFS](#configurer-et-démarrer-hdfs)
-  - [Initialiser et démarrer](#initialiser-et-démarrer)
-  - [Démarrer le cluster HDFS](#démarrer-le-cluster-hdfs)
+- [I. Introduction HDFS](#i-introduction-hdfs)
+  - [A. Pourquoi HDFS ?](#a-pourquoi-hdfs-)
+  - [B. Présentation de HDFS](#b-présentation-de-hdfs)
+  - [C. Accès à HDFS](#c-accès-à-hdfs)
+  - [D. Comment utiliser HDFS](#d-comment-utiliser-hdfs)
+  - [E. API HDFS](#e-api-hdfs)
+- [II. Principes HDFS](#ii-principes-hdfs)
+  - [A. Caractéristiques générales](#a-caractéristiques-générales)
+  - [B. Réplication](#b-réplication)
+  - [C. Sous-réplication](#c-sous-réplication)
+  - [D. Taille des blocs](#d-taille-des-blocs)
+  - [E. Codecs de compression](#e-codecs-de-compression)
+  - [F. Permissions](#f-permissions)
+- [III. Architecture des services](#iii-architecture-des-services)
+  - [A. Fonctionnement](#a-fonctionnement)
+  - [B. Le NameNode](#b-le-namenode)
+  - [C. La communication](#c-la-communication)
+  - [D. NameNode (rôle résumé)](#d-namenode-rôle-résumé)
+  - [E. DataNode](#e-datanode)
+  - [F. Secondary NameNode](#f-secondary-namenode)
+- [IV. Opérations HDFS](#iv-opérations-hdfs)
+- [V. Configurer et démarrer HDFS](#v-configurer-et-démarrer-hdfs)
+  - [A. Initialiser et démarrer](#a-initialiser-et-démarrer)
+  - [B. Démarrer le cluster HDFS](#b-démarrer-le-cluster-hdfs)
 
----
+## I. Introduction HDFS
 
-## **Introduction HDFS**
-
----
-
-### **Pourquoi HDFS ?**
+### A. Pourquoi HDFS ?
 
 - Ce système de fichiers est distribué sur des centaines voire des milliers de serveurs, et chaque nœud stocke une partie du système fichier. Pour éviter le risque de perdre des données, chaque donnée est stockée à plusieurs emplacements (ratio 3 par défaut — 1 sur le cluster du cours, voir plus bas la section Réplication).
 - Il est très adapté au Big Data. Des dizaines de millions de fichiers peuvent être supportés sur une seule instance. Par ailleurs, cela assure la cohérence et l’intégrité des données pour éviter tout désagrément.
 - HDFS est connu par sa portabilité. Il peut fonctionner sur différents types de commodity hardwares sans aucun problème de compatibilité.
 - Plus qu’une base de données, ce système de fichier distribué se présente comme une Data Warehouse. Il est impossible de déployer un langage de requête *direct* sur HDFS : les données sont lues par des programmes MapReduce, ou requêtées en SQL via une couche dédiée (**Hive**, séquence 05) qui compile le SQL en MapReduce. Les données adhèrent à un modèle de cohérence simple et robuste.
 
-### **Présentation de HDFS**
+### B. Présentation de HDFS
 
 - HDFS est le système de fichiers de Hadoop.
 - Comme tout système de fichiers, HDFS a vocation à être accédé à la fois :
@@ -60,14 +56,14 @@
 - Cette couche d'abstraction a le gros avantage d'avoir plusieurs backend et plusieurs frontend.
 - En backend, on entend les systèmes de fichiers supportés.
 
-### **Accès à HDFS**
+### C. Accès à HDFS
 
 - Ainsi, HadoopFS va permettre d'accéder à la fois à l'HDFS, mais également aux fichiers locaux,
 - Et par exemple : à Amazon S3, aux fichiers stockés sur un FTP, à OpenStack Swift, à OrangeFS, Windows Azure, Cassandra, CephFS, le Google Storage, MapR-FS ou Quantcast ….
 - Tous ces backend vont être gérés avec les mêmes interfaces, et ainsi un logiciel qui va utiliser HadoopFS, va pouvoir accéder aux données quel que soit le système de fichiers sur lequel elles sont stockées.
 - Et ainsi, un outil qui utilise HadoopFS, va pouvoir accéder aux données quel que soit le système de fichiers utilisé.
 
-### **Comment utiliser HDFS**
+### D. Comment utiliser HDFS
 
 - Pour ce faire, on va utiliser des URI — des « Uniform Resource Identifier » — et plus précisément des URL, des « Uniform Resource Locator », pour savoir où les données sont stockées.
 - A chaque fois, on va avoir donc, un protocole qui va définir le type de système de fichiers
@@ -75,7 +71,7 @@
 - **Je vous encourage vivement à toujours utiliser HadoopFS sans spécifier le protocole afin de laisser la possibilité à l'utilisateur de votre application de le faire.**
 - **Cela permettra que tous vous outils fonctionnent maintenant avec HadoopFS, puissent fonctionner quel que soit le système de fichiers derrière.**
 
-### **API HDFS**
+### E. API HDFS
 
 - HadoopFS met donc à disposition diverses API
 - C'est-à-dire qu'on va pouvoir y accéder par exemple en ligne de commande, pour pouvoir interroger le système de fichiers quel qu'il soit ou via une API Java (ou aussi une API dans notre cas en Python avec une API JAVA)
@@ -83,20 +79,16 @@
 - Via une librairie C, qui est en fait construite grâce à JNI, Java Native Interface, qui permet d'avoir les méthodes Java accessibles directement en C. Via Thrift, un protocole directement pour accéder aux données, qui est propre à Apache.
 - Ou encore via Fuse par exemple, pour le monter dans l'espace utilisateur, ou en WebDAV, pour l'interroger, par exemple, grâce à une API HTTP.
 
----
+## II. Principes HDFS
 
-## **Principes HDFS**
-
----
-
-### **Caractéristiques générales**
+### A. Caractéristiques générales
 
 - Concernant la Réplication : La Réplication est le fait d'avoir les données accessibles à plusieurs endroits simultanément.
 - Cette Réplication, sur l'HDFS, se fait par blocs.
 - C'est à dire que ce sont les blocs, non pas les fichiers, qui sont accessibles à plusieurs endroits simultanément.
 - Elles ne concernent bien entendu que les fichiers.
 
-### **Réplication**
+### B. Réplication
 
 - En effet, les dossiers, à proprement parler, n'existent que dans l'index.
 - Par défaut, l'HDFS a un ratio de Réplication de 3.
@@ -105,14 +97,14 @@
 - Il peut ainsi donc être ajusté en fonction des besoins, notamment si la donnée doit être plus répliquée
 - Par exemple parce qu'elle est sensible, ou pour augmenter les performances en lecture, ou moins répliquée, parce qu'elle consomme beaucoup trop d'espace de stockage pour sa criticité.
 
-### **Sous-réplication**
+### C. Sous-réplication
 
 - On peut avoir des cas de sous-réplication, c'est à dire qu'à un moment donné, il n'existe pas assez de réplicas d'un même bloc
 - Dans ce cas-là, le système essaye de le corriger au plus vite, et des cas de sur réplication
 - C'est à dire qu'à un moment donné, trop de réplicas existent pour un même bloc, auquel cas, le système HDFS le corrige également au plus vite, simplement en supprimant un ou plusieurs réplicas.
 - Le nombre de réplicas est visible dans chacune des interfaces, que ce soit l'interface web ou la ligne de commande. On a également la notion de Block Size.
 
-### **Taille des blocs**
+### D. Taille des blocs
 
 - Le Block Size étant la taille d'un bloc.
 - Toutes les données étant stockées par bloc, l'espace de stockage étant découpé par blocs, ce paramètre se configure dans `hdfs-site.xml` et **peut être dérogé fichier par fichier** (par ex. `hdfs dfs -D dfs.blocksize=67108864 -put …`).
@@ -121,7 +113,7 @@
 - Plus il est faible, plus c'est adapté pour les petits fichiers et les fichiers très nombreux, et plus cela limite le surcoût, à proprement parler, de travailler par blocs.
 - L'HDFS supporte également nativement la Compression. Ça veut dire que tout ce qui est écrit ou lu de l'HDFS peut être compressé ou décompressé à la volée.
 
-### **Codecs de compression**
+### E. Codecs de compression
 
 - On va passer par des codecs de compression, soit écrits en Java, soit natifs directement sur le système s'ils sont disponibles.
 - Bien entendu, compresser réduit l'espace de stockage nécessaire pour stocker les données et augmente de ce fait les vitesses de transfert, également, puisque moins de données à transférer.
@@ -129,7 +121,7 @@
 - Différents codecs de compression sont disponibles, on va retrouver notamment Gzip, Bzip2, Snappy et LZO.
 - **Chaque codec ayant ses avantages et ses inconvénients en fonction de nos besoins.**
 
-### **Permissions**
+### F. Permissions
 
 - l'HDFS a également un système de permission.
 - De façon similaire à ce qu'on retrouve sous Linux, chaque fichier et répertoire a un propriétaire et un groupe.
@@ -137,20 +129,16 @@
 - On a également un sticky bit pour les répertoires et l'HDFS supporte les ACL POSIX pour avoir des permissions plus fines avec par exemple getfacl.
 - Le système de permission peut se désactiver pour l'intégralité de l'HDFS mais dans ce cas-là, il peut cependant être nécessaire, toujours, d'utiliser le SuperUser qui est le user HDFS par défaut. Ce système de permission va de paire avec un système d'Authentification qui se fait soit de façon simple avec un login mot de passe, soit via Kerberos.
 
----
+## III. Architecture des services
 
-## **Architecture des services**
-
----
-
-### **Fonctionnement**
+### A. Fonctionnement
 
 - L'HDFS fonctionne grâce à deux types de service, le NameNode et un ou plusieurs DataNode.
 - Les DataNodes vont être là où vont être stockés les données.
 - Il peut donc s'agir de serveurs totalement différents avec de le hardware totalement différent avec un ou plusieurs disques, il faut juste éviter d'avoir des raids sur les DataNodes.
 - Les DataNodes vont stocker les données, données qui sont répliquées, c'est-à-dire que la même donnée, par exemple A va se retrouver à plusieurs endroits et qui sont stockées par blocs. A, B, C, D, E, F et G sont, de ce fait-là, des blocs.
 
-### **Le NameNode**
+### B. Le NameNode
 
 - Le NameNode quant à lui va avoir l'index des fichiers
 - Il va savoir qu'il y a un fichier /totaux.txt qui va être composé des blocs A, B, C et D.
@@ -163,7 +151,7 @@
 
 ![working-hdfs](assets/working-hdfs.jpeg)
 
-### **La communication**
+### C. La communication
 
 - Il y a, une communication permanente entre les DataNodes et le NameNode afin d'informer les uns et les autres de qui possède quel bloc.
 - Le NameNode stocke ces données-là, les métadatas dans un fichier appelé le FS Image et va stocker les modifications au fur et à mesure de la vie du NameNode dans un EditLog qui est un journal des modifications.
@@ -173,13 +161,13 @@
   - Le temps qu'il se connecte à tous les DataNodes, ou à la demande d'un administrateur ou en cas de soucis afin de faciliter le débogage.
   - Il possède également un mode Recovery interactif permettant de contrôler plus précisément ce qui se fait dessus.
 
-### **NameNode (rôle résumé)**
+### D. NameNode (rôle résumé)
 
 - La position des blocs dans les Data nodes est reconstruite à chaque démarrage du Namenode dans un mode appelé safe mode.
 - Le safe mode bloque l'écriture sur HDFS, car le Name node charge les fichiers edits_xxx et fsimage_xxx et attend le retour des Data nodes sur la position des blocs.
 - Le Name node charge tout en mémoire, chaque fichier, répertoire et bloc dans HDFS est représenté comme un objet dans la mémoire et occupe 150 octets.
 
-### **DataNode**
+### E. DataNode
 
 - Il contient les blocs de données et sont surnommés les Workers.
 - Les Data nodes sont sous les ordres du Name Node:
@@ -187,7 +175,7 @@
 - En écriture, les Data nodes vont retourner l'emplacement des blocs fraîchement créés.
 - Les Data nodes sont également sollicités lors de l'initialisation du Name node et aussi de manière périodique, afin de retourner la liste des blocs stockés.
 
-### **Secondary NameNode**
+### F. Secondary NameNode
 
 - Il vérifie périodiquement l'état du Name Node principal et **agit comme « checkpoint »** : il fusionne les fichiers `edits_xxx` dans `fsimage_xxx` (voir les schémas ci-dessous), allégeant le journal du NameNode.
 - ⚠️ **Le NameNode secondaire n'est PAS un NameNode de secours.** Si le NameNode principal tombe, le secondaire **ne prend pas sa place** : le cluster redevient disponible seulement après le redémarrage du NameNode principal (ou via la **haute disponibilité** — un *standby NameNode* actif piloté par ZooKeeper, hors périmètre de notre petit cluster). Reprenez le schéma de la séquence 01 : la redondance « active » du NameNode passe par le failover HA, pas par le SNN.
@@ -196,9 +184,7 @@
 
 ![fsimage-edits-2](assets/fsimage-edits-2.png) ![checkpointing](assets/checkpointing.png)
 
----
-
-## **Opérations HDFS**
+## IV. Opérations HDFS
 
 ![operation-1](assets/operation-1.png)
 ![operation-2](assets/operation-2.png)
@@ -236,11 +222,9 @@
   - Vous pouvez arrêter le HDFS à l'aide de la commande suivante.
     **stop-dfs.sh**
 
----
+## V. Configurer et démarrer HDFS
 
-## **Configurer et démarrer HDFS**
-
-### **Initialiser et démarrer**
+### A. Initialiser et démarrer
 
 1. Initialiser le système de fichiers HDFS
     - `hdfs namenode -format` ne configure pas le NameNode : elle **initialise** son répertoire de métadonnées (le `fsimage`).
@@ -263,9 +247,7 @@
 
  ![hadoop-webviews](assets/hadoop-webviews.png)
 
----
-
-### **Démarrer le cluster HDFS**
+### B. Démarrer le cluster HDFS
 
 - Une fois la configuration effectuée, on peut démarrer les démons HDFS : le **NameNode** et les **DataNodes**, afin d'accéder à HDFS.
 

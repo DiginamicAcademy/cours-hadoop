@@ -2,32 +2,28 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **Hive, l'entrepôt SQL sur Hadoop**
+# Hive, l'entrepôt SQL sur Hadoop
 
 > **Objectifs** : comprendre ce qu'apporte Hive par rapport à MapReduce · maîtriser l'architecture (HiveServer2, Metastore, driver) · distinguer tables externes et managées · écrire des requêtes SQL sur des données HDFS · relier SQL et MapReduce via EXPLAIN.
 > **Prérequis** : séquences 03-04 (HDFS, MapReduce) · **Durée** : ~4 h · **Type** : cours + manipulations
 
-## **Sommaire**
+## Sommaire
 
-* [Hive](#hive)
-  * [Le problème : interroger sans programmer](#le-problème--interroger-sans-programmer)
-  * [Présentation de Hive](#présentation-de-hive)
-  * [Architecture de Hive](#architecture-de-hive)
-  * [Le modèle de données](#le-modèle-de-données)
-  * [Tables externes vs tables managées](#tables-externes-vs-tables-managées)
-  * [SQL sur HDFS : la séparation calcul/stockage](#sql-sur-hdfs--la-séparation-calculstockage)
-  * [Ce que compile Hive : le lien avec MapReduce](#ce-que-compile-hive--le-lien-avec-mapreduce)
-  * [Premiers pas sur le cluster](#premiers-pas-sur-le-cluster)
-  * [Hive en 2026 : datalake et lakehouse](#hive-en-2026--datalake-et-lakehouse)
-  * [Hive, HBase, HDFS : quel stockage pour quel usage ?](#hive-hbase-hdfs--quel-stockage-pour-quel-usage-)
+- [I. Hive](#i-hive)
+  - [A. Le problème : interroger sans programmer](#a-le-problème--interroger-sans-programmer)
+  - [B. Présentation de Hive](#b-présentation-de-hive)
+  - [C. Architecture de Hive](#c-architecture-de-hive)
+  - [D. Le modèle de données](#d-le-modèle-de-données)
+  - [E. Tables externes vs tables managées](#e-tables-externes-vs-tables-managées)
+  - [F. SQL sur HDFS : la séparation calcul/stockage](#f-sql-sur-hdfs--la-séparation-calculstockage)
+  - [G. Ce que compile Hive : le lien avec MapReduce](#g-ce-que-compile-hive--le-lien-avec-mapreduce)
+  - [H. Premiers pas sur le cluster](#h-premiers-pas-sur-le-cluster)
+  - [I. Hive en 2026 : datalake et lakehouse](#i-hive-en-2026--datalake-et-lakehouse)
+  - [J. Hive, HBase, HDFS : quel stockage pour quel usage ?](#j-hive-hbase-hdfs--quel-stockage-pour-quel-usage-)
 
----
+## I. Hive
 
-## **Hive**
-
----
-
-### **Le problème : interroger sans programmer**
+### A. Le problème : interroger sans programmer
 
 Après la séquence 04, vous savez écrire un job MapReduce en Python. Posez-vous maintenant la question du **quotidien d'une équipe data** :
 
@@ -39,7 +35,7 @@ MapReduce répond au **comment** exécuter un calcul distribué, pas au **quoi**
 
 La solution historique de l'écosystème Hadoop pour ce problème : **Hive**, le SQL sur HDFS.
 
-### **Présentation de Hive**
+### B. Présentation de Hive
 
 **Apache Hive** est un entrepôt de données (_data warehouse_) qui s'installe au-dessus de Hadoop et permet d'interroger les données stockées dans HDFS **avec un langage proche du SQL** : HiveQL.
 
@@ -59,7 +55,7 @@ LIMIT 10;
 
 > **Vocabulaire.** On dit que Hive est un _data warehouse_ (entrepôt de données) plutôt qu'une base de données : il ne stocke pas les données lui-même — elles restent des fichiers dans HDFS — et il est optimisé pour l'**analyse en batch** de gros volumes (OLAP), pas pour les transactions à la ligne (OLTP).
 
-### **Architecture de Hive**
+### C. Architecture de Hive
 
 ```
         ┌─────────────┐
@@ -94,7 +90,7 @@ Trois briques à retenir :
 
 > **Conséquence importante** : deux clients (Hive, mais aussi Spark SQL ou Trino s'ils sont configurés) peuvent interroger les **mêmes fichiers HDFS** via le même Metastore. Le stockage est partagé, seul le moteur de calcul change.
 
-### **Le modèle de données**
+### D. Le modèle de données
 
 Hive organise les données selon une hiérarchie familière pour qui connaît le SQL :
 
@@ -110,7 +106,7 @@ Hive organise les données selon une hiérarchie familière pour qui connaît le
 
 **Point de vigilance** : Hive ne modifie pas les fichiers d'entrée. Il lit des fichiers **au format déclaré** (texte délimité, Parquet, ORC…) et suppose que la réalité correspond au schéma — il n'y a pas de contraintes d'intégrité comme dans MySQL. C'est à vous de garantir la cohérence entre le schéma déclaré et les données réelles.
 
-### **Tables externes vs tables managées**
+### E. Tables externes vs tables managées
 
 C'est **la** distinction à maîtriser — elle conditionne qui est maître des données.
 
@@ -137,7 +133,7 @@ LOCATION '/user/root/spotify/clean';
 
 > **Réflexe de survie** : avant tout `DROP TABLE`, demander — est-ce une EXTERNAL ou une MANAGED ? Sur une table managée, DROP détruit des heures de pipeline. Vous verrez cette manipulation contrôlée en EX ([exercices/05](exercices/05-hive.md)).
 
-### **SQL sur HDFS : la séparation calcul/stockage**
+### F. SQL sur HDFS : la séparation calcul/stockage
 
 Reprenons le schéma de l'architecture : le Metastore sait _où_ sont les données (fichiers HDFS) et _comment_ les lire (schéma, format) ; YARN exécute le calcul. **Aucune donnée ne transite par Hive.**
 
@@ -150,7 +146,7 @@ Cette séparation est le concept le plus durable de l'écosystème — tous les 
 
 C'est la promesse du _lakehouse_ actuel : un stockage de fichiers ouvert (HDFS, puis S3, Iceberg), plusieurs moteurs de calcul à la demande.
 
-### **Ce que compile Hive : le lien avec MapReduce**
+### G. Ce que compile Hive : le lien avec MapReduce
 
 Vous savez (séquence 04) ce qu'est un job MapReduce. Regardez maintenant ce que Hive fait de votre SQL — la boucle se referme :
 
@@ -177,7 +173,7 @@ STAGE DEPENDENCIES:
 
 > **Quand Hive, quand MapReduce à la main ?** Hive excelle pour l'**exploration ad-hoc** (question → requête) et les ETL déclaratifs. On retombe sur MapReduce (ou Spark) quand il faut un contrôle fin du traitement : logique métier complexe, formats exotiques, optimisations au niveau enregistrement. La séquence 04 vous a appris ce que fait le moteur ; Hive vous fait gagner le temps de l'écrire.
 
-### **Premiers pas sur le cluster**
+### H. Premiers pas sur le cluster
 
 Hive **4.1.0** est installé dans l'image du cluster (`hadoop-cluster-base`) : HiveServer2 et le Metastore (Derby embarqué) sont préconfigurés — rien à installer. Son démarrage est un simple script dans le master :
 
@@ -206,7 +202,7 @@ SHOW TABLES;
 
 > **Manipulations complètes** (création de la table Spotify, requêtes, EXPLAIN, DROP) : [exercices/05](exercices/05-hive.md). Le corrigé se trouve dans [`exercices/corriges/05-hive.md`](exercices/corriges/05-hive.md).
 
-### **Hive en 2026 : datalake et lakehouse**
+### I. Hive en 2026 : datalake et lakehouse
 
 L'encart « écosystème historique » du cours 01 cite Hive parmi les briques toujours actives — le détail :
 
@@ -216,7 +212,7 @@ L'encart « écosystème historique » du cours 01 cite Hive parmi les briques
 
 Positionnement dans notre cursus : Hive s'insère **entre MapReduce (04) et HBase (06)** — trois réponses à trois questions de stockage/interrogation sur le même HDFS.
 
-### **Hive, HBase, HDFS : quel stockage pour quel usage ?**
+### J. Hive, HBase, HDFS : quel stockage pour quel usage ?
 
 Synthèse pour fixer les idées avant la séquence 06 :
 

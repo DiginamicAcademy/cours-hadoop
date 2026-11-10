@@ -2,46 +2,41 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **HBase**
+# HBase
 
 > **Objectifs** : comprendre le modèle de données HBase et son architecture (régions, RegionServers, HMaster) · le rôle de ZooKeeper · manipuler HBase via le shell et HappyBase.
 > **Prérequis** : séquences 01-04 (HDFS, MapReduce) · **Durée** : ~2 h · **Type** : cours + manipulations
 > **Mise en pratique** : [exercices/06 — HBase](exercices/06-hbase.md)
 
-## **Sommaire**
+## Sommaire
 
-- [HBase Introduction](#introduction-à-hbase)
-  - [Pourquoi utiliser HBase ?](#pourquoi-utiliser-hbase-)
-  - [Caractéristiques principales de HBase](#caractéristiques-principales-de-hbase)
-  - [Principe de fonctionnement](#principe-de-fonctionnement)
-  - [HBase, un modèle de données souple](#hbase-un-modèle-de-données-souple)
-- [HBase et le NoSQL dans l’écosystème Hadoop](#hbase-et-le-nosql-dans-lécosystème-hadoop)
-  - [Limites du modèle Hadoop classique](#limites-du-modèle-hadoop-classique)
-  - [Qu’est-ce que le NoSQL ?](#quest-ce-que-le-nosql-)
-  - [Pourquoi utiliser des bases NoSQL ?](#pourquoi-utiliser-des-bases-nosql-)
-- [HBase Modèle de Données](#hbase-modèle-de-données)
-- [HBase Architecture](#hbase-architecture)
-- [HBase et ZooKeeper](#hbase-et-zookeeper)
-  - [Rôle de ZooKeeper dans HBase](#rôle-de-zookeeper-dans-hbase)
-  - [Le rôle du HBase Master](#le-rôle-du-hbase-master)
-  - [Le rôle des RegionServers](#le-rôle-des-regionservers)
-  - [Le concept de Région](#le-concept-de-région)
-- [HBase Stockage des tables](#hbase-stockage-des-tables)
-- [HBase Namespaces](#hbase-namespaces)
-- [HBase et Python : HappyBase](#hbase-et-python--happybase)
-- [HBase Liens web sur les commandes](#hbase-liens-web-sur-les-commandes)
-  - [Shell de HBase](#shell-de-hbase)
-    - [General Commands](#general-commands)
-    - [Data Definition Language](#data-definition-language)
-    - [Data Manipulation Language](#data-manipulation-language)
+- [I. Introduction à HBase](#i-introduction-à-hbase)
+  - [A. Pourquoi utiliser HBase ?](#a-pourquoi-utiliser-hbase-)
+  - [B. Caractéristiques principales de HBase](#b-caractéristiques-principales-de-hbase)
+  - [C. Principe de fonctionnement](#c-principe-de-fonctionnement)
+  - [D. HBase, un modèle de données souple](#d-hbase-un-modèle-de-données-souple)
+- [II. HBase et le NoSQL dans l’écosystème Hadoop](#ii-hbase-et-le-nosql-dans-lécosystème-hadoop)
+  - [A. Limites du modèle Hadoop classique](#a-limites-du-modèle-hadoop-classique)
+  - [B. Qu’est-ce que le NoSQL ?](#b-quest-ce-que-le-nosql-)
+  - [C. Pourquoi utiliser des bases NoSQL ?](#c-pourquoi-utiliser-des-bases-nosql-)
+- [III. HBase Modèle de Données](#iii-hbase-modèle-de-données)
+- [IV. HBase Architecture](#iv-hbase-architecture)
+- [V. HBase et ZooKeeper](#v-hbase-et-zookeeper)
+  - [A. Rôle de ZooKeeper dans HBase](#a-rôle-de-zookeeper-dans-hbase)
+  - [B. Le rôle du HBase Master](#b-le-rôle-du-hbase-master)
+  - [C. Le rôle des RegionServers](#c-le-rôle-des-regionservers)
+  - [D. Le concept de Région](#d-le-concept-de-région)
+- [VI. HBase Stockage des tables](#vi-hbase-stockage-des-tables)
+- [VII. HBase Namespaces](#vii-hbase-namespaces)
+- [VIII. HBase et Python : HappyBase](#viii-hbase-et-python--happybase)
+  - [A. Installer et démarrer](#a-installer-et-démarrer)
+  - [B. Connexion et manipulation](#b-connexion-et-manipulation)
+- [IX. HBase Liens web sur les commandes](#ix-hbase-liens-web-sur-les-commandes)
+  - [A. Shell de HBase](#a-shell-de-hbase)
 
----
+## I. Introduction à HBase
 
-## **Introduction à HBase**
-
----
-
-### **Pourquoi utiliser HBase ?**
+### A. Pourquoi utiliser HBase ?
 
 Les volumes de données actuels atteignent des échelles très élevées, allant du **téraoctet** au **pétaoctet**, voire au-delà. Si le **scaling out** (ajout de machines standards) permet de gérer cette croissance à moindre coût, certains cas d’usage dépassent les capacités d’Hadoop seul.
 
@@ -52,13 +47,13 @@ En particulier, Hadoop n’est pas adapté aux besoins nécessitant :
 👉 Les bases de données relationnelles classiques ne sont donc plus suffisantes dans ces contextes.
 **HBase répond à ces besoins en apportant un stockage distribué orienté accès temps quasi réel.**
 
-### **Caractéristiques principales de HBase**
+### B. Caractéristiques principales de HBase
 
 * une base de données **distribuée**, **orientée colonnes** et **multidimensionnelle** ;
 * conçue pour la **haute disponibilité** et les **hautes performances** ;
 * un **système de stockage** s’appuyant sur **HDFS**.
 
-### **Principe de fonctionnement**
+### C. Principe de fonctionnement
 
 L’architecture HBase repose sur deux types de nœuds :
 * **HBase Master** (actif à un instant donné) :
@@ -70,7 +65,7 @@ L’architecture HBase repose sur deux types de nœuds :
   * exécutent les opérations de **lecture** et **écriture** ;
   * communiquent directement avec les clients.
 
-### **HBase, un modèle de données souple**
+### D. HBase, un modèle de données souple
 
 * seules les **familles de colonnes** sont définies à l’avance ;
 * les colonnes sont créées **dynamiquement lors de l’insertion** ;
@@ -79,13 +74,9 @@ L’architecture HBase repose sur deux types de nœuds :
 * les lignes sont **triées par clé** et stockées séquentiellement ;
 * les colonnes d’une même famille sont également **ordonnées**.
 
----
+## II. HBase et le NoSQL dans l’écosystème Hadoop
 
-## **HBase et le NoSQL dans l’écosystème Hadoop**
-
----
-
-### **Limites du modèle Hadoop classique**
+### A. Limites du modèle Hadoop classique
 
 Hadoop repose historiquement sur deux composants principaux :
 * **HDFS** pour le stockage de grandes quantités de données ;
@@ -102,7 +93,7 @@ Cependant, dans de nombreux cas :
 
 C’est dans ce contexte qu’apparaissent des solutions telles que **HBase, Cassandra, CouchDB, Dynamo ou MongoDB**, qui font partie des technologies de **bases de données NoSQL**.
 
-### **Qu’est-ce que le NoSQL ?**
+### B. Qu’est-ce que le NoSQL ?
 
 Le terme **NoSQL** (Not Only SQL) désigne un ensemble de technologies de bases de données conçues pour répondre aux contraintes du **Big Data** :
 * données massives,
@@ -119,9 +110,7 @@ On distingue principalement **quatre grandes familles** de bases NoSQL :
 
 ⚠️ Les technologies NoSQL **ne remplacent pas** les bases relationnelles ou les data warehouses, mais les **complètent** selon les cas d’usage.
 
----
-
-### **Pourquoi utiliser des bases NoSQL ?**
+### C. Pourquoi utiliser des bases NoSQL ?
 
 Les bases NoSQL répondent à plusieurs besoins majeurs du Big Data :
 * **Scalabilité horizontale** : ajout de machines plutôt qu’augmentation de la puissance d’un serveur ;
@@ -132,19 +121,13 @@ Les bases NoSQL répondent à plusieurs besoins majeurs du Big Data :
 
 👉 **HBase** s’inscrit pleinement dans cette logique en apportant un stockage NoSQL distribué, intégré à Hadoop et capable de gérer des accès aléatoires à très grande échelle.
 
----
-
-## **HBase Modèle de Données**
-
----
+## III. HBase Modèle de Données
 
 ![hbase table model](assets/hbase-table-model.jpeg)
 
 > **EXEMPLE : Comparaison HBase & RDBMS**
 
 ![hbase rdbms compare](assets/hbase-rdbms-compare.jpeg)
-
----
 
 > **Plus spécifiquement, le modèle de données de HBase repose sur les concepts suivants :**
 
@@ -166,11 +149,7 @@ Les bases NoSQL répondent à plusieurs besoins majeurs du Big Data :
 10. Chaque clé-valeur a un horodatage qui désigne une version:
     * Modifier une colonne consiste à ajouter une nouvelle version
 
----
-
-## **HBase Architecture**
-
----
+## IV. HBase Architecture
 
 - Vue Physique de cellules
 
@@ -180,13 +159,9 @@ Les bases NoSQL répondent à plusieurs besoins majeurs du Big Data :
 
 ![hbase cluster](assets/hbase-cluster.jpeg)
 
----
+## V. HBase et ZooKeeper
 
-## **HBase et ZooKeeper**
-
----
-
-### **Rôle de ZooKeeper dans HBase**
+### A. Rôle de ZooKeeper dans HBase
 
 **Apache ZooKeeper** fournit un **service de coordination distribué** indispensable au fonctionnement de HBase. Il joue un rôle central dans la **gestion de l’état du cluster** et dans la **tolérance aux pannes**.
 
@@ -208,7 +183,7 @@ jps | grep Quorum             # doit afficher QuorumPeerMain
 
 > Sur ce cluster il n'y a **aucun service SysVinit** : `service zookeeper-server status` et `sudo` n'ont rien à faire ici — on est déjà root dans le conteneur, et ZooKeeper est lancé par le script du cours ci-dessus. Le process à reconnaître dans `jps` est `QuorumPeerMain`.
 
-### **Le rôle du HBase Master**
+### B. Le rôle du HBase Master
 
 Le **HBase Master** est responsable de la **gestion globale du cluster**.
 Un seul Master est actif à un instant donné ; les autres restent en **veille (backup)**.
@@ -226,9 +201,7 @@ Lors de leur démarrage, les Masters se connectent à **ZooKeeper** :
 * le premier devient **Master actif** ;
 * les autres restent **Masters passifs**, prêts à prendre le relais.
 
----
-
-### **Le rôle des RegionServers**
+### C. Le rôle des RegionServers
 
 Les **RegionServers** sont les nœuds chargés du **stockage effectif des données** et de l’**exécution des lectures et écritures**.
 
@@ -248,7 +221,7 @@ Pour garantir la durabilité des données :
 
 ![hbase stockage schéma](assets/hbase-schema-stockage.png)
 
-### **Le concept de Région**
+### D. Le concept de Région
 
 Une **région** est une **partition horizontale d’une table HBase**, définie par :
 * une clé de ligne de début,
@@ -263,17 +236,11 @@ Caractéristiques principales :
 
 👉 Les régions permettent à HBase de **passer à l’échelle** et de rester **hautement disponible**.
 
----
-
-## **HBase Stockage des tables**
-
----
+## VI. HBase Stockage des tables
 
 ![hbase shared explain](assets/hbase-shared-explain.jpeg)
 
-## **HBase Namespaces**
-
----
+## VII. HBase Namespaces
 
 - Un namespace est un groupement logique de tables similaire à une BD ou un schéma dans SGBDR.
 - Il y a des namespace prédéfinis dans HBase:
@@ -293,11 +260,7 @@ Caractéristiques principales :
 - Lister les tables d’un namespace :
   `list_namespace_tables 'nom_namespace'`
 
----
-
-## **HBase et Python : HappyBase**
-
----
+## VIII. HBase et Python : HappyBase
 
 HBase fournit une API en Python : [HappyBase](https://happybase.readthedocs.io/en/latest/). HappyBase est une bibliothèque conviviale permettant d'interagir avec Apache HBase ; sous la surface, elle utilise la bibliothèque Python Thrift pour se connecter à HBase via sa passerelle Thrift.
 
@@ -305,7 +268,7 @@ Dans le contexte de HBase, Java est le seul langage qui peut accéder directemen
 
 ![happybase](assets/happybase.png)
 
-### **Installer et démarrer**
+### A. Installer et démarrer
 
 **Rien à installer** : `happybase` 1.3.0 est déjà présent dans l'image du cours (cf. séquence 02). Vérifiez plutôt :
 
@@ -327,7 +290,7 @@ jps | grep Thrift         # doit afficher ThriftServer
 
 ![start thrift](assets/start-thrift.png)
 
-### **Connexion et manipulation**
+### B. Connexion et manipulation
 
 Par défaut, le service thrift écoute sur le port **9090**. On se connecte depuis Python à la table déjà créée (ex. `store`, voir l'EX 06) :
 
@@ -428,20 +391,18 @@ connection.close()
 
  ![script 2](assets/script-happybase-2.png)
 
----
+## IX. HBase Liens web sur les commandes
 
-## HBase Liens web sur les commandes
+### A. Shell de HBase
 
-### **Shell de HBase**
-
-#### General Commands
+#### 1. General Commands
 
 - `status` - Provides the status of HBase, for example, the number of servers.
 - `version` - Provides the version of HBase being used.
 - `table_help` - Provides help for table-reference commands.
 - `whoami` - Provides information about the user.
 
-#### Data Definition Language
+#### 2. Data Definition Language
 
 - `create` - Creates a table.
 - `list` - Lists all the tables in HBase.
@@ -454,7 +415,7 @@ connection.close()
 - `drop` - Drops a table from HBase.
 - `drop_all` - Drops the tables matching the ‘regex’ given in the command.
 
-#### Data Manipulation Language
+#### 3. Data Manipulation Language
 
 - `put` - Puts a cell value at a specified column in a specified row in a particular table.
 - `get` - Fetches the contents of row or a cell.

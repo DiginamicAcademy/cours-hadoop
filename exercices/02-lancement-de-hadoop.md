@@ -1,6 +1,6 @@
 ![Diginamic Logo](../assets/diginamic.png) ![Hadoop Logo](../assets/hadoop.png)
 
-# **Exercice 02 : Lancement de Hadoop**
+# Exercice 02 : Lancement de Hadoop
 
 > **Type** : exercice guidé · **Prérequis** : séquence 02 · **Durée** : ~1 h
 > **Objectifs** : démarrer le cluster de conteneurs, lancer les services Hadoop, accéder aux interfaces web, transférer des fichiers.
@@ -8,7 +8,7 @@
 
 Pour réaliser cet exercice, vous aurez besoin de la machine hôte du cluster (la vôtre en session locale, ou la VM fournie par votre formateur en session distante — cf. [cours 02, section « Accéder à l'environnement à distance »](../02-presentation-env-hadoop.md#accéder-à-lenvironnement-à-distance)).
 
-## **Sommaire**
+## Sommaire
 
 - **[Partie 1 – Démarrer les conteneurs](#partie-1--démarrer-les-conteneurs)**
 - **[Partie 2 – Lancer les services Hadoop](#partie-2--lancer-les-services-hadoop)**
@@ -17,7 +17,7 @@ Pour réaliser cet exercice, vous aurez besoin de la machine hôte du cluster (l
 
 ---
 
-## **Partie 1 – Démarrer les conteneurs**
+## Partie 1 – Démarrer les conteneurs
 
 Dans un terminal de la machine hôte (le projet de déploiement est fourni avec le cours) :
 
@@ -39,9 +39,9 @@ Entrez dans le conteneur master :
 
 ✅ Vous devez obtenir un terminal bash dans `hadoop-master` (prompt et `/home` comme répertoire de travail).
 
-## **Partie 2 – Lancer les services Hadoop**
+## Partie 2 – Lancer les services Hadoop
 
-### **A. Démarrer les services**
+### A. Démarrer les services
 
 Depuis le master, dans `/home` :
 
@@ -51,7 +51,7 @@ Depuis le master, dans `/home` :
 
 Ce script lance les services **dans l'ordre des dépendances** : ZooKeeper → HDFS → YARN → JobHistory → HBase → Thrift → REST → Hive. Vous pouvez aussi les lancer un à un (`./start-zookeeper.sh`, `./start-dfs.sh`, `./start-yarn.sh`, …) — c'est même recommandé la première fois, pour voir ce que fait chaque script (cattez-les !).
 
-### **B. Vérifier que les services sont actifs**
+### B. Vérifier que les services sont actifs
 
 ```bash
 jps
@@ -85,7 +85,7 @@ QuorumPeerMain      # ZooKeeper
 
 ---
 
-## **Partie 3 – Accéder aux interfaces web**
+## Partie 3 – Accéder aux interfaces web
 
 Depuis votre navigateur (sur la machine hôte : `localhost` ; en session distante : l'adresse communiquée par votre formateur) :
 
@@ -107,7 +107,7 @@ Depuis votre navigateur (sur la machine hôte : `localhost` ; en session dista
 
 ---
 
-## **Partie 4 – Transférer un fichier vers HDFS**
+## Partie 4 – Transférer un fichier vers HDFS
 
 Pour boucler la boucle avec la séquence 03 : déposez un petit fichier dans HDFS depuis le master.
 

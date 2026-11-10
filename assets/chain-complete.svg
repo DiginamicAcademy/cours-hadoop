@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- bande de fond -->
+  <rect x="40" y="30" width="880" height="350" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+
+  <!-- arrivée -->
+  <line x1="42" y1="230" x2="68" y2="230" stroke="#334155" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#ca)"/>
+  <text x="46" y="222" font-size="11" fill="#64748b">arrivée</text>
+
+  <!-- NiFi (07) -->
+  <rect x="70" y="155" width="165" height="150" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M70 167 Q70 155 80 155 L225 155 Q235 155 235 167 L235 185 L70 185 Z" fill="#ec4899"/>
+  <text x="152" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">NiFi (07)</text>
+  <text x="152" y="215" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">ingestion &amp; routage</text>
+  <text x="152" y="237" text-anchor="middle" font-size="13" fill="#334155">transforme CSV → TSV</text>
+  <text x="152" y="282" text-anchor="middle" font-size="12" fill="#94a3b8">l'« usine à flux »</text>
+
+  <!-- flèche 1 -->
+  <line x1="235" y1="230" x2="282" y2="230" stroke="#334155" stroke-width="2" marker-end="url(#ca)"/>
+  <text x="258" y="265" text-anchor="middle" font-size="11" fill="#64748b">dépose</text>
+
+  <!-- HDFS (03) -->
+  <rect x="285" y="155" width="165" height="150" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M285 167 Q285 155 295 155 L440 155 Q450 155 450 167 L450 185 L285 185 Z" fill="#f59e0b"/>
+  <text x="367" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">HDFS (03)</text>
+  <text x="367" y="215" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">stockage distribué</text>
+  <text x="367" y="237" text-anchor="middle" font-size="13" fill="#334155">blocs + réplication ×3</text>
+  <text x="367" y="282" text-anchor="middle" font-size="12" fill="#94a3b8">namenode / datanodes</text>
+
+  <!-- flèche 2 -->
+  <line x1="450" y1="230" x2="497" y2="230" stroke="#334155" stroke-width="2" marker-end="url(#ca)"/>
+  <text x="473" y="265" text-anchor="middle" font-size="11" fill="#64748b">lit</text>
+
+  <!-- MapReduce / Hive (04/05) -->
+  <rect x="500" y="155" width="165" height="150" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M500 167 Q500 155 510 155 L655 155 Q665 155 665 167 L665 185 L500 185 Z" fill="#2563eb"/>
+  <text x="582" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">MapReduce / Hive</text>
+  <text x="582" y="215" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">calcul par lots</text>
+  <text x="582" y="237" text-anchor="middle" font-size="13" fill="#334155">2 langages, 1 moteur</text>
+  <text x="582" y="282" text-anchor="middle" font-size="12" fill="#94a3b8">Hive n'est que du MR</text>
+
+  <!-- flèche 3 -->
+  <line x1="665" y1="230" x2="712" y2="230" stroke="#334155" stroke-width="2" marker-end="url(#ca)"/>
+  <text x="688" y="265" text-anchor="middle" font-size="11" fill="#64748b">charge</text>
+
+  <!-- HBase (06) -->
+  <rect x="715" y="155" width="165" height="150" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M715 167 Q715 155 725 155 L870 155 Q880 155 880 167 L880 185 L715 185 Z" fill="#16a34a"/>
+  <text x="797" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">HBase (06)</text>
+  <text x="797" y="215" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">service clé/valeur</text>
+  <text x="797" y="237" text-anchor="middle" font-size="13" fill="#334155">rowkey → lecture directe</text>
+  <text x="797" y="282" text-anchor="middle" font-size="12" fill="#94a3b8">temps réel</text>
+
+  <!-- affichage -->
+  <line x1="880" y1="230" x2="914" y2="230" stroke="#334155" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#ca)"/>
+  <text x="908" y="222" text-anchor="end" font-size="11" fill="#64748b">affichage</text>
+
+  <!-- légende : les 4 temps -->
+  <text x="52" y="333" font-size="13" fill="#475569">de l'arrivée à l'affichage :</text>
+
+  <circle cx="140" cy="358" r="11" fill="#ec4899"/>
+  <text x="140" y="362" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">1</text>
+  <text x="158" y="362" font-size="13" fill="#334155">amène &amp; transforme</text>
+
+  <circle cx="355" cy="358" r="11" fill="#f59e0b"/>
+  <text x="355" y="362" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">2</text>
+  <text x="373" y="362" font-size="13" fill="#334155">stocke</text>
+
+  <circle cx="570" cy="358" r="11" fill="#2563eb"/>
+  <text x="570" y="362" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">3</text>
+  <text x="588" y="362" font-size="13" fill="#334155">calcule</text>
+
+  <circle cx="785" cy="358" r="11" fill="#16a34a"/>
+  <text x="785" y="362" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">4</text>
+  <text x="803" y="362" font-size="13" fill="#334155">sert en temps réel</text>
+
+</svg>

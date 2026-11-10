@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="ha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- bande de fond -->
+  <rect x="40" y="30" width="880" height="460" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+
+  <!-- Analyste -->
+  <rect x="80" y="70" width="190" height="100" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 82 Q80 70 90 70 L260 70 Q270 70 270 82 L270 100 L80 100 Z" fill="#ec4899"/>
+  <text x="175" y="91" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Analyste</text>
+  <text x="175" y="128" text-anchor="middle" font-size="13" fill="#334155">HiveQL par Beeline</text>
+  <text x="175" y="150" text-anchor="middle" font-size="12" fill="#94a3b8">le client JDBC officiel</text>
+
+  <!-- HiveServer2 -->
+  <line x1="270" y1="120" x2="338" y2="120" stroke="#334155" stroke-width="2" marker-end="url(#ha)"/>
+  <text x="304" y="112" text-anchor="middle" font-size="11" fill="#64748b">requêtes</text>
+  <rect x="340" y="60" width="340" height="120" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M340 72 Q340 60 350 60 L670 60 Q680 60 680 72 L680 90 L340 90 Z" fill="#2563eb"/>
+  <text x="510" y="81" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">HiveServer2</text>
+  <text x="510" y="118" text-anchor="middle" font-size="14" fill="#334155">Driver : parse → compile → optimise</text>
+  <text x="510" y="140" text-anchor="middle" font-size="13" fill="#334155">produit un plan d'exécution</text>
+  <text x="510" y="162" text-anchor="middle" font-size="12" fill="#94a3b8">→ des jobs MapReduce</text>
+
+  <!-- YARN -->
+  <line x1="400" y1="180" x2="195" y2="238" stroke="#334155" stroke-width="2" marker-end="url(#ha)"/>
+  <text x="318" y="222" text-anchor="middle" font-size="11" fill="#64748b">plan d'exécution</text>
+  <rect x="80" y="240" width="230" height="90" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 252 Q80 240 90 240 L300 240 Q310 240 310 252 L310 270 L80 270 Z" fill="#16a34a"/>
+  <text x="195" y="261" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">YARN → MapReduce</text>
+  <text x="195" y="298" text-anchor="middle" font-size="13" fill="#334155">le calcul (mappers, reducers)</text>
+
+  <!-- HDFS -->
+  <line x1="195" y1="330" x2="195" y2="358" stroke="#334155" stroke-width="2" marker-end="url(#ha)"/>
+  <text x="205" y="348" text-anchor="start" font-size="11" fill="#64748b">lit / écrit les fichiers</text>
+  <rect x="80" y="360" width="230" height="90" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 372 Q80 360 90 360 L300 360 Q310 360 310 372 L310 390 L80 390 Z" fill="#f59e0b"/>
+  <text x="195" y="381" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">HDFS</text>
+  <text x="195" y="418" text-anchor="middle" font-size="13" fill="#334155">les fichiers (les données)</text>
+  <text x="195" y="438" text-anchor="middle" font-size="12" fill="#94a3b8">dossier = partition (pruning)</text>
+
+  <!-- Metastore -->
+  <line x1="470" y1="180" x2="470" y2="228" stroke="#334155" stroke-width="2" marker-end="url(#ha)"/>
+  <text x="478" y="212" text-anchor="start" font-size="11" fill="#64748b">lit le schéma à chaque requête</text>
+  <rect x="340" y="230" width="240" height="110" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M340 242 Q340 230 350 230 L570 230 Q580 230 580 242 L580 260 L340 260 Z" fill="#8b5cf6"/>
+  <text x="460" y="251" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Metastore</text>
+  <text x="460" y="290" text-anchor="middle" font-size="13" fill="#334155">catalogue des tables / schémas</text>
+  <text x="460" y="312" text-anchor="middle" font-size="12" fill="#94a3b8">⚠️ aucune donnée, que des métadonnées</text>
+
+  <!-- base relationnelle -->
+  <line x1="460" y1="340" x2="460" y2="366" stroke="#334155" stroke-width="2" marker-start="url(#ha)" marker-end="url(#ha)"/>
+  <text x="468" y="357" text-anchor="start" font-size="11" fill="#64748b">métadonnées</text>
+  <rect x="340" y="370" width="320" height="90" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M340 382 Q340 370 350 370 L650 370 Q660 370 660 382 L660 400 L340 400 Z" fill="#64748b"/>
+  <text x="500" y="391" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">base relationnelle</text>
+  <text x="500" y="428" text-anchor="middle" font-size="13" fill="#334155">Derby (ici) · MySQL (en production)</text>
+  <text x="500" y="448" text-anchor="middle" font-size="12" fill="#94a3b8">stocke les métadonnées du Metastore</text>
+
+</svg>

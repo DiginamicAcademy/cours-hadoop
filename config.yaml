@@ -1,0 +1,22 @@
+# Déclaration du cours, en deux sections. Vérifiée à chaque push qui la modifie
+# (workflow « Vérifier »). Voir le chapitre 00-Creer-un-depot-de-cours.md du
+# template.
+#
+# - course : ce que vise le cours. Recopiée à chaque version dans sa partie
+#   pédagogique, le dépôt privé cours-hadoop-Peda.
+# - credits : qui signe le cours, et avec quels comptes GitHub.
+course:
+  name: "Exploiter l'écosystème Hadoop : HDFS, MapReduce, Hive, HBase et NiFi"
+  RNCP:     ## titres RNCP dans lesquels ce cours entre.
+    ## Cours historiquement porté hors référentiel, rattaché ici nominalement au
+    ## titre EISI sans bloc revendiqué, pour rester dans le gabarit de la
+    ## collection. Voir -Peda/cadrage/03-ADR.md, ADR-005.
+    - RNCP40573
+  RNCPBloc: []  ## aucun bloc de compétences n'est revendiqué par ce cours.
+  timing: 5     ## durée prévue en jours (4 jours de cours + 1 jour de TP)
+
+credits:
+  authors: ## signataires du cours, dans l'ordre où ils doivent apparaître
+    - name: Robin Hotton
+      github: ## comptes GitHub avec lesquels il commite, pour reconnaître ses commits
+        - robinhotton

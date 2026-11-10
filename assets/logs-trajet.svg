@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="lta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- bande de fond -->
+  <rect x="40" y="30" width="880" height="460" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+
+  <!-- tâche (conteneur) -->
+  <rect x="80" y="100" width="190" height="95" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 112 Q80 100 90 100 L260 100 Q270 100 270 112 L270 130 L80 130 Z" fill="#f59e0b"/>
+  <text x="175" y="121" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">tâche (conteneur)</text>
+  <text x="175" y="158" text-anchor="middle" font-size="13" fill="#334155">le mapper · son stdout</text>
+  <text x="175" y="178" text-anchor="middle" font-size="12" fill="#94a3b8">pas d'écriture locale !</text>
+
+  <!-- NodeManager -->
+  <line x1="270" y1="147" x2="328" y2="147" stroke="#334155" stroke-width="2" marker-end="url(#lta)"/>
+  <text x="299" y="139" text-anchor="middle" font-size="11" fill="#64748b">au fil de l'eau</text>
+  <rect x="330" y="100" width="190" height="95" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M330 112 Q330 100 340 100 L510 100 Q520 100 520 112 L520 130 L330 130 Z" fill="#6366f1"/>
+  <text x="425" y="121" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">NodeManager</text>
+  <text x="425" y="158" text-anchor="middle" font-size="13" fill="#334155">stderr · stdout · syslog</text>
+  <text x="425" y="178" text-anchor="middle" font-size="12" fill="#94a3b8">ports 8041 / 8042</text>
+
+  <!-- Log Aggregation -->
+  <line x1="520" y1="147" x2="578" y2="147" stroke="#334155" stroke-width="2" marker-end="url(#lta)"/>
+  <text x="549" y="139" text-anchor="middle" font-size="11" fill="#64748b">fin de job</text>
+  <rect x="580" y="100" width="300" height="95" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M580 112 Q580 100 590 100 L870 100 Q880 100 880 112 L880 130 L580 130 Z" fill="#16a34a"/>
+  <text x="730" y="121" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Log Aggregation</text>
+  <text x="730" y="158" text-anchor="middle" font-size="13" fill="#334155">tous les logs centralisés</text>
+  <text x="730" y="178" text-anchor="middle" font-size="12" fill="#94a3b8">le POURQUOI (« Caused by: »)</text>
+
+  <!-- deux portes d'accès -->
+  <rect x="620" y="250" width="280" height="62" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="760" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">UI 8088 → application → « Logs »</text>
+  <text x="760" y="298" text-anchor="middle" font-size="12" fill="#64748b">le plus rapide (ResourceManager)</text>
+
+  <rect x="620" y="350" width="280" height="62" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="760" y="376" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">yarn logs -applicationId …</text>
+  <text x="760" y="398" text-anchor="middle" font-size="12" fill="#64748b">le plus précis (sur le master)</text>
+
+  <!-- analyste -->
+  <rect x="80" y="380" width="220" height="80" rx="12" fill="#0f172a"/>
+  <text x="190" y="415" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">vous — l'analyste</text>
+  <text x="190" y="439" text-anchor="middle" font-size="12" fill="#94a3b8">même UI que YARN : 8088</text>
+
+  <!-- liaisons analyste → portes -->
+  <line x1="300" y1="405" x2="616" y2="288" stroke="#334155" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#lta)"/>
+  <text x="468" y="352" text-anchor="middle" font-size="11" fill="#64748b">navigateur</text>
+  <line x1="300" y1="425" x2="616" y2="382" stroke="#334155" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#lta)"/>
+  <text x="460" y="408" text-anchor="middle" font-size="11" fill="#64748b">terminal</text>
+
+  <!-- portes → Log Aggregation -->
+  <line x1="640" y1="250" x2="726" y2="199" stroke="#334155" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#lta)"/>
+  <text x="648" y="233" text-anchor="middle" font-size="11" fill="#64748b">onglet « Logs »</text>
+  <line x1="770" y1="250" x2="796" y2="199" stroke="#334155" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#lta)"/>
+  <text x="788" y="233" text-anchor="middle" font-size="11" fill="#64748b">mêmes logs</text>
+
+</svg>

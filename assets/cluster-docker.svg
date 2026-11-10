@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <!-- Conteneur principal -->
+  <rect x="50" y="40" width="860" height="405" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="74" y="72" font-size="16" font-weight="600" fill="#334155">Machine hôte (Docker Compose)</text>
+
+  <!-- hadoop-master -->
+  <rect x="80" y="90" width="340" height="180" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 100 Q80 90 90 90 L410 90 Q420 90 420 100 L420 128 L80 128 Z" fill="#f59e0b"/>
+  <text x="250" y="113" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">hadoop-master</text>
+  <circle cx="100" cy="160" r="4" fill="#f59e0b"/>
+  <text x="114" y="165" font-size="14" fill="#334155">NameNode — métadonnées HDFS</text>
+  <circle cx="100" cy="190" r="4" fill="#ec4899"/>
+  <text x="114" y="195" font-size="14" fill="#334155">HBase Master — NoSQL (06)</text>
+  <circle cx="100" cy="220" r="4" fill="#2563eb"/>
+  <text x="114" y="225" font-size="14" fill="#334155">HiveServer2 — SQL sur HDFS (05)</text>
+  <text x="100" y="252" font-size="12" fill="#94a3b8">le « chef d'orchestre » du cluster</text>
+
+  <!-- hadoop-slave1 -->
+  <rect x="460" y="90" width="350" height="90" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M460 100 Q460 90 470 90 L800 90 Q810 90 810 100 L810 118 L460 118 Z" fill="#16a34a"/>
+  <text x="635" y="109" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">hadoop-slave1</text>
+  <text x="635" y="146" text-anchor="middle" font-size="14" fill="#334155">DataNode 1 · RegionServer · NodeManager</text>
+  <text x="635" y="166" text-anchor="middle" font-size="12" fill="#94a3b8">stocke des blocs + exécute les tâches</text>
+
+  <!-- hadoop-slave2 -->
+  <rect x="460" y="194" width="350" height="76" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M460 204 Q460 194 470 194 L800 194 Q810 194 810 204 L810 222 L460 222 Z" fill="#16a34a"/>
+  <text x="635" y="213" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">hadoop-slave2</text>
+  <text x="635" y="246" text-anchor="middle" font-size="14" fill="#334155">idem slave1</text>
+
+  <!-- conteneur NiFi -->
+  <rect x="80" y="300" width="340" height="100" rx="10" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+  <path d="M80 310 Q80 300 90 300 L410 300 Q420 300 420 310 L420 338 L80 338 Z" fill="#ec4899"/>
+  <text x="250" y="323" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">conteneur NiFi</text>
+  <text x="250" y="362" text-anchor="middle" font-size="14" fill="#334155">ingestion : un flux CSV → HDFS</text>
+  <text x="250" y="384" text-anchor="middle" font-size="14" fill="#334155">UI : <tspan font-weight="700">https://localhost:8443</tspan></text>
+
+  <!-- réseau -->
+  <rect x="460" y="300" width="350" height="100" rx="10" fill="#eef2ff" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="635" y="344" text-anchor="middle" font-size="15" font-weight="700" fill="#4338ca">réseau « hadoop-net »</text>
+  <text x="635" y="370" text-anchor="middle" font-size="13" fill="#6366f1">HDFS · YARN · Hive · HBase</text>
+
+  <!-- accès depuis le navigateur -->
+  <line x1="480" y1="445" x2="480" y2="500" stroke="#0f172a" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+  <rect x="250" y="514" width="460" height="34" rx="17" fill="#0f172a"/>
+  <text x="480" y="536" text-anchor="middle" font-size="14" fill="#e2e8f0">http://localhost:9870 <tspan fill="#94a3b8">·</tspan> :8088 <tspan fill="#94a3b8">·</tspan> https://:8443/nifi</text>
+</svg>

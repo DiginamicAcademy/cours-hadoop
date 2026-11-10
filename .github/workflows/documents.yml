@@ -408,6 +408,25 @@ jobs:
             style: |
               section table {font-size: 0.85em}
               blockquote {border: 2px green solid; border-left-width: 15px; padding: 0.5em 15px;font-style: italic }
+              section.lead {text-align: center}
+              section.lead h1 {font-size: 2em}
+              section.section {text-align: center}
+              section.statement {text-align: center}
+              section.exercise {border-top: 10px solid #4a90d9}
+              section.correction {border-top: 10px solid #67b26f}
+              .card {border: 2px solid #888; border-radius: 10px; padding: 0.4em 0.8em; margin: 0.3em 0}
+              .card-title {font-weight: bolder; margin-bottom: 0.2em}
+              .card-blue {border-color: #4a90d9}
+              .card-pink {border-color: #d966a8}
+              .card-green {border-color: #67b26f}
+              .card-yellow, .card-amber {border-color: #e8b93e}
+              .card-red {border-color: #d9534f}
+              .card-purple {border-color: #8393f0}
+              .cols-2 {display: grid; grid-template-columns: 1fr 1fr; gap: 1em}
+              .cols-3 {display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em}
+              .cols-2 > div, .cols-3 > div {min-width: 0}
+              .flex {display: flex}
+              .justify-center {justify-content: center; align-items: center}
         run: |
           awk '
             NR == 1 && $0 == "---" { fm = 1; print; next }

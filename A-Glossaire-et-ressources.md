@@ -147,7 +147,7 @@
 
 **Scripts de référence — `annexes/utils/`**
 
-- [`0-job.sh`](annexes/utils/0-job.sh) — enchaîner démarrage des services, préparation HDFS, soumission du job et lecture du résultat.
+- [`0-job.sh`](annexes/utils/0-job.sh) — version outillée : arguments, vérifications, enchaînement démarrage des services, préparation HDFS, soumission du job, contrôle `_SUCCESS` et lecture du résultat.
 - [`1-structure-mapper.py`](annexes/utils/1-structure-mapper.py), [`2-structure-reducer.py`](annexes/utils/2-structure-reducer.py) — squelettes commentés d'un mapper et d'un reducer.
 - [`3-mapper-txt.py`](annexes/utils/3-mapper-txt.py), [`4-mapper-csv-reader.py`](annexes/utils/4-mapper-csv-reader.py) — mapper sur texte simple, puis mapper avec lecture CSV protégée.
 - [`5-reducer-hbase.py`](annexes/utils/5-reducer-hbase.py), [`6-reducer-matplotlib-pdf.py`](annexes/utils/6-reducer-matplotlib-pdf.py) — reducer qui écrit dans HBase, reducer qui produit un graphique PDF.

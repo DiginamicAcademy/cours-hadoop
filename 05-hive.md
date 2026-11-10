@@ -396,7 +396,7 @@ Total de la colonne `streams` de la table (952 valeurs, la ligne corrompue pass�
 >
 > 🤔 **Question de contrôle — la plus importante de la semaine** : la validation croisée MR ↔ Hive n'a de sens que si **les deux côtés appliquent la même convention**. Écrivez la requête Hive qui éclate les duos, et la requête MapReduce qui ne les éclate pas : vous devez retrouver, de part et d'autre, les deux classements ci-dessus. Si vos chiffres MR et Hive divergent, la première cause à écarter n'est pas un bug — c'est une divergence de convention.
 
-> 🤔 **Validation croisée** : dans les [exercices du chapitre 04](04-mapreduce-et-yarn.md#v-exercices), l'exercice 1 calculait les streams **par année de sortie**. La requête équivalente ici serait `GROUP BY released_year`. Lancez-la et comparez ligne à ligne avec votre sortie MapReduce : **ce sont exactement les mêmes chiffres** — c'est la preuve que Hive compile le SQL en MapReduce sous le capot.
+> 🤔 **Validation croisée** : dans les [exercices du chapitre 04](04-mapreduce-et-yarn.md#iv-exercices), l'exercice 1 calculait les streams **par année de sortie**. La requête équivalente ici serait `GROUP BY released_year`. Lancez-la et comparez ligne à ligne avec votre sortie MapReduce : **ce sont exactement les mêmes chiffres** — c'est la preuve que Hive compile le SQL en MapReduce sous le capot.
 
 **Résultat attendu** (extrait de trois années de contrôle) :
 

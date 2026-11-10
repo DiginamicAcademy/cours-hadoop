@@ -64,6 +64,6 @@
 
   <!-- orchestration YARN -->
   <rect x="60" y="330" width="840" height="30" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
-  <text x="480" y="350" text-anchor="middle" font-size="13" fill="#334155">YARN orchestre : il place les splits sur les mappers, distribue aux reducers, relance en cas d'échec</text>
+  <text x="480" y="350" text-anchor="middle" font-size="13" fill="#334155">YARN alloue les conteneurs : l'ApplicationMaster y place mappers et reducers ; MapReduce gère splits et relances</text>
 
 </svg>

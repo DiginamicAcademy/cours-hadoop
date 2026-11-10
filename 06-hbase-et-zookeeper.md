@@ -152,13 +152,13 @@ Les bases NoSQL répondent à plusieurs besoins majeurs du Big Data :
 2. Les tables contiennent des lignes et des colonnes
 3. Chaque ligne est identifiée par une clé unique (RowKey)
 4. Les colonnes sont regroupées dans des familles de colonnes (Column family)
-5. Chacune des valeurs d'une cellule à une version désignée par un horodatage
+5. Chacune des valeurs d'une cellule a une version désignée par un horodatage
 6. Le schéma de table définit les familles de colonnes
     * On peut avoir un grand nombre variable de colonnes par ligne
     * (clé de ligne, clé de colonne, horodatage) -> valeur
     * Le tuple {ligne, colonne, version} spécifie exactement une cellule
 7. Les lignes sont rangées dans l'ordre lexicographique (ordre binaire des octets) de clés de lignes
-8. Il n'y a pas de schéma de table dans HBase
+8. Il n'y a pas de schéma de colonnes figé dans HBase
     * On doit préciser les familles de colonnes possibles.
     * Elles déterminent l'organisation du stockage physique sur disque.
     * Chaque ligne peut avoir différents ensembles de familles de colonnes.

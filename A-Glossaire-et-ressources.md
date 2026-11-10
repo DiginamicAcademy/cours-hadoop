@@ -173,7 +173,7 @@ Le cluster du cours (Hadoop 3.3.6, Hive 4.1.0, HBase, NiFi 2.11.0) est défini d
 
 ### Jeux de données
 
-- `data/Spotify_Most_Streamed_Songs.csv` — fil rouge des exercices 04 à 07.
+- `data/Spotify_Most_Streamed_Songs.csv` — fil rouge des exercices 03 à 07.
 - `data/dataw_fro03_mini_1000.csv` — support du TP final ; `data/dataw_fro03.csv` (complet) en bonus.
 
 ### Liens externes cités dans les chapitres

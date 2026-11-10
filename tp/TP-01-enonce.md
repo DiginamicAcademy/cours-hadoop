@@ -35,12 +35,12 @@ _Exemple : utilisation d'une structure minimale._
 
 ## **I. Objectif — les questions du TP**
 
-Les fichiers `dataw_fro03_*.csv` enregistrent des **commandes** d'articles (catalogue : « Tête de menagere », « Drap de bain », « Montre »…). Cinq colonnes vous intéressent :
+Les fichiers `dataw_fro03_*.csv` enregistrent des **commandes** d'articles (catalogue : « Tête de menagere », « Drap de bain », « Montre »…). Quatre colonnes vous intéressent (index de la colonne dans la ligne CSV, en partant de 0) :
 
 | Colonne (index) | Nom | Usage |
 |---|---|---|
 | 5 | `villecli` | la ville du client |
-| 7 | `datcde` | la date de commande (`AAAA-MM-JJ`) |
+| 7 | `datcde` | la date de commande (`AAAA-MM-JJ HH:MM:SS`, heure toujours à zéro) |
 | 15 | `qte` | la quantité d'articles commandée |
 | 17 | `libobj` | l'article commandé |
 
@@ -85,7 +85,7 @@ hdfs dfs -ls input
 
 **2.** Vérifiez que le fichier est complet : `hdfs dfs -cat input/dataw_fro03_mini_1000.csv | tail -3` (la dernière ligne est une commande du client `4676` sur `SAINT ROMAIN DE COLBOSC`).
 
-> 📋 **Pour le rapport** : documentez la connexion à la machine (IP, port, utilisateur, mot de passe) telle qu'elle a réellement fonctionné, les services démarrés et les commandes utilisées (HDFS, YARN, ZooKeeper, HBase). Chaque action du TP donne lieu à une ligne « action → retour observé ».
+> 📋 **Pour le rapport** : documentez la connexion à la machine (IP, port, utilisateur — le mot de passe ne se documente pas) telle qu'elle a réellement fonctionné, les services démarrés et les commandes utilisées (HDFS, YARN, ZooKeeper, HBase). Chaque action du TP donne lieu à une ligne « action → retour observé ».
 
 ---
 
@@ -169,7 +169,7 @@ DOUDEVILLE#2006   15
 
 `578` paires `ville#année` au total — le mini ne contient presque que l'année `2006` ; c'est sur le **fichier complet** (bonus) que cette question devient parlante.
 
-> 💡 **Lien pédagogique** : la clé est **composite** — deux dimensions accolées dans une seule clé textuelle. C'est le même geste que `danceability% + energy%` du module précédent.
+> 💡 **Lien pédagogique** : la clé est **composite** — deux dimensions accolées dans une seule clé textuelle. Le reducer la décompose avant d'agréger : chaque dimension redevient un champ exploitable.
 
 > 📋 **Pour le rapport** : expliquez pourquoi la clé composite passe par UNE seule clé (et le tri du shuffle), et notez ce que la question 2 apporte de plus que la question 1.
 
@@ -215,7 +215,7 @@ SELECT ville, annee, SUM(qte) AS total FROM ventes_db.ventes
 
 ## **VI. Question 4 — stocker le résultat en clé/valeur (HBase)**
 
-> Exercice d'origine : [`../exercices/06-hbase.md`](../exercices/06-hbase.md) — partie IV (exercices 4-5), ex-EX/04 6-7.
+> Exercice d'origine : [`../exercices/06-hbase.md`](../exercices/06-hbase.md) — partie IV (exercices 4-5).
 
 **Q4 — Comment retrouver, en clé/valeur, le total d'articles d'une ville ?**
 
@@ -265,7 +265,7 @@ hbase shell
 cp data/dataw_fro03_mini_1000.csv nifi/input/
 ```
 
-**2.** Dans NiFi (`https://localhost:8443/nifi`), vérifiez que le flux du chapitre 07 tourne : **GetFile → ConvertRecord → PutFile**, avec le câblage `failure` vers `/opt/nifi/errors`. Le fichier doit ressortir en **TSV** dans `/opt/nifi/output` (= `/home/staging` du master).
+**2.** Dans NiFi (`https://localhost:8443/nifi`), vérifiez que le flux du chapitre 07 tourne : **GetFile → ConvertRecord → PutFile**, avec le câblage `failure` vers `/opt/nifi/errors`. Le fichier doit ressortir en **TSV** dans `/opt/nifi/output` (= `/home/staging` du master) — l'extension reste `.csv`, c'est le contenu qui change (cf. chap. 07).
 
 **3.** Déposez le fichier produit dans HDFS, là où Hive le lit :
 
@@ -328,7 +328,7 @@ Vous venez d'enchaîner, avec **une seule donnée**, les cinq étapes de la pipe
 # emplacement des sorties de cette session
 output/ventes_ville/part-00000            # MapReduce Q1
 output/ventes_ville_annee/part-00000      # MapReduce Q2
-/warehouse? — table externe Hive         # /user/root/ventes/clean/
+/user/root/ventes/clean/                # table externe Hive (LOCATION)
 ventes                                    # table HBase (scan / get)
 ```
 > ⚠️ La localisation Hive est celle définie dans `CREATE EXTERNAL TABLE … LOCATION` : reportez celle **que vous avez réellement utilisée**.

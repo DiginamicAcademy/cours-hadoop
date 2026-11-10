@@ -90,7 +90,7 @@ QuorumPeerMain      # ZooKeeper
 Depuis votre navigateur (sur la machine hôte : `localhost` ; en session distante : l'adresse communiquée par votre formateur) :
 
 1. **Interface web du NameNode (HDFS)** : <http://localhost:9870>
- ![9870](../assets/9000.jpeg)
+ ![9870](../assets/9870.jpeg)
 
 2. **Interface web du ResourceManager (YARN)** : <http://localhost:8088>
  ![8088](../assets/8088.jpeg)

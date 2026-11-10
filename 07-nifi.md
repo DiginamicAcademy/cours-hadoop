@@ -70,11 +70,11 @@ Un FlowFile traverse le flux en gardant son contenu, enrichi d'attributs à chaq
 | **Routage** | orienter, filtrer | `RouteOnAttribute`, `QueryRecord` |
 | **Destination (egress)** | faire sortir | `PutFile`, `PutS3Object`, `PutKafka` |
 
-> Un **funnel** (entonnoir) n'appartient à aucune de ces familles : ce n'est **pas** un processeur. C'est un exutoire, une cible de connection qui accepte plusieurs flux entrants et les fusionne en une seule file — typiquement pour récolter les `failure` de toute une branche sans créer de processeur. Il se dépose depuis la palette comme les connections, et ne s'configure pas.
+> Un **funnel** (entonnoir) n'appartient à aucune de ces familles : ce n'est **pas** un processeur. C'est un exutoire, une cible de connection qui accepte plusieurs flux entrants et les fusionne en une seule file — typiquement pour récolter les `failure` de toute une branche sans créer de processeur. Il se dépose depuis la palette comme les connections, et ne se configure pas.
 
 Un processeur émet son résultat sur des **relationships** : `success` (traité) et `failure` (en échec) le plus souvent. **Une relationship non connectée est une erreur de conception** : elle signifie « si ça échoue, la donnée disparaît silencieusement ».
 
-**3. La connection** — la file entre deux processeurs. C'est une vraie **queue** avec capacité limitée (back pressure : nombre d'objets / volume de données) ; si elle se remplit, le processeur amont est **arrêté** en amont (stop and wait), pas submergé. La connection porte aussi le nom de la relationship (`success`, `failure`).
+**3. La connection** — la file entre deux processeurs. C'est une vraie **queue** avec capacité limitée (back pressure : nombre d'objets / volume de données) ; si elle se remplit, le processeur amont est **arrêté** (stop and wait), pas submergé. La connection porte aussi le nom de la relationship (`success`, `failure`).
 
 ```
  GetFile ──success──► UpdateRecord ──success──► PutFile
@@ -102,7 +102,7 @@ L'UI web de NiFi présente un **canvas** : on y glisse des processeurs depuis l
 
 La fonctionnalité la plus impressionnante de NiFi pour un data engineer : cliquer sur un événement dans une queue → **View Data Provenance** : l'historique complet de ce FlowFile — heure d'entrée, processeurs traversés, attributs à chaque étape, **contenu avant/après chaque transformation** (visualisables et téléchargeables), durée de chaque saut.
 
-Concrètement, quand la question arrive — _« Il manque les données du 12 mars, que s'est-il passé ? »_ — la réponse est à trois clics : chercher l'événement, voir où il s'est arrêté, **rejouer** (replay) la donnée depuis le point de l'échec. C'est ce garantie-là — reprise sur erreur avec traçabilité — qui justifie NiFi par rapport à un cron + `hdfs dfs -put`.
+Concrètement, quand la question arrive — _« Il manque les données du 12 mars, que s'est-il passé ? »_ — la réponse est à trois clics : chercher l'événement, voir où il s'est arrêté, **rejouer** (replay) la donnée depuis le point de l'échec. C'est cette garantie-là — reprise sur erreur avec traçabilité — qui justifie NiFi par rapport à un cron + `hdfs dfs -put`.
 
 ### **Les processeurs clés pour notre cas d'usage**
 
@@ -121,7 +121,7 @@ GetFile ──► ConvertRecord/UpdateRecord ──► PutFile ──► hdfs df
 | **PutFile** | écrire le contenu du FlowFile sur le disque du conteneur NiFi (répertoire, nom de fichier, stratégie en cas de doublon) |
 | *puis, à la main* `hdfs dfs -moveFromLocal` | le dernier pas entre NiFi et HDFS, fait depuis le master |
 
-> ⚠️ **Pourquoi le dernier maillon n'est pas un processeur.** L'image NiFi du cours (`apache/nifi:2.11.0`, officielle) embarque **118 NAR, dont aucun NAR Hadoop** : les processeurs `PutHDFS`, `GetHDFSFile` et leur *controller resource* de configuration Hadoop sont construits derrière un profil Maven optionnel (`include-hadoop`) que la distribution officielle désactive. Vous ne les trouverez pas dans la palette, et il n'y a rien à « ajouter » : la ressource n'est pas installée. Le montage `nifi/hadoop/` du `docker-compose.yml` reste utile pour `hdfs-site.xml` côté conteneur, mais il ne branchera aucun processeur.
+> ⚠️ **Pourquoi le dernier maillon n'est pas un processeur.** L'image NiFi du cours (`apache/nifi:2.11.0`, officielle) embarque **118 NAR, dont aucun NAR Hadoop** : les processeurs `PutHDFS`, `GetHDFSFile` et leur *controller service* de configuration Hadoop sont construits derrière un profil Maven optionnel (`include-hadoop`) que la distribution officielle désactive. Vous ne les trouverez pas dans la palette, et il n'y a rien à « ajouter » : la ressource n'est pas installée. Le montage `nifi/hadoop/` du `docker-compose.yml` reste utile pour `hdfs-site.xml` côté conteneur, mais il ne branchera aucun processeur.
 >
 > Ce n'est pas une perte pédagogique, c'est un gain : le passage par `PutFile` + `hdfs dfs -moveFromLocal` **vous fait faire le geste HDFS vous-même**, et il rend visible une frontière que NiFi a tendance à cacher — *où finit l'orchestrateur, où commence le système de fichiers*. En production on réintroduirait un connecteur HDFS (ou l'on ferait tourner NiFi sur les nœuds du cluster) ; à ce stade du cursus, savoir nommer cette frontière vaut mieux qu'un processeur de plus.
 

@@ -69,7 +69,7 @@ Ces commandes sont proche de celles utilisées par le Shell linux comme ls, mkdi
 
 ## **II. Manipulation des commandes HDFS**
 
-Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour tous les traitements MapReduce du cursus. C'est le seul jeu de données fourni avec le cours (`data/`), et **les EX 04 à 07 ne travaillent que sur lui** — gardez-le.
+Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour tous les traitements MapReduce du cursus. C'est le jeu de données de référence du cours (`data/` — le TP final change de jeu), et **les exercices 03 à 07 ne travaillent que sur lui** — gardez-le.
 
 > ⚠️ **Le fichier n'est pas dans le conteneur.** `data/` vit sur *votre* machine ; le master HDFS ne le voit pas encore. Toutes les sessions du cursus partent d'une copie faite **une fois pour toutes** :
 >
@@ -78,7 +78,7 @@ Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour to
 > docker cp ../data/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/
 > # puis, dans le conteneur :
 > docker exec -it hadoop-master bash
-> ls -l /home/Spotify_Most_Streamed_Songs.csv   # 156547 octets
+> ls -l /home/Spotify_Most_Streamed_Songs.csv   # 155593 octets
 > ```
 >
 > Si le `ls -l` suivant affiche `No such file`, c'est que le `docker cp` n'a pas été fait depuis le répertoire du cours.
@@ -108,13 +108,14 @@ Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour to
    **Résultat attendu** (mesuré) :
    ```
    Found 1 items
-   -rw-r--r--   1 root supergroup    156547 2026-09-11 18:33 /user/root/input/Spotify_Most_Streamed_Songs.csv
+   -rw-r--r--   1 root supergroup    155593 2026-09-11 18:33 /user/root/input/Spotify_Most_Streamed_Songs.csv
    ```
 
    Trois choses à lire dans cette ligne, toutes vérifiables :
    - le **premier chiffre après les droits est 1**, pas 3 : c'est le facteur de réplication, et le cluster du cours est configuré à `dfs.replication=1`. Un `3` signifierait que vous avez monté un autre cluster ;
-   - la taille est **156 547 octets** exactement — le même nombre qu'en local : personne n'a transformé le fichier ;
-   - le chemin absolu est `/user/root/input/…` : `input`, sans `/`, est relatif à votre répertoire utilisateur HDFS.
+   - la taille est **155 593 octets** exactement — le même nombre qu'en local : personne n'a transformé le fichier ;
+   - le chemin absolu est `/user/root/input/…` : `input`, sans `/`, est relatif à votre répertoire utilisateur HDFS ;
+- la date et l'heure affichées sont **celles de l'envoi** : les vôtres différeront de la mesure ci-dessus, c'est normal.
 
 4. Afficher les 10 dernières lignes du fichier stocké dans HDFS.
 

@@ -633,7 +633,7 @@ DataNode · NodeManager · HRegionServer
 </div>
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/9000.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
+<img src="assets/9870.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
 <img src="assets/8088.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
 </div>
 

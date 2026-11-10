@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# **HDFS (HaDoop File System)**
+# **HDFS (Hadoop File System)**
 
 > **Objectifs** : comprendre l'architecture HDFS (NameNode, DataNode, blocs, réplication) · maîtriser les opérations de base (put, get, ls…) · configurer et démarrer le cluster.
 > **Prérequis** : séquences 01-02 · **Durée** : ~5 h · **Type** : cours + manipulations
@@ -32,7 +32,7 @@
   - [Secondary NameNode](#secondary-namenode)
 - [Opérations HDFS](#opérations-hdfs)
 - [Configurer et démarrer HDFS](#configurer-et-démarrer-hdfs)
-  - [Configurer HDFS](#configurer-hdfs)
+  - [Initialiser et démarrer](#initialiser-et-démarrer)
   - [Démarrer le cluster HDFS](#démarrer-le-cluster-hdfs)
 
 ---
@@ -56,7 +56,7 @@
   - pour interroger,
   - pour lire les données qui y sont stockées.
 - Cependant, on ne va jamais l'interroger en direct.
-- En effet, Hadoop possède une couche d'abstraction nommée HaDoopFS qui permet d'interroger, de lire et d'écrire des données directement dans un système de fichiers.
+- En effet, Hadoop possède une couche d'abstraction nommée HadoopFS qui permet d'interroger, de lire et d'écrire des données directement dans un système de fichiers.
 - Cette couche d'abstraction a le gros avantage d'avoir plusieurs backend et plusieurs frontend.
 - En backend, on entend les systèmes de fichiers supportés.
 
@@ -69,15 +69,15 @@
 
 ### **Comment utiliser HDFS**
 
-- Pour ce faire, on va utiliser des URL, des URI exactement, des « Unique Resource Identifier » et des « Unique Resource Location », pour savoir où les données sont stockées.
+- Pour ce faire, on va utiliser des URI — des « Uniform Resource Identifier » — et plus précisément des URL, des « Uniform Resource Locator », pour savoir où les données sont stockées.
 - A chaque fois, on va avoir donc, un protocole qui va définir le type de système de fichiers
 - Ainsi, si on veut parler de l'HDFS, on va avoir notre URI qui va commencer par hdfs://, tout comme si on veut parler d'une ressource sur le système de fichiers local, on va utiliser file://.
-- **Je vous encourage vivement à toujours utiliser HaDoopFS sans spécifier le protocole afin de laisser la possibilité à l'utilisateur de votre application de le faire.**
-- **Cela permettra que tous vous outils fonctionnent maintenant avec HaDoopFS, puissent fonctionner quel que soit le système de fichiers derrière.**
+- **Je vous encourage vivement à toujours utiliser HadoopFS sans spécifier le protocole afin de laisser la possibilité à l'utilisateur de votre application de le faire.**
+- **Cela permettra que tous vous outils fonctionnent maintenant avec HadoopFS, puissent fonctionner quel que soit le système de fichiers derrière.**
 
 ### **API HDFS**
 
-- HaDoopFS met donc à disposition diverses API
+- HadoopFS met donc à disposition diverses API
 - C'est-à-dire qu'on va pouvoir y accéder par exemple en ligne de commande, pour pouvoir interroger le système de fichiers quel qu'il soit ou via une API Java (ou aussi une API dans notre cas en Python avec une API JAVA)
 - Qui permet de créer d'écrire, de modifier, de supprimer des fichiers.
 - Via une librairie C, qui est en fait construite grâce à JNI, Java Native Interface, qui permet d'avoir les méthodes Java accessibles directement en C. Via Thrift, un protocole directement pour accéder aux données, qui est propre à Apache.
@@ -134,7 +134,7 @@
 - l'HDFS a également un système de permission.
 - De façon similaire à ce qu'on retrouve sous Linux, chaque fichier et répertoire a un propriétaire et un groupe.
 - Les trois sont alors définis pour le propriétaire, le groupe et les autres, et à chaque fois, pour la lecture, l'écriture et la traversée du répertoire.
-- On a également un stick-bit pour les répertoires et l'HDFS supporte les ACL POSIX pour avoir des permissions plus fines avec par exemple getfacl.
+- On a également un sticky bit pour les répertoires et l'HDFS supporte les ACL POSIX pour avoir des permissions plus fines avec par exemple getfacl.
 - Le système de permission peut se désactiver pour l'intégralité de l'HDFS mais dans ce cas-là, il peut cependant être nécessaire, toujours, d'utiliser le SuperUser qui est le user HDFS par défaut. Ce système de permission va de paire avec un système d'Authentification qui se fait soit de façon simple avec un login mot de passe, soit via Kerberos.
 
 ---
@@ -211,7 +211,7 @@
   - Après avoir formaté le HDFS, démarrez le système de fichiers distribué. La commande suivante démarrera le namenode ainsi que les nœuds de données en tant que cluster.
     **start-dfs.sh** (dans le cluster du cours : `./start-dfs.sh` depuis le master)
 - **Liste des fichiers dans HDFS**
-  - Après avoir chargé les informations dans le serveur, nous pouvons trouver la liste des fichiers dans un répertoire, l'état d'un fichier, en utilisant ‘**ls**’. Voici la syntaxe **dels** que vous pouvez passer à un répertoire ou à un nom de fichier comme argument.
+  - Après avoir chargé les informations dans le serveur, nous pouvons trouver la liste des fichiers dans un répertoire, l'état d'un fichier, en utilisant ‘**ls**’. Voici la syntaxe de **ls** que vous pouvez passer à un répertoire ou à un nom de fichier comme argument.
     **$HADOOP_HOME/bin/hadoop fs -ls <args>**
 - **Insertion de données dans HDFS**
   - Supposons que nous ayons des données dans le fichier appelé file.txt dans le système local qui doivent être enregistrées dans le système de fichiers hdfs. Suivez les étapes ci-dessous pour insérer le fichier requis dans le système de fichiers Hadoop.
@@ -225,12 +225,12 @@
       - Vous pouvez vérifier le fichier à l'aide de la commande ls.
       **$HADOOP_HOME/bin/hadoop fs -ls /user/exemple1**
 - **Récupération de données depuis HDFS**
-  - Supposons que nous ayons un fichier en HDFS appelé outfile. Vous trouverez ci - dessous une démonstration simple pour récupérer le fichier requis à partir du système de fichiers Hadoop.
+  - Supposons que nous ayons un fichier en HDFS appelé outfile. Vous trouverez ci-dessous une démonstration simple pour récupérer le fichier requis à partir du système de fichiers Hadoop.
     1. Étape 1
-        - Au départ, affichez les données de HDFS en utilisant cat commander.
+        - Au départ, affichez les données de HDFS en utilisant `cat`.
       **$HADOOP_HOME/bin/hadoop fs -cat /user/output/outfile**
     2. Étape 2
-        - Récupérez le fichier de HDFS vers le système de fichiers local en utilisant get commander.
+        - Récupérez le fichier de HDFS vers le système de fichiers local en utilisant `get`.
       **$HADOOP_HOME/bin/hadoop fs -get /user/output/ /home/hadoop_tp/**
 - **Arrêt HDFS**
   - Vous pouvez arrêter le HDFS à l'aide de la commande suivante.
@@ -240,29 +240,25 @@
 
 ## **Configurer et démarrer HDFS**
 
-### **Configurer HDFS**
+### **Initialiser et démarrer**
 
-1. Configuration du nœud de nom
-    - Configurez le namenode en utilisant la commande «hdfs namenode -format» comme suit.
+1. Initialiser le système de fichiers HDFS
+    - `hdfs namenode -format` ne configure pas le NameNode : elle **initialise** son répertoire de métadonnées (le `fsimage`).
+    - À ne lancer **qu'une seule fois**, avant le premier démarrage : la relancer efface le namespace et désaligne le `clusterID` des DataNodes. ⚠️ Sur le cluster du cours, ce formatage est déjà fait : ne le relancez jamais.
 
-2. Vérification des fichiers DFS Hadoop
-    - La commande suivante est utilisée pour démarrer dfs. L'exécution de cette commande démarrera votre système de fichiers Hadoop.
-    - start-dfs.sh
+2. Démarrer HDFS
+    - `start-dfs.sh` démarre les démons HDFS : le **NameNode** (master) et les **DataNodes** (nœuds de stockage).
 
-3. Vérification du script de fil
-    - La commande suivante est utilisée pour démarrer le script de fil. L'exécution de cette commande démarrera vos démons yarn.
-    - $ start-yarn.sh
+3. Démarrer YARN
+    - `start-yarn.sh` démarre les démons YARN : le **ResourceManager** (master) et les **NodeManagers** (workers).
 
-4. Accéder à Hadoop sur le navigateur
-
-    - Le numéro de port par défaut pour accéder à Hadoop est 9870 (50070 avant Hadoop 3).
-    - Utilisez l'url suivante pour obtenir les services Hadoop sur le navigateur.
+4. Interface web HDFS
+    - L'interface web du **NameNode** écoute par défaut sur le port **9870** (**50070** avant Hadoop 3).
+    - On y parcourt le système de fichiers, les blocs et les DataNodes.
     - <http://localhost:9870/>
 
-5. Vérifier toutes les applications pour le cluster
-
-    - Le numéro de port par défaut pour accéder à toutes les applications du cluster est 8088.
-    - Utilisez l'url suivante pour visiter ce service.
+5. Interface web YARN
+    - L'interface web du **ResourceManager** écoute par défaut sur le port **8088** : on y suit les applications du cluster.
     - **<http://localhost:8088/>**
 
  ![hadoop-webviews](assets/hadoop-webviews.png)

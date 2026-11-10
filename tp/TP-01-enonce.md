@@ -50,12 +50,12 @@ Vous répondez à **plusieurs questions**, dans l'ordre de la chaîne :
 
 | # | Question | Outil | Chapitre d'appui |
 |---|---|---|---|
-| Q1 | Quelles sont les **villes** qui commandent le plus d'articles ? | MapReduce | ../exercices/04 (exercices 1-3) + TD-05 |
-| Q2 | Même question, mais **par ville et par année** (clé composite) | MapReduce | ../exercices/04 (clé composite) |
-| Q3 | Le **même classement en SQL** : les deux moteurs sont-ils d'accord ? | Hive | ../exercices/05 + TD-02 |
-| Q4 | Comment retrouver ces totaux **en clé/valeur** ? | HBase | ../exercices/06 + TD-03 |
-| Q5 | Et si le fichier arrivait **ingéré par un flux** plutôt qu'un `put` ? | NiFi | ../exercices/07 + TD-04 |
-| V | Le **graphique** du top 10 des villes | Matplotlib | ../exercices/06 (partie IV) |
+| Q1 | Quelles sont les **villes** qui commandent le plus d'articles ? | MapReduce | [exercice 04](../exercices/04-mapreduce.md) (exercices 1-3) + [TD 05](../td/TD05.md) |
+| Q2 | Même question, mais **par ville et par année** (clé composite) | MapReduce | [exercice 04](../exercices/04-mapreduce.md) (clé composite) |
+| Q3 | Le **même classement en SQL** : les deux moteurs sont-ils d'accord ? | Hive | [exercice 05](../exercices/05-hive.md) + [TD 02](../td/TD02.md) |
+| Q4 | Comment retrouver ces totaux **en clé/valeur** ? | HBase | [exercice 06](../exercices/06-hbase.md) + [TD 03](../td/TD03.md) |
+| Q5 | Et si le fichier arrivait **ingéré par un flux** plutôt qu'un `put` ? | NiFi | [exercice 07](../exercices/07-nifi.md) + [TD 04](../td/TD04.md) |
+| V | Le **graphique** du top 10 des villes | Matplotlib | [exercice 06](../exercices/06-hbase.md) (partie IV) |
 
 Vous utiliserez **Hadoop MapReduce** pour calculer, **HappyBase** pour stocker, **Hive** pour valider en SQL, **NiFi** pour ingérer, et **Matplotlib** pour visualiser.
 

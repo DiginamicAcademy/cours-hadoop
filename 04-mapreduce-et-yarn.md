@@ -4,17 +4,18 @@
 
 # 04 - MapReduce et YARN
 
-> **Objectifs** : modéliser le pipeline MapReduce (bloc → split → map → partition → shuffle/sort → reduce) · connaître le contrat d'exécution (processus par tâche, tri, partition) · développer un MapReduce en Python via Hadoop Streaming · tester en local, lancer, suivre et diagnostiquer un job sur le cluster.
+> **Objectifs** : modéliser le pipeline MapReduce (découpage bloc → split, map → partition → shuffle/sort → reduce) · connaître le contrat d'exécution (processus par tâche, tri, partition) · développer un MapReduce en Python via Hadoop Streaming · tester en local, lancer, suivre et diagnostiquer un job sur le cluster.
 > **La vérité vient de la mesure** : tous les chiffres de ce chapitre (nombre de splits, de reducers, latences, compteurs) ont été reproduits sur le cluster du cours (Hadoop 3.3.6). Quand une règle de la littérature ne colle pas à notre cluster, c'est la mesure qui fait foi.
 > **Mise en pratique** : [Exercices](#v-exercices)
 ## Sommaire
 
 - [I. Temps 1 — Le modèle](#i-temps-1--le-modèle)
   - [A. Le pipeline complet](#a-le-pipeline-complet)
-  - [B. Bloc → Split : combien de mappers ?](#b-bloc--split--combien-de-mappers-)
-  - [C. Map](#c-map)
-  - [D. Partition, shuffle et sort](#d-partition-shuffle-et-sort)
-  - [E. Reduce](#e-reduce)
+  - [B. Du fichier au bloc — le mécanisme de découpage](#b-du-fichier-au-bloc--le-mécanisme-de-découpage)
+  - [C. Du bloc au split, du split au mapper : combien de mappers ?](#c-du-bloc-au-split-du-split-au-mapper--combien-de-mappers-)
+  - [D. Map](#d-map)
+  - [E. Partition, shuffle et sort](#e-partition-shuffle-et-sort)
+  - [F. Reduce](#f-reduce)
 - [II. Temps 2 — Le contrat d'exécution](#ii-temps-2--le-contrat-dexécution)
   - [A. Un processus par tâche](#a-un-processus-par-tâche)
   - [B. L'en-tête n'existe que dans le premier split](#b-len-tête-nexiste-que-dans-le-premier-split)
@@ -54,8 +55,8 @@ Le traitement d'un job suit une chaîne **fixe**, où chaque étape est jouée p
 
 ![Le pipeline MapReduce : blocs, splits, map, partition, shuffle/sort, reduce](assets/mapreduce-pipeline.svg)
 
-- **Bloc** : le fichier HDFS est découpé en blocs de **128 Mio** (c'est le *block size*, vu en séquence 03). Notre CSV Spotify fait 156 547 octets : **un seul bloc**.
-- **Split** : à chaque job, Hadoop découpe les blocs en *splits* — des « tranches de lecture » attribuées aux mappers. **Un split = une tâche map = un mapper.**
+- **Bloc** : le fichier HDFS est découpé en blocs de **128 Mio** — le mécanisme de découpage est la section B ci-dessous. Notre CSV Spotify fait 155 593 octets : **un seul bloc**.
+- **Split** : à chaque job, Hadoop découpe les blocs en *splits* — des « tranches de lecture » attribuées aux mappers. **Un split = une tâche map = un mapper.** Combien ? La section C répond, mesures à l'appui.
 - **Map** : le mapper lit les lignes de son split (`stdin`), émet des paires intermédiaires `clé\tvaleur`.
 - **Partition** : les paires sont routées vers les reducers — par défaut, « même clé → même reducer ».
 - **Shuffle / sort** : le framework regroupe et **trie** les pairs par clé avant de les donner aux reducers.
@@ -64,7 +65,17 @@ Le traitement d'un job suit une chaîne **fixe**, où chaque étape est jouée p
 
 ![MR](assets/mr.png)
 
-### B. Bloc → Split : combien de mappers ?
+### B. Du fichier au bloc — le mécanisme de découpage
+
+Le nombre de mappers d'un job se décide à partir de la façon dont HDFS range les fichiers. Le chapitre 03 a présenté le bloc comme l'unité que le NameNode connaît et que la réplication duplique ; on reprend ici ce qui compte pour le calcul.
+
+- HDFS ne range pas un fichier entier quelque part : il le **découpe en blocs** de **128 Mio par défaut**, chaque bloc étant répliqué indépendamment. Notre CSV Spotify (155 593 octets) tient dans **un seul bloc**.
+- La taille par défaut se configure dans `hdfs-site.xml` (`dfs.blocksize`) et **on peut y déroger fichier par fichier** au moment de l'envoi : `hdfs dfs -D dfs.blocksize=67108864 -put fichier.csv input/` (64 Mio pour celui-là).
+- ⚠️ **Contrevérité classique :** la taille de bloc par défaut s'applique à tous les fichiers **sauf à ceux pour lesquels on a donné une valeur à la création** — elle n'est donc pas « forcément la même pour tous les fichiers ».
+- Le compromis est simple : des blocs **gros** conviennent aux fichiers gros et peu nombreux ; des blocs **faibles** conviennent aux fichiers petits et très nombreux, et limitent le surcoût propre au travail par blocs.
+- HDFS gère aussi la **compression à la volée** (codecs vus au chapitre 03) : elle économise l'espace et la bande passante, mais un fichier compressé **ne peut pas être découpé en splits** — un seul mapper le lirait donc en entier. C'est le prix, côté MapReduce, de cette économie de stockage.
+
+### C. Du bloc au split, du split au mapper : combien de mappers ?
 
 > **La règle à retenir de tout ce chapitre : le nombre de mappers se *lit*, il ne se devine pas.** La littérature dit « le nombre de splits = taille / taille de bloc ». Sur **notre** cluster, c'est faux : la vraie commande est lue dans le log du job, ligne `number of splits:`.
 
@@ -72,7 +83,7 @@ Ce qui a été **mesuré** sur le cluster du cours :
 
 | Situation | Splits / mappers observés |
 |---|---|
-| une `-input` d'**un seul bloc** (156 547 o), sans option | **2 splits** — parce que `mapreduce.job.maps` vaut **2 par défaut** ici |
+| une `-input` d'**un seul bloc** (155 593 o), sans option | **2 splits** — parce que `mapreduce.job.maps` vaut **2 par défaut** ici |
 | même fichier, `-D mapreduce.job.maps=1` | **1 split** |
 | même fichier, `-D mapreduce.job.maps=4` | **4 splits** (toujours le même bloc unique) |
 | fichier de 1 095 829 o (1 bloc), `-D mapreduce.job.maps=8` | **8 splits**, `Map input records=6678` |
@@ -84,26 +95,20 @@ Deux enseignements :
 Pour lire la vérité d'un job, après lancement :
 
 ```bash
-hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
-  -D mapreduce.job.maps=2 \
-  -file mapper.py -mapper "python3 mapper.py" \
-  -file reducer.py -reducer "python3 reducer.py" \
-  -input input/Spotify_Most_Streamed_Songs.csv \
-  -output output/wordcount 2>&1 | grep "number of splits"
+hadoop jar … 2>&1 | grep "number of splits"
 # 22/09/11 10:31:42 INFO mapreduce.JobSubmitter: number of splits:2
 ```
 
-> Le `2>&1 | grep "number of splits"` met en évidence la ligne — le job se lance comme d'habitude, la sortie du *launcher* est juste filtrée.
+La commande complète de lancement est en III.C ; ici seul le filtre compte : `2>&1 | grep "number of splits"` met en évidence la ligne, le job se lance comme d'habitude.
 
-### C. Map
+### D. Map
 
 - Le mapper reçoit les lignes de **son** split sur l'entrée standard, **une par tour de boucle**.
 - Il émet sur la sortie standard des paires `clé\tvaleur` — **une paire par ligne**.
 - **Un mapper = un processus `python3 mapper.py` lancé une fois.** Pas d'état conservé entre deux appels : tout ce qu'il doit « retenir », il le met dans la clé ou la valeur.
 
-![mapper](assets/mapper.png)
 
-### D. Partition, shuffle et sort
+### E. Partition, shuffle et sort
 
 Après la map, trois étapes intermédiaires préparent les données pour les reducers :
 
@@ -115,13 +120,12 @@ Après la map, trois étapes intermédiaires préparent les données pour les re
 
 > Le tri est **lexicographique** (ordre des chaînes, pas des nombres) : `"10"` passe **avant** `"2"`. Conséquence concrète : les années sortent comme `1930, 1931, …, 2023` tant que les années ont 4 chiffres (alignement par hasard correct), mais `"2023" < "897"`. Et en HBase, on retrouvera le même tri — une clé `"1975"` arrive avant `"2023"` uniquement parce que `'1' < '2'`, pas parce que 1975 < 2023 (cf. séquence 06).
 
-### E. Reduce
+### F. Reduce
 
 - Le reducer reçoit sur `stdin` des lignes `clé\tvaleur` **déjà groupées et triées par clé**.
 - Il agrée les valeurs de chaque groupe et émet le résultat final, toujours en `clé\tvaleur`.
 - **Un reducer = aussi un processus unique**, lancé entre 1 et N fois (une fois par *task* reduce). Comme le mapper, il ne garde rien entre deux exécutions.
 
-![MR-word-count](assets/mr-word-count.jpeg)
 
 ## II. Temps 2 — Le contrat d'exécution
 
@@ -255,7 +259,6 @@ Le `sort` du shell **simule le shuffle** : sur le cluster, Hadoop regroupe et t
 
 > **Sous Windows** (avant de se connecter au master) : `type fichier.txt | python mapper.py | sort | python reducer.py`.
 
-![mapper](assets/mapper.png)
 
 ### C. Lancer un job et lire les résultats
 
@@ -272,6 +275,8 @@ hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
 - `-file` : envoie le script au cluster (il sera exécuté sur les nœuds) ;
 - `-mapper` / `-reducer` : la commande exacte exécutée pour chaque tâche ;
 - `-input` / `-output` : chemins **HDFS** (le répertoire de sortie **ne doit pas exister**).
+
+> **Options dont on peut avoir besoin :** `-D mapreduce.job.maps=N` force le nombre de mappers (voir I.C) ; `-D mapreduce.job.reduces=N` force le nombre de reducers ; `-D mapreduce.job.name=…` donne un nom au job, affiché dans l'interface 8088. Pour lire le nombre de splits d'un job, ajouter `2>&1 | grep "number of splits"` à la commande.
 
 > **ATTENTION :** le nom des fichiers doit être cohérent entre `-file` et `-mapper`/`-reducer` : si vous envoyez `mapper.py` avec `-file`, la commande doit référencer `mapper.py` (et pas un autre nom).
 

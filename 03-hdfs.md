@@ -108,18 +108,15 @@
 
 ### D. Taille des blocs
 
-- Le Block Size étant la taille d'un bloc.
-- Toutes les données étant stockées par bloc, l'espace de stockage étant découpé par blocs, ce paramètre se configure dans `hdfs-site.xml` et **peut être dérogé fichier par fichier** (par ex. `hdfs dfs -D dfs.blocksize=67108864 -put …`).
-- ⚠️ **Contrevérité classique (y compris dans ce support) :** le block size *par défaut* du cluster (128 Mio) s'applique à tous les fichiers **sauf à ceux pour lesquels on a donné une valeur à la création** — il n'est donc pas « forcément le même pour tous les fichiers ».
-- Plus le Block Size est gros, plus cela est adapté pour les gros fichiers et les fichiers peu nombreux.
-- Plus il est faible, plus c'est adapté pour les petits fichiers et les fichiers très nombreux, et plus cela limite le surcoût, à proprement parler, de travailler par blocs.
-- L'HDFS supporte également nativement la Compression. Ça veut dire que tout ce qui est écrit ou lu de l'HDFS peut être compressé ou décompressé à la volée.
+- Toutes les données étant stockées par blocs, la taille du bloc est un paramètre du cluster, configuré dans `hdfs-site.xml` (`dfs.blocksize`, 128 Mio par défaut ici).
+- Ce que ce découpage implique pour la lecture des fichiers et le nombre de mappers : **chapitre 04, section « Du fichier au bloc »**.
 
 ### E. Codecs de compression
 
+- L'HDFS supporte nativement la **compression** : tout ce qui est écrit ou lu de l'HDFS peut être compressé ou décompressé à la volée.
 - On va passer par des codecs de compression, soit écrits en Java, soit natifs directement sur le système s'ils sont disponibles.
 - Bien entendu, compresser réduit l'espace de stockage nécessaire pour stocker les données et augmente de ce fait les vitesses de transfert, également, puisque moins de données à transférer.
-- Par contre, cela induit une charge CPU supplémentaire, et en plus, empêche les données de pouvoir être « splittées », c’est-à-dire découpées en plusieurs parties.
+- Par contre, cela induit une charge CPU supplémentaire, et en plus, empêche les données de pouvoir être « splittées », c'est-à-dire découpées en plusieurs parties — ce que cela bloque pour MapReduce, le chapitre 04 le montre.
 - Différents codecs de compression sont disponibles, on va retrouver notamment Gzip, Bzip2, Snappy et LZO.
 - **Chaque codec ayant ses avantages et ses inconvénients en fonction de nos besoins.**
 

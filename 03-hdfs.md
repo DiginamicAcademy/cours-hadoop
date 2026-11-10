@@ -5,7 +5,6 @@
 # 03 - HDFS (Hadoop File System)
 
 > **Objectifs** : comprendre l'architecture HDFS (NameNode, DataNode, blocs, réplication) · maîtriser les opérations de base (put, get, ls…) · configurer et démarrer le cluster.
-> **Prérequis** : séquences 01-02 · **Durée** : ~5 h · **Type** : cours + manipulations
 > **Mise en pratique** : [exercices/03 — HDFS](exercices/03-hdfs.md)
 
 ## Sommaire

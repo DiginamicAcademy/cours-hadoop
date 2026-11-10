@@ -5,7 +5,6 @@
 # 04 - MapReduce et YARN
 
 > **Objectifs** : modéliser le pipeline MapReduce (bloc → split → map → partition → shuffle/sort → reduce) · connaître le contrat d'exécution (processus par tâche, tri, partition) · développer un MapReduce en Python via Hadoop Streaming · tester en local, lancer, suivre et diagnostiquer un job sur le cluster.
-> **Prérequis** : séquence 03 (HDFS) · **Durée** : ~6 h · **Type** : cours + code
 > **La vérité vient de la mesure** : tous les chiffres de ce chapitre (nombre de splits, de reducers, latences, compteurs) ont été reproduits sur le cluster du cours (Hadoop 3.3.6). Quand une règle de la littérature ne colle pas à notre cluster, c'est la mesure qui fait foi.
 > **Mise en pratique** : [exercices/04 — MapReduce & YARN](exercices/04-mapreduce.md)
 

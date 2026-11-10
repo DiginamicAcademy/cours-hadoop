@@ -5,7 +5,6 @@
 # 02 - Présentation de l'environnement Hadoop
 
 > **Objectifs** : comprendre l'architecture de l'environnement de TP (cluster Docker local, conteneurs, services) · connaître les scripts de manipulation et leur usage.
-> **Prérequis** : séquence 01 · **Durée** : ~2 h · **Type** : cours (environnement)
 > **Mise en pratique** : [exercices/02 — Lancement de Hadoop](exercices/02-lancement-de-hadoop.md)
 
 ## Sommaire

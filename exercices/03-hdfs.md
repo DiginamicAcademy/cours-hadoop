@@ -111,11 +111,11 @@ Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour to
    -rw-r--r--   1 root supergroup    155593 2026-09-11 18:33 /user/root/input/Spotify_Most_Streamed_Songs.csv
    ```
 
-   Trois choses à lire dans cette ligne, toutes vérifiables :
+   Quatre choses à lire dans cette ligne, toutes vérifiables :
    - le **premier chiffre après les droits est 1**, pas 3 : c'est le facteur de réplication, et le cluster du cours est configuré à `dfs.replication=1`. Un `3` signifierait que vous avez monté un autre cluster ;
    - la taille est **155 593 octets** exactement — le même nombre qu'en local : personne n'a transformé le fichier ;
    - le chemin absolu est `/user/root/input/…` : `input`, sans `/`, est relatif à votre répertoire utilisateur HDFS ;
-- la date et l'heure affichées sont **celles de l'envoi** : les vôtres différeront de la mesure ci-dessus, c'est normal.
+   - la date et l'heure affichées sont **celles de l'envoi** : les vôtres différeront de la mesure ci-dessus, c'est normal.
 
 4. Afficher les 10 dernières lignes du fichier stocké dans HDFS.
 

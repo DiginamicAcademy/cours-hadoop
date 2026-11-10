@@ -5,8 +5,7 @@
 # 03 - HDFS (Hadoop File System)
 
 > **Objectifs** : comprendre l'architecture HDFS (NameNode, DataNode, blocs, réplication) · maîtriser les opérations de base (put, get, ls…) · configurer et démarrer le cluster.
-> **Mise en pratique** : [exercices/03 — HDFS](exercices/03-hdfs.md)
-
+> **Mise en pratique** : [Exercices](#vi-exercices)
 ## Sommaire
 
 - [I. Introduction HDFS](#i-introduction-hdfs)
@@ -33,6 +32,10 @@
 - [V. Configurer et démarrer HDFS](#v-configurer-et-démarrer-hdfs)
   - [A. Initialiser et démarrer](#a-initialiser-et-démarrer)
   - [B. Démarrer le cluster HDFS](#b-démarrer-le-cluster-hdfs)
+- [VI. Exercices](#vi-exercices)
+  - [A. Mémo des commandes HDFS](#a-mémo-des-commandes-hdfs)
+  - [B. Manipulation des commandes HDFS](#b-manipulation-des-commandes-hdfs)
+- [VII. Vérifiez vos acquis](#vii-vérifiez-vos-acquis)
 
 ## I. Introduction HDFS
 
@@ -262,6 +265,186 @@
 
 - Le démarrage se fait donc par `./start-dfs.sh` (déjà connecté en `root` dans notre environnement de TP — pas de `sudo` ni de mot de passe ici).
 - Ces manipulations seront pratiquées lors des exercices.
+
+## VI. Exercices
+
+### A. Mémo des commandes HDFS
+
+Pour ces commandes, il existe 2 syntaxes possibles:
+- Avec hadoop: avec une syntaxe du type `hadoop fs <commande>`,
+- Avec hdfs: la syntaxe est `hdfs dfs <commande>`.
+
+Ces commandes sont proche de celles utilisées par le Shell linux comme ls, mkdir, rm, cat, etc…
+
+> **1. Lister le contenu d’un répertoire**
+
+* Pattern : `hdfs dfs -ls <chemin du répertoire>`
+* Exemple: `hdfs dfs -ls /user`
+
+> **2. Afficher le contenu d’un fichier**
+
+* Pattern : `hdfs dfs -cat <chemin_src>`
+* Exemple : `hdfs dfs -cat /user/135-0.txt`
+
+> **3. Créer un répertoire**
+
+* Pattern : `hdfs dfs -mkdir <chemin_src>`
+* Exemple: `hdfs dfs -mkdir /user/output`
+
+> **4. Envoyer un fichier sur HDFS**
+
+* Pattern : `hdfs dfs -put <chemin_src> <chemin_dest_HDFS>`
+* Exemple: `hdfs dfs -put TextFile.txt /user`
+
+> **5. Copier un fichier de HDFS sur HDFS**
+
+* Pattern : `hdfs dfs -cp <chemin_src> <chemin_dest_HDFS>`
+* Exemple: `hdfs dfs -cp ./TextFile.txt /user/output`
+
+> **6. Récupérer un fichier de HDFS**
+
+* Pattern : `hdfs dfs -get <chemin_dest_HDFS> <chemin_src>`
+* Exemple: `hdfs dfs -get /user/HdfsTextFile2.txt ./LocalTextFile2.txt`
+
+> **7. Supprimer un fichier**
+
+* Pattern : `hdfs dfs -rm <chemin_dest_HDFS>`
+* Exemple: `hdfs dfs -rm /user/TextFile2.txt`
+
+> **8. Supprimer un répertoire**
+
+* Pattern : `hdfs dfs -rmdir <chemin_dir_empty>` ou `hdfs dfs -rm -r <chemin_dir>`
+* Exemple:
+   - `hdfs dfs -rmdir /user/output2`
+   - `hdfs dfs -rm -r /user/output`
+
+### B. Manipulation des commandes HDFS
+
+Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour tous les traitements MapReduce du cursus. C'est le jeu de données de référence du cours (`data/` — le TP final change de jeu), et **les exercices 03 à 07 ne travaillent que sur lui** — gardez-le.
+
+> ⚠️ **Le fichier n'est pas dans le conteneur.** `data/` vit sur *votre* machine ; le master HDFS ne le voit pas encore. Toutes les sessions du cursus partent d'une copie faite **une fois pour toutes** :
+>
+> ```bash
+> # depuis la machine où tourne Docker, pas depuis le conteneur
+> docker cp ../data/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/
+> # puis, dans le conteneur :
+> docker exec -it hadoop-master bash
+> ls -l /home/Spotify_Most_Streamed_Songs.csv   # 155593 octets
+> ```
+>
+> Si le `ls -l` suivant affiche `No such file`, c'est que le `docker cp` n'a pas été fait depuis le répertoire du cours.
+
+1. Créer un répertoire `input` dans HDFS.
+
+   ```bash
+   hdfs dfs -mkdir -p input
+   ```
+
+   **Résultat attendu** : aucune sortie. `hdfs dfs -ls input` liste ensuite le répertoire (vide, sans erreur).
+
+2. Charger le fichier dans le répertoire `input` de HDFS.
+
+   ```bash
+   hdfs dfs -put Spotify_Most_Streamed_Songs.csv input/
+   ```
+
+   **Résultat attendu** : aucune sortie ; c'est la question 3 qui confirme.
+
+3. Afficher le contenu du répertoire input.
+
+   ```bash
+   hdfs dfs -ls input
+   ```
+
+   **Résultat attendu** (mesuré) :
+   ```
+   Found 1 items
+   -rw-r--r--   1 root supergroup    155593 2026-09-11 18:33 /user/root/input/Spotify_Most_Streamed_Songs.csv
+   ```
+
+   Quatre choses à lire dans cette ligne, toutes vérifiables :
+   - le **premier chiffre après les droits est 1**, pas 3 : c'est le facteur de réplication, et le cluster du cours est configuré à `dfs.replication=1`. Un `3` signifierait que vous avez monté un autre cluster ;
+   - la taille est **155 593 octets** exactement — le même nombre qu'en local : personne n'a transformé le fichier ;
+   - le chemin absolu est `/user/root/input/…` : `input`, sans `/`, est relatif à votre répertoire utilisateur HDFS ;
+   - la date et l'heure affichées sont **celles de l'envoi** : les vôtres différeront de la mesure ci-dessus, c'est normal.
+
+4. Afficher les 10 dernières lignes du fichier stocké dans HDFS.
+
+   ```bash
+   hdfs dfs -cat input/Spotify_Most_Streamed_Songs.csv | tail -10
+   ```
+
+   **Résultat attendu** : 10 lignes de 25 champs séparés par des virgules, dont certaines entre guillemets parce qu'elles contiennent des virgules — `"Feid, Paulo Londra"`, `"Marília Mendonça, Hugo & G"`. La toute dernière est `Alone,Burna Boy,…`. C'est le **même contenu** que le fichier local : vérifiez en comparant.
+
+![tail](assets/tail.jpeg)
+
+> **INFO :** `-p` dans `hdfs dfs -mkdir -p input` crée les répertoires parents manquants, comme `mkdir -p` en shell.
+>
+> **INFO — `hdfs dfs -tail` est un piège, et votre cours vous y envoyait.** `-tail` relit **les derniers 1024 octets** du fichier, sans égard pour les fins de ligne. Mesuré sur ce fichier, il affiche **7 lignes dont la première est coupée en plein milieu d'un champ** :
+>
+> ```
+> 022,11,4,1060,0,106249219,3,8,5,0,0,120,D,Major,64,11,53,1,0,25,27,…
+> ```
+>
+> Ce n'est pas un accident de ce fichier : `-tail` ne sait pas où commence une ligne, il ne sait que seek à `taille − 1024`. Pour « les N dernières lignes » sur HDFS, l'outil est `hdfs dfs -cat … | tail -N`. Gardez `-tail` pour *surveiller un fichier en cours d'écriture* (un log, un `part-*` qui grossit), usage pour lequel il est conçu.
+
+## VII. Vérifiez vos acquis
+
+*Formatif, jamais noté. Répondez sans relire le chapitre. Les réponses se déplient juste après le séparateur : ce qui compte est de repérer où vous vacillez, pas de faire 5 sur 5.*
+
+**1.** Le NameNode principal tombe. Que fait le Secondary NameNode, d'après le chapitre ?
+
+- A. Il reprend le service à sa place, puisque le `fsimage` qu'il tient est une copie chaude du NameNode
+- B. Il fusionne les `edits_xxx` dans `fsimage_xxx` périodiquement, mais ne le remplace pas
+- C. Il place les DataNodes en lecture seule et les bloque jusqu'au retour du NameNode principal
+- D. Il recopie les blocs manquants sur les autres DataNodes pour rétablir le facteur de réplication
+
+**2.** Vous listez le système de fichiers distribué HDFS (Hadoop File System) avec `hdfs dfs -ls input`, et un « 1 » apparaît juste après les droits. Que signifie ce chiffre ?
+
+- A. Le fichier occupe un seul bloc de 128 Mio, la taille minimale que sache gérer HDFS
+- B. Le fichier appartient à un seul utilisateur, le propriétaire du répertoire courant
+- C. Le fichier n'a pas encore été répliqué, le NameNode étant en safe mode au moment de la mesure
+- D. Le facteur de réplication vaut 1 sur ce cluster, et non le 3 par défaut d'HDFS
+
+**3.** Pourquoi éviter de compresser un fichier que MapReduce devra traiter en parallèle ?
+
+- A. Parce qu'un fichier compressé ne se découpe pas : un seul map le traite
+- B. Parce que la compression supprime les fins de ligne, ce qui rend les champs illisibles
+- C. Parce que les codecs du cours ne s'appliquent qu'aux fichiers texte, jamais aux CSV
+- D. Parce que HDFS refuse d'écrire un bloc compressé sur plusieurs DataNodes
+
+**4.** Le NameNode vient de démarrer et reste en safe mode. Que peut-on faire sur HDFS à cet instant ?
+
+- A. Écrire normalement, mais pas lire : les blocs ne sont pas encore cartographiés
+- B. Rien du tout : le NameNode attend son `fsimage` et refuse toute connexion
+- C. Lire seulement : l'écriture reste bloquée tant que les DataNodes n'ont pas répondu
+- D. Tout faire, le safe mode n'étant qu'un bandeau d'avertissement sur l'interface du port 8088
+
+**5.** *Question ouverte (2-3 lignes).* Un cluster ne répond plus et un collègue propose de relancer `hdfs namenode -format` « pour repartir proprement ». Que lui répondez-vous ?
+
+---
+
+<details>
+<summary>Vérifier ses réponses</summary>
+
+### Réponses
+
+**1. B.** Le Secondary NameNode est un checkpoint, pas un NameNode de secours : il allège le journal du NameNode principal sans jamais le remplacer.
+**Pourquoi :** le chapitre insiste en encadré — si le NameNode principal tombe, le secondaire ne prend pas sa place ; le cluster redevient disponible après redémarrage du NameNode principal, ou via la haute disponibilité (un *standby NameNode* actif piloté par ZooKeeper), hors périmètre du cluster du cours.
+
+**2. D.** Ce premier chiffre après les droits est le facteur de réplication : ici 1, parce que le cluster du cours est configuré `dfs.replication=1`.
+**Pourquoi :** le 3 est la valeur par défaut d'HDFS, pas une obligation ; elle se règle fichier par fichier ou répertoire par répertoire avec `hdfs dfs -setrep`, et l'exercice signale qu'un `3` affiché ici signalerait un autre cluster.
+
+**3. A.** Un fichier compressé ne se « splitte » pas : un seul map le lit, et le parallélisme disparaît.
+**Pourquoi :** le chapitre range cette perte parmi les inconvénients de la compression, à côté de la charge CPU supplémentaire — les avantages (place gagnée, transferts plus rapides) ne se discutent qu'en connaissance de ce prix.
+
+**4. C.** Le safe mode est un mode lecture seule : le NameNode charge ses métadonnées et attend que les DataNodes lui déclarent les blocs qu'ils détiennent.
+**Pourquoi :** le chapitre décrit ce mode déclenché au démarrage (ou à la demande d'un administrateur, ou pour déboguer) et précise qu'il bloque l'écriture sur HDFS le temps de la reconstruction de la cartographie des blocs.
+
+**5.** Attendu : il ne faut pas relancer ce formatage. `hdfs namenode -format` n'est pas une commande de configuration mais une **initialisation** du répertoire de métadonnées : relancée, elle efface le namespace et désaligne le `clusterID` des DataNodes, donc détruit les données. Sur le cluster du cours le formatage est déjà fait au premier démarrage du conteneur ; on repart par un simple `./start-dfs.sh`.
+**Pourquoi :** le chapitre pose la règle deux fois (section Opérations HDFS puis « Initialiser et démarrer ») : à ne lancer qu'une seule fois, avant le premier démarrage — un cluster qui ne répond plus se redémarre, xMARKERx
+
+</details>
 
 ---
 

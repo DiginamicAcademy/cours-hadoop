@@ -152,7 +152,7 @@ Même mapper avec `in_spotify_playlists` à la place de `streams`. Reducer « m
 
 ## [`../04-mapreduce.md`](../04-mapreduce.md) — Exercice 5 — Graphique PDF
 
-Reducer : agrégation identique à l'exercice 1, puis génération matplotlib **à la fin du stdin** (toutes les clés vues) :
+Reducer : agrégation identique à l'exercice 3, puis génération matplotlib **à la fin du stdin** (toutes les clés vues) :
 
 ```python
 import sys

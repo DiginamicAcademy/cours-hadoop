@@ -16,14 +16,15 @@
   - [E. Synthèse visuelle](#e-synthèse-visuelle)
 - [II. Écosystème de Hadoop](#ii-écosystème-de-hadoop)
 - [III. Fichiers de configuration principaux](#iii-fichiers-de-configuration-principaux)
-  - [A. hadoop-env.sh](#a-hadoop-envsh)
-  - [B. core-site.xml](#b-core-sitexml)
-  - [C. hdfs-site.xml](#c-hdfs-sitexml)
-  - [D. mapred-site.xml](#d-mapred-sitexml)
-  - [E. yarn-site.xml](#e-yarn-sitexml)
+  - [A. [hadoop-env.sh](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/UnixShellGuide.html)](#a-hadoop-envsh)
+  - [B. [core-site.xml](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml)](#b-core-sitexml)
+  - [C. [hdfs-site.xml](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)](#c-hdfs-sitexml)
+  - [D. [mapred-site.xml](http://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml)](#d-mapred-sitexml)
+  - [E. [yarn-site.xml](http://hadoop.apache.org/docs/r2.3.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)](#e-yarn-sitexml)
 - [IV. Positionnement de Hadoop dans l'écosystème Big Data](#iv-positionnement-de-hadoop-dans-lécosystème-big-data)
 - [V. Distributions principales d’Hadoop](#v-distributions-principales-dhadoop)
   - [A. Principales distributions](#a-principales-distributions)
+- [VI. Vérifiez vos acquis](#vi-vérifiez-vos-acquis)
 
 ## I. Qu'est-ce que Hadoop ?
 
@@ -183,7 +184,7 @@ La propriété **fs.defaultFS** (avant : fs.default.name) permet de spécifier 
 
 ### C. [hdfs-site.xml](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml)
 
-Définis l'emplacement du **NameNode** et des **datanode**. Il contient aussi les paramètres de **réplication**.
+Définit l'emplacement du **NameNode** et des **datanodes**. Il contient aussi les paramètres de **réplication**.
 
 ```xml
 <?xml version="1.0"?>
@@ -266,6 +267,64 @@ Hadoop est composé de multiples briques logicielles, développées et maintenue
 > **Ce que le marché est devenu.** Le modèle « distribution » de 2013 — packager Hadoop et le vendre avec un support — a survécu là où les entreprises gardent leurs serveurs (Cloudera). Partout ailleurs, la distribution est devenue un **service managé** : on choisit un label de version, plus un éditeur. Les acteurs historiques ont fusionné ou disparu (Hortonworks avalée par Cloudera, MapR rachetée par HPE).
 
 > **Quelle version d'Apache Hadoop en 2026 ?** La branche courante est **3.5** (3.5.0, avril 2026). La branche **3.4** (3.4.3, février 2026) est celle qu'embarquent Cloudera 7.3.2 et AWS EMR. Le cluster de ce cours tourne sous **3.3.6** (juin 2023) : c'est aussi la version de l'image 2.3 du service Google — un choix délibéré, pour que ce que vous manipulez ressemble aux clusters réellement déployés en entreprise. Les écarts qui comptent pour vous sont ceux entre 2.x et 3.x (les ports, vus au chapitre 02), pas ceux entre 3.3 et 3.5.
+
+## VI. Vérifiez vos acquis
+
+*Formatif, jamais noté. Répondez sans relire le chapitre. Les réponses se déplient juste après le séparateur : ce qui compte est de repérer où vous vacillez, pas de faire 5 sur 5.*
+
+**1.** Que décrit le mieux Hadoop, d'après le chapitre ?
+
+- A. Un entrepôt de données SQL qui interroge les données sans écrire de job, à la place des bases relationnelles
+- B. Un service cloud managé qui installe les clusters et choisit les versions de Hadoop à votre place
+- C. Un framework java open-source de stockage et de traitement distribué de volumes massifs de données
+- D. Un système de fichiers distribué conçu pour stocker de très grands volumes de données sur tous les nœuds
+
+**2.** Le chapitre oppose deux façons de suivre la croissance des volumes. Laquelle est l'« upsizing », et pourquoi montre-t-elle ses limites ?
+
+- A. Ajouter des nœuds standards dans un cluster pour étendre à la fois la capacité de stockage et la tolérance aux pannes
+- B. Augmenter les capacités matérielles d'un serveur central, une approche bornée par les limites physiques du matériel
+- C. Répartir les traitements sur plusieurs nœuds d'un même cluster, ce qui parallélise les calculs sans toucher au stockage
+- D. Remplacer le serveur central par une base NoSQL (non relationnelle) distribuée, ce qui supprime le goulot d'étranglement
+
+**3.** Vous devez fixer le préfixe `hdfs://hadoop-master:9000` qui s'applique à tous les chemins HDFS (Hadoop Distributed File System). Quel fichier éditez-vous ?
+
+- A. `hdfs-site.xml`, qui règle les répertoires et la réplication
+- B. `hadoop-env.sh`, où l'on exporte `JAVA_HOME`
+- C. `yarn-site.xml`, qui porte `yarn.resourcemanager.hostname`
+- D. `core-site.xml`, via la propriété `fs.defaultFS`
+
+**4.** En 2026, qu'est devenu le modèle « distribution Hadoop » — packager Hadoop et le vendre avec un support ?
+
+- A. Il a tenu là où les entreprises gardent leurs serveurs ; ailleurs il est devenu un service managé
+- B. Il survit chez les deux éditeurs qui ont fusionné, Hortonworks et MapR, devenus une seule entreprise
+- C. Il a disparu partout, y compris chez Cloudera dont l’offre sur serveurs propres est hors support
+- D. Il se poursuit inchangé, la branche 3.5 étant embarquée par toutes les distributions du marché
+
+**5.** *Question ouverte (2-3 lignes).* Un collègue propose de tout faire tourner sur un unique serveur très puissant, « puisque Hadoop sait tout faire ». Dites en deux ou trois lignes ce que ce choix perd par rapport à l'approche du chapitre, en nommant au moins deux éléments.
+
+---
+
+<details>
+<summary>Vérifier ses réponses</summary>
+
+### Réponses
+
+**1. C.** Hadoop est un framework java open-source d'Apache, conçu pour le stockage et le traitement distribué de volumes massifs de données sur des clusters de serveurs.
+**Pourquoi :** les trois autres propositions décrivent des briques de l'écosystème et non le framework lui-même — l'entrepôt SQL qui évite d'écrire un job est Hive, le service cloud managé est Amazon EMR, et le système de fichiers distribué est HDFS.
+
+**2. B.** L'upsizing consiste à augmenter les capacités matérielles du serveur central ; il bute sur les limites physiques du matériel et n'offre pas une scalabilité infinie.
+**Pourquoi :** c'est parce que cette voie est bornée que Google puis Hadoop ont retenu le scaling out : des clusters de machines standards, avec le stockage distribué et le traitement parallélisé sur plusieurs nœuds.
+
+**3. D.** C'est dans `core-site.xml` que la propriété `fs.defaultFS` porte `hdfs://hadoop-master:9000`.
+**Pourquoi :** `core-site.xml` regroupe les configurations communes à HDFS et MapReduce et indique l'emplacement du NameNode ; `hdfs-site.xml` règle les répertoires et la réplication, `hadoop-env.sh` les variables d'environnement dont `JAVA_HOME`, et `yarn-site.xml` le ResourceManager comme le shuffle.
+
+**4. A.** Le modèle distribution a survécu là où l'entreprise garde ses serveurs, avec Cloudera ; partout ailleurs il est devenu un service managé, où l'on choisit un label de version plutôt qu'un éditeur.
+**Pourquoi :** Hortonworks a été avalée par Cloudera et MapR radiée après son rachat par HPE, ce qui disqualifie la proposition B ; Cloudera Base 7.3.2 reste au contraire supporté, et les distributions n'embarquent pas la même version (3.4.1 chez Cloudera, 3.4.2 chez Amazon EMR).
+
+**5.** Attendu : on revient à l'architecture client/serveur et à son upsizing, borné par les limites physiques du matériel ; le stockage n'étant plus réparti sur plusieurs nœuds, ni la capacité ni la tolérance aux pannes ne progressent en ajoutant des machines. Peuvent aussi être cités : la réplication HDFS perd son objet sur un nœud unique, et un serveur unique concentre la défaillance, comme le NameNode de Hadoop 1.x.
+**Pourquoi :** le chapitre présente la rupture de Google précisément comme le passage d'un serveur central puissant à des clusters de machines standards au stockage distribué et au calcul parallélisé.
+
+</details>
 
 ---
 

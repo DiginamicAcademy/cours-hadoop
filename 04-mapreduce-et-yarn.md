@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# MapReduce et YARN
+# 04 - MapReduce et YARN
 
 > **Objectifs** : modéliser le pipeline MapReduce (bloc → split → map → partition → shuffle/sort → reduce) · connaître le contrat d'exécution (processus par tâche, tri, partition) · développer un MapReduce en Python via Hadoop Streaming · tester en local, lancer, suivre et diagnostiquer un job sur le cluster.
 > **Prérequis** : séquence 03 (HDFS) · **Durée** : ~6 h · **Type** : cours + code

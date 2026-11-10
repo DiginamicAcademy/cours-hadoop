@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# HDFS (Hadoop File System)
+# 03 - HDFS (Hadoop File System)
 
 > **Objectifs** : comprendre l'architecture HDFS (NameNode, DataNode, blocs, réplication) · maîtriser les opérations de base (put, get, ls…) · configurer et démarrer le cluster.
 > **Prérequis** : séquences 01-02 · **Durée** : ~5 h · **Type** : cours + manipulations

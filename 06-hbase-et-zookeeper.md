@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# HBase
+# 06 - HBase
 
 > **Objectifs** : comprendre le modèle de données HBase et son architecture (régions, RegionServers, HMaster) · le rôle de ZooKeeper · manipuler HBase via le shell et HappyBase.
 > **Prérequis** : séquences 01-04 (HDFS, MapReduce) · **Durée** : ~2 h · **Type** : cours + manipulations

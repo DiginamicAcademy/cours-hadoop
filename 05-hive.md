@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# Hive, l'entrepôt SQL sur Hadoop
+# 05 - Hive, l'entrepôt SQL sur Hadoop
 
 > **Objectifs** : comprendre ce qu'apporte Hive par rapport à MapReduce · maîtriser l'architecture (HiveServer2, Metastore, driver) · distinguer tables externes et managées · écrire des requêtes SQL sur des données HDFS · relier SQL et MapReduce via EXPLAIN.
 > **Prérequis** : séquences 03-04 (HDFS, MapReduce) · **Durée** : ~4 h · **Type** : cours + manipulations

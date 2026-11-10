@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# NiFi, l'usine à flux de données
+# 07 - NiFi, l'usine à flux de données
 
 > **Objectifs** : comprendre le problème de l'ingestion de données · maîtriser le modèle dataflow de NiFi (FlowFile, processeurs, connections, back pressure) · découvrir l'interface et la Data Provenance · situer NiFi dans l'écosystème 2026.
 > **Prérequis** : séquence 03 (HDFS) · **Durée** : ~3 h · **Type** : cours + démo interactive

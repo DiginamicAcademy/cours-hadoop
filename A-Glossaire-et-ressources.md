@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# Glossaire et ressources
+# A - Glossaire et ressources
 
 > **Nature :** annexe de référence · **Usage :** tout au long du cours
 > Chaque sigle et chaque notion du cours sont définis à leur première occurrence dans le chapitre indiqué, puis retrouvés ici. Les définitions sont volontairement courtes : c'est le chapitre qui les travaille.

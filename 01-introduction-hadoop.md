@@ -2,7 +2,7 @@
 
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
-# Introduction à Hadoop
+# 01 - Introduction à Hadoop
 
 > **Objectifs** : situer Hadoop dans l'histoire du Big Data · comprendre son architecture (HDFS, MapReduce, YARN) · connaître les fichiers de configuration · situer l'écosystème historique en 2026.
 > **Prérequis** : aucun · **Durée** : ~3 h · **Type** : cours de contexte

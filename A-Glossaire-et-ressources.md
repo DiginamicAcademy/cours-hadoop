@@ -37,7 +37,7 @@
 | Data Provenance (NiFi) | Historique requêtable de chaque FlowFile : heure, processeurs traversés, attributs, contenu avant/après | chap. 07 · TD 04 · TP |
 | Data warehouse (entrepôt de données) | Magasin optimisé pour l'analyse en batch de gros volumes — le statut de Hive, qui ne stocke rien lui-même | chap. 05 |
 | Derby (Apache) | Base relationnelle embarquée : le Metastore par défaut de Hive | chap. 05 |
-| Distribution Hadoop | Version packagée du socle avec ses outils et son support — Cloudera (CDP), Hortonworks, MapR | chap. 01 |
+| Distribution Hadoop | Version packagée du socle avec ses outils et son support — aujourd'hui Cloudera, ou un service managé (Amazon EMR, Google Cloud, Azure HDInsight) | chap. 01 |
 | Docker | Moteur de conteneurs qui fait tourner le cluster sur votre machine | chap. 02 |
 | Docker Compose | Outil qui démarre d'un coup plusieurs conteneurs décrits dans un même fichier YAML | chap. 02, 07 |
 | EditLog | Journal de toutes les modifications de l'arborescence HDFS | chap. 03 |

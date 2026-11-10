@@ -412,7 +412,7 @@ Le framework de calcul
 
 - Le socle **on-premise** du Big Data classique
 - La compétence de base recherchée par les équipes data
-- Les distributions : **Cloudera (CDH)**, **Hortonworks (HDP)**, MapR
+- Les distributions : **Cloudera**, **Amazon EMR**, **Google Cloud**, **Azure HDInsight**
 
 </div>
 
@@ -1854,7 +1854,7 @@ Un **par job** : négocie les conteneurs auprès du RM, coordonne maps et reduc
 <div class="card card-yellow">
 <div class="card-title">FIFO · Fair · Capacity — qui va passer en premier ?</div>
 
-- **Capacity** : des files dédiées (par équipe/tenant), chacune avec sa garantie — le défaut des distributions modernes (CDH/HDP)
+- **Capacity** : des files dédiées (par équipe/tenant), chacune avec sa garantie — le défaut des distributions historiques (CDH/HDP)
 - **Fair** : toutes les applications se partagent également la capacité, avec moindre coût si elles n'ont pas de grosse demande
 - **FIFO** : une file unique, les jobs en ordre d'arrivée — **simple, mais famine** des jobs courts derrière un gros
 

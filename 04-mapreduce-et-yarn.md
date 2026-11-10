@@ -330,7 +330,7 @@ yarn logs -applicationId application_1690000000000_0001 2>&1 | grep -n "PipeMapR
 ```
 
 - `application_…` : l'identifiant affiché dans l'UI 8088 (et dans la sortie du launcher, après `INFO mapreduce.JobSubmitter`) — le prenez **avant** l'échec ou dans l'historique.
-- L'option `-map_attempt_id` cible une tâche précise ; sans elle, `yarn logs` affiche tous les tâches.
+- L'option `-containerId` cible un conteneur précis (ex. `container_e1_1690000000000_0001_01_000002`) ; sans elle, `yarn logs` affiche les journaux de **toutes** les tâches. Pour lister les conteneurs avec leur nœud : `-show_application_log_info`.
 
 > Cette commande manquait au cursus alors que le « réflexe n°1 » y est affirmé : **c'est *le* moyen de voir le `stderr` d'un mapper qui a planté** (exception Python, code de sortie, ligne en cause).
 

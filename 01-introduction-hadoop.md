@@ -278,9 +278,17 @@ Hadoop est composé de multiples briques logicielles, développées et maintenue
 
 ### **Principales distributions**
 
-* **MapR (créé en 2009) :** Propose une version open source et deux versions payantes. MapR a repensé des composants clés comme HDFS _(remplacé par MapR FS)_ et YARN _(remplacé par MapR MR)_, et a apporté des améliorations à HBase. Utilisé par Amazon EMR et Google GCE.
-* **Cloudera (CDH) :** Développée par des experts issus de Google, Yahoo, Facebook, etc. Offre une version libre et des outils spécifiques comme Cloudera Search, Hue et Impala. Axée sur le support commercial, la formation et la certification.
-* **Hortonworks (HDP) :** Fondée en 2011 par une équipe de Yahoo, 100% open source et fidèle à la plateforme Apache. Peu de modifications spécifiques, utilisée dans Microsoft Azure.
+| Distribution | Statut 2026 | Hadoop livré |
+|---|---|---|
+| **Cloudera** | La seule distribution on-premise encore vivante. Hortonworks a fusionné avec elle en janvier 2019 ; CDH et HDP sont hors support depuis 2021-2022. Produit actuel : Cloudera Base on premises 7.3.2 (mars 2026), support garanti jusqu'en 2032. | 3.4.1 |
+| **Amazon EMR** | Service managé d'AWS, le plus répandu du marché. Version courante : emr-7.14.0 (septembre 2026). Existe aussi en EMR on EKS et EMR Serverless. | 3.4.2 |
+| **Google Cloud** | **Dataproc a été renommé « Managed Service for Apache Spark »** en 2026. Images 2.2 et 2.3 encore supportées ; l'image 3.0 (juillet 2026) est la plus récente. | 3.3.6 (2.3) · 3.5.0 (3.0) |
+| **Azure HDInsight** | Service maintenu, mais sans nouvelle version depuis HDInsight 5.1 (novembre 2023). Les versions 4.0 et 5.0 ont été retirées le 31 mars 2025. | 3.3.4 |
+| **MapR** | Radiée. Rachetée par HPE en août 2019, devenue « HPE Data Fabric » (8.2.0, octobre 2026) : plateforme compatible Hadoop, mais qui remplace HDFS par son propre système de fichiers. Ce n'est plus une distribution Hadoop. | — |
+
+> **Ce que le marché est devenu.** Le modèle « distribution » de 2013 — packager Hadoop et le vendre avec un support — a survécu là où les entreprises gardent leurs serveurs (Cloudera). Partout ailleurs, la distribution est devenue un **service managé** : on choisit un label de version, plus un éditeur. Les acteurs historiques ont fusionné ou disparu (Hortonworks avalée par Cloudera, MapR rachetée par HPE).
+
+> **Quelle version d'Apache Hadoop en 2026 ?** La branche courante est **3.5** (3.5.0, avril 2026). La branche **3.4** (3.4.3, février 2026) est celle qu'embarquent Cloudera 7.3.2 et AWS EMR. Le cluster de ce cours tourne sous **3.3.6** (juin 2023) : c'est aussi la version de l'image 2.3 du service Google — un choix délibéré, pour que ce que vous manipulez ressemble aux clusters réellement déployés en entreprise. Les écarts qui comptent pour vous sont ceux entre 2.x et 3.x (les ports, vus au chapitre 02), pas ceux entre 3.3 et 3.5.
 
 ---
 

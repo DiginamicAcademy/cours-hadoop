@@ -101,7 +101,7 @@
 - En effet, les dossiers, à proprement parler, n'existent que dans l'index.
 - Par défaut, l'HDFS a un ratio de Réplication de 3.
 - C'est à dire que chaque bloc de chaque fichier doit être à trois endroits simultanément. ⚠️ **Mais ce n'est qu'une valeur par défaut, modifiable** : sur le cluster du cours `dfs.replication=1` (configuré dans `hdfs-site.xml`, voir la séquence 01) — l'économie de place est au prix de la redondance.
-- Il peut être personnalisable par fichier, ou par répertoire, grâce à la commande HDFS : **dfs setrep**.
+- Il est personnalisable fichier par fichier, ou répertoire par répertoire, grâce à la commande du FsShell : `hdfs dfs -setrep [-R] [-w] <nombre de copies> <chemin>` — par exemple `hdfs dfs -setrep -w 3 input/Spotify_Most_Streamed_Songs.csv`, puis `hdfs dfs -stat %r <chemin>` pour vérifier la valeur enregistrée.
 - Il peut ainsi donc être ajusté en fonction des besoins, notamment si la donnée doit être plus répliquée
 - Par exemple parce qu'elle est sensible, ou pour augmenter les performances en lecture, ou moins répliquée, parce qu'elle consomme beaucoup trop d'espace de stockage pour sa criticité.
 

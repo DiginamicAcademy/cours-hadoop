@@ -466,9 +466,10 @@ jobs:
       # continue d'afficher les sources telles quelles.
       #
       # De chaque chapitre on retire tout ce qui précède son titre de niveau 1,
-      # titre compris : la ligne de navigation (« ← Étape 05 · Sommaire · Étape
-      # suivante → ») n'a aucun sens dans un document relié, et le titre est
-      # déjà porté par l'intercalaire.
+      # titre compris : le logo n'a pas sa place dans le document, et le titre
+      # est déjà porté par l'intercalaire. La ligne de navigation de tête fait
+      # exception : elle est remise en tête de la première page du chapitre,
+      # comme celle de pied (demande Robin du 10/11/2026).
       - name: Assembler le support de cours
         run: |
           OUT=build/support-de-cours.md
@@ -517,9 +518,21 @@ jobs:
             anchor="$(anchor_of "$f")"
             printf '%s\t%s\n' "$f" "$anchor" >> "$MANIFEST"
 
+            # La ligne de navigation de tête — première ligne du fichier, posée
+            # par le workflow Navigation — est conservée : elle reparaît en tête
+            # de la première page du chapitre, après l'intercalaire. Ses liens
+            # seront réécrits vers les intercalaires par l'étape suivante, comme
+            # tous les liens internes du document.
+            nav="$(head -1 "$f")"
+            case "$nav" in
+              \[←* | \[Sommaire\]*) ;;
+              *) nav="" ;;
+            esac
+
             {
               printf '\n<div class="intercalaire" id="%s"><span>%s</span></div>\n\n' \
                 "$anchor" "$title_html"
+              if [ -n "$nav" ]; then printf '%s\n\n' "$nav"; fi
               printf '%s\n' "$body"
             } >> "$OUT"
 

@@ -1,3 +1,5 @@
+[← Chapitre précédent](04-mapreduce-et-yarn.md) · [Sommaire](Readme.md) · [Chapitre suivant →](06-hbase-et-zookeeper.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **Hive, l'entrepôt SQL sur Hadoop**
@@ -227,3 +229,7 @@ Synthèse pour fixer les idées avant la séquence 06 :
 | **Usage type** | stocker des archives, gros fichiers | analyser, agréger, explorer | servir des lectures/écritures à la ligne |
 
 Les trois cohabitent sur le même cluster — et même sur les mêmes données, via les tables externes.
+
+---
+
+[← Chapitre précédent](04-mapreduce-et-yarn.md) · [Sommaire](Readme.md) · [Chapitre suivant →](06-hbase-et-zookeeper.md)

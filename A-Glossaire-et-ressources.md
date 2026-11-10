@@ -1,3 +1,5 @@
+[← Chapitre précédent](07-nifi.md) · [Sommaire](Readme.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # Glossaire et ressources
@@ -187,3 +189,7 @@ Le cluster du cours (Hadoop 3.3.6, Hive 4.1.0, HBase, NiFi 2.11.0) est défini d
 - [Apache HBase — accueil](https://hbase.apache.org/) et [Reference Guide](https://hbase.apache.org/book.html#_overriding_configuration_starting_the_hbase_shell) (chap. 06).
 - [HappyBase — documentation](https://happybase.readthedocs.io/en/latest/) (chap. 06).
 - [HBase Shell — Tutorialspoint](https://www.tutorialspoint.com/hbase/hbase_shell.htm) — le répertoire des commandes du shell (chap. 06).
+
+---
+
+[← Chapitre précédent](07-nifi.md) · [Sommaire](Readme.md)

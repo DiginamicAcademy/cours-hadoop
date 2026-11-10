@@ -1,3 +1,5 @@
+[← Chapitre précédent](05-hive.md) · [Sommaire](Readme.md) · [Chapitre suivant →](07-nifi.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **HBase**
@@ -467,3 +469,7 @@ connection.close()
 - **Projet apache :**
   [Apache HBase – Apache HBase™ Home](https://hbase.apache.org/)
   [Apache HBase ™ Reference Guide](https://hbase.apache.org/book.html#_overriding_configuration_starting_the_hbase_shell)
+
+---
+
+[← Chapitre précédent](05-hive.md) · [Sommaire](Readme.md) · [Chapitre suivant →](07-nifi.md)

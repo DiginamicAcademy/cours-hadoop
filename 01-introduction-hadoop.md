@@ -1,3 +1,5 @@
+[Sommaire](Readme.md) · [Chapitre suivant →](02-presentation-env-hadoop.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **Introduction à Hadoop**
@@ -279,3 +281,7 @@ Hadoop est composé de multiples briques logicielles, développées et maintenue
 * **MapR (créé en 2009) :** Propose une version open source et deux versions payantes. MapR a repensé des composants clés comme HDFS _(remplacé par MapR FS)_ et YARN _(remplacé par MapR MR)_, et a apporté des améliorations à HBase. Utilisé par Amazon EMR et Google GCE.
 * **Cloudera (CDH) :** Développée par des experts issus de Google, Yahoo, Facebook, etc. Offre une version libre et des outils spécifiques comme Cloudera Search, Hue et Impala. Axée sur le support commercial, la formation et la certification.
 * **Hortonworks (HDP) :** Fondée en 2011 par une équipe de Yahoo, 100% open source et fidèle à la plateforme Apache. Peu de modifications spécifiques, utilisée dans Microsoft Azure.
+
+---
+
+[Sommaire](Readme.md) · [Chapitre suivant →](02-presentation-env-hadoop.md)

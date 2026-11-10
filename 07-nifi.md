@@ -1,3 +1,5 @@
+[← Chapitre précédent](06-hbase-et-zookeeper.md) · [Sommaire](Readme.md) · [Chapitre suivant →](A-Glossaire-et-ressources.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **NiFi, l'usine à flux de données**
@@ -172,3 +174,7 @@ Avec NiFi, le cursus couvre la chaîne data de bout en bout :
 - **06 (HBase)** sert les accès temps réel par clé.
 
 Le TP final vous proposera de rejouer l'ingestion d'un dataset par NiFi en ouverture de votre projet de synthèse.
+
+---
+
+[← Chapitre précédent](06-hbase-et-zookeeper.md) · [Sommaire](Readme.md) · [Chapitre suivant →](A-Glossaire-et-ressources.md)

@@ -1,3 +1,5 @@
+[← Chapitre précédent](01-introduction-hadoop.md) · [Sommaire](Readme.md) · [Chapitre suivant →](03-hdfs.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **Présentation de l'environnement Hadoop**
@@ -153,3 +155,7 @@ Le cluster décrit ci-dessus tourne **localement** (formateur ou poste apprenant
 * **Transferts de fichiers** : `scp` ou FileZilla (SFTP) vers la VM, même destination.
 
 Le guide complet de déploiement sur VM est fourni avec le projet Docker du cours (`docs/deploiement-vm.md`) : prérequis, build, ports, vérifications. Dans tous les cas, **l'adresse exacte vous est communiquée par votre formateur en début de séance** — hors session locale, tout le reste de ce cours s'applique à l'identique.
+
+---
+
+[← Chapitre précédent](01-introduction-hadoop.md) · [Sommaire](Readme.md) · [Chapitre suivant →](03-hdfs.md)

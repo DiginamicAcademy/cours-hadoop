@@ -1,3 +1,5 @@
+[← Chapitre précédent](03-hdfs.md) · [Sommaire](Readme.md) · [Chapitre suivant →](05-hive.md)
+
 ![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
 
 # **MapReduce et YARN**
@@ -399,3 +401,7 @@ La stratégie est configurée dans `etc/hadoop/yarn-site.xml` (propriété `yarn
 Sur le cluster du cours, les conteneurs sont petits — et c'est un choix, pas un oubli : `yarn.nodemanager.resource.memory-mb=256` (mémoire gérée par YARN par NodeManager) et `mapreduce.map.memory.mb=192` (mémoire demandée par chaque tâche map). N'attendez pas des mappers « géants » : avec 192 Mio par tâche, un mapper Python tient, mais le parallélisme (et la taille des données qu'une tâche peut tenir en mémoire) est forcément modeste. Pour un job qui en a besoin, on augmente le nombre de tâches plutôt que la mémoire de chacune.
 
 ![yarn-config](assets/yarn-config.png)
+
+---
+
+[← Chapitre précédent](03-hdfs.md) · [Sommaire](Readme.md) · [Chapitre suivant →](05-hive.md)

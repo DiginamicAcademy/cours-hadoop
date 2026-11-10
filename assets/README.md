@@ -22,10 +22,10 @@ Captures et schémas du cours, et où ils servent :
 | `9870.jpeg` | `exercices/02-lancement-de-hadoop.md`, `slides.md` |
 | `block-size.jpeg` | `slides.md` |
 | `blocks.jpeg` | orphelin (hygiène §5 du plan de refonte) |
-| `chain-complete.svg` | `slides.md` |
+| `chain-complete.svg` | `07-nifi.md`, `slides.md` |
 | `checkpointing.png` | `03-hdfs.md` |
-| `cluster-docker.svg` | `slides.md` |
-| `cluster.jpeg` | `01-introduction-hadoop.md`, `06-hbase-et-zookeeper.md`, `slides.md` |
+| `cluster-docker.svg` | `02-presentation-env-hadoop.md`, `07-nifi.md`, `slides.md` |
+| `cluster.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `create_vm.png` | orphelin (hygiène §5 du plan de refonte) |
 | `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/03-hdfs.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `dn-name-node.png` | orphelin (hygiène §5 du plan de refonte) |
@@ -50,11 +50,11 @@ Captures et schémas du cours, et où ils servent :
 | `hbase-table.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hbase.jpeg` | `exercices/06-hbase.md`, `td/TD03.md` |
 | `hidora.png` | orphelin (hygiène §5 du plan de refonte) |
-| `hive-architecture.svg` | `slides.md` |
+| `hive-architecture.svg` | `05-hive.md`, `slides.md` |
 | `logs-trajet.svg` | `slides.md` |
 | `managing-failures.jpeg` | `03-hdfs.md` |
 | `mapper.png` | `04-mapreduce-et-yarn.md` |
-| `mapreduce-pipeline.svg` | `slides.md` |
+| `mapreduce-pipeline.svg` | `04-mapreduce-et-yarn.md`, `slides.md` |
 | `mapreduce_sort.png` | `04-mapreduce-et-yarn.md`, `exercices/04-mapreduce.md` |
 | `mapreduce_unsort.png` | `04-mapreduce-et-yarn.md` |
 | `marketplace.png` | orphelin (hygiène §5 du plan de refonte) |
@@ -65,6 +65,8 @@ Captures et schémas du cours, et où ils servent :
 | `mr-word-count.jpeg` | `04-mapreduce-et-yarn.md` |
 | `mr.png` | `04-mapreduce-et-yarn.md` |
 | `namenode_datanode.png` | `01-introduction-hadoop.md`, `slides.md` |
+| `nifi-flux-ex07.svg` | `07-nifi.md` |
+| `nifi-relationships.svg` | `07-nifi.md` |
 | `operation-1.png` | `03-hdfs.md`, `slides.md` |
 | `operation-2.png` | `03-hdfs.md`, `slides.md` |
 | `overview.png` | orphelin (hygiène §5 du plan de refonte) |

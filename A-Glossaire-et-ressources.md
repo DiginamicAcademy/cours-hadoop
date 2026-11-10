@@ -45,8 +45,8 @@
 | EX | Exercice d'application d'une séquence, guidé puis autonome | exercices 02 à 07 |
 | EXPLAIN | Commande Hive qui affiche le plan d'exécution (les *stages*) généré à partir de votre requête SQL | chap. 05 · EX 05 · TP |
 | Famille de colonnes (*column family*) | Groupement de colonnes déclaré à la création d'une table HBase ; il organise le stockage physique | chap. 06 |
-| FileZilla | Client graphique FTP/SFTP pour déposer des fichiers sur la VM | chap. 02 · annexe `Filezilla.pdf` |
 | FIFO / Fair / Capacity Scheduler | Politiques d'ordonnancement de YARN : premier arrivé premier servi, partage équitable, quotas par file | chap. 04 |
+| FileZilla | Client graphique FTP/SFTP pour déposer des fichiers sur la VM | chap. 02 · annexe `Filezilla.pdf` |
 | FlowFile (NiFi) | Unité de données en mouvement : un contenu (le fichier) et des attributs (métadonnées clé/valeur) | chap. 07 · TD 04 |
 | FSImage | Image de l'arborescence HDFS, chargée au démarrage du NameNode | chap. 03 |
 | Funnel (NiFi) | Exutoire qui fusionne plusieurs flux entrants en une seule file — ce n'est pas un processeur | chap. 07 |
@@ -65,25 +65,25 @@
 | HMaster (HBase Master) | Démon qui assigne les régions, supervise les RegionServers et gère les schémas ; un seul est actif | chap. 06 |
 | Iceberg (Apache) | Format de table *lakehouse* — transactions ACID, évolution de schéma, *time travel* — intégré à Hive 4 | chap. 01, 05 |
 | JDBC (*Java Database Connectivity*) | API Java de connexion aux bases ; `jdbc:hive2://localhost:10000` est celle de Hive | chap. 05 |
+| JDK (*Java Development Kit*) | Boîte à outils Java ; `JAVA_HOME` l'indique à Hadoop | chap. 01 |
 | JNI (*Java Native Interface*) | Pont qui autorise du code natif — celui d'un plugin — à s'exécuter dans la JVM d'un démon Hadoop | chap. 03 |
 | JobHistoryServer | Démon qui conserve l'historique des jobs MapReduce et leurs journaux après la fin de l'application | EX 02 |
-| JDK (*Java Development Kit*) | Boîte à outils Java ; `JAVA_HOME` l'indique à Hadoop | chap. 01 |
 | jps | Commande qui liste les processus Java d'une machine : c'est ainsi qu'on vérifie que les démons sont démarrés | chap. 02, 06 · EX 02 |
 | JVM (*Java Virtual Machine*) | Machine virtuelle qui exécute démons et tâches ; chaque tâche map ou reduce lance sa JVM | chap. 01, 04 |
 | Kafka (Apache) | Bus de flux de messages ; Kafka Connect est l'outil d'ingestion quand la source est un flux | chap. 01, 07 |
 | Kerberos | Protocole d'authentification fort, optionnel dans Hadoop | chap. 03 |
 | Lakehouse | Architecture qui marie le stockage de fichiers du *data lake* et les garanties d'un entrepôt | chap. 05, 07 |
 | Lineage (NiFi) | Graphe des processeurs traversés par un FlowFile, affiché dans Data Provenance | TD 04 · EX 07 · TP |
-| MapReduce (MR) | Modèle de programmation parallèle du framework : map → partition → shuffle/sort → reduce | chap. 04 |
 | Mapper et reducer | Programme qui émet les paires `clé\tvaleur` à partir d'un split / programme qui agrège les valeurs d'une même clé | chap. 04 · EX 04 |
+| MapReduce (MR) | Modèle de programmation parallèle du framework : map → partition → shuffle/sort → reduce | chap. 04 |
 | MasterNode / SlaveNode | Rôles des machines d'un cluster : le master porte la coordination, les slaves portent le stockage et le calcul | chap. 01 |
 | MemStore | Tampon d'écriture en mémoire d'un Store HBase, vidé en HFiles | chap. 06 |
 | Metastore | Catalogue de Hive : tables, colonnes, formats, emplacements — aucunement les données | chap. 05 |
 | MySQL | Base relationnelle recommandée pour le Metastore dès que Hive est en production | chap. 05 |
 | NAR (*NiFi Archive*) | Paquet de processeurs chargeable par NiFi ; l'image du cours embarque 118 NAR, dont aucun NAR Hadoop | chap. 07 · EX 07 |
-| Namespace (HBase) | Groupement logique de tables, équivalent d'une base en SGBDR | chap. 06 |
 | NameNode | Maître de HDFS : il connaît l'arborescence, les blocs et les réplicas, et décide de la réplication | chap. 01, 03 |
 | NameNode secondaire (SNN) | Assistant qui factorise l'EditLog et tient une copie de la FSImage — ce n'est **pas** un NameNode de secours | chap. 03 |
+| Namespace (HBase) | Groupement logique de tables, équivalent d'une base en SGBDR | chap. 06 |
 | NiFi (Apache) | Plateforme visuelle de routage et de transformation de flux de données, avec livraison garantie et provenance | chap. 07 |
 | NodeManager | Démon YARN de chaque nœud : il surveille les conteneurs et rend compte au ResourceManager | chap. 02, 04 |
 | NoSQL | Familles de bases non relationnelles — clé/valeur, documents, colonnes, graphes — pour les volumes et la distribution | chap. 06 |
@@ -95,14 +95,14 @@
 | Pig | Flux de données « SQL-like » sur Hadoop, aujourd'hui legacy | chap. 01 |
 | Power BI | Outil de visualisation de Microsoft, connectable à HBase via ODBC et l'API REST | chap. 02 · annexe `ODBC.pdf` |
 | Processeur (NiFi) | Brique de traitement du flux : source, transformation, routage ou destination | chap. 07 · TD 04 |
-| PuTTY | Client SSH graphique pour Windows | annexe `PuTTY.pdf` |
 | PutFile (NiFi) | Processeur de destination : il écrit le contenu du FlowFile sur le disque du conteneur | chap. 07 · EX 07 · TP |
+| PuTTY | Client SSH graphique pour Windows | annexe `PuTTY.pdf` |
 | PutHDFS / GetHDFSFile | Processeurs NiFi de aller-retour direct avec HDFS — absents de l'image du cours, d'où le passage par `hdfs dfs -moveFromLocal` | chap. 07 · EX 07 |
 | Relationship (NiFi) | Sortie nommée d'un processeur, `success` ou `failure` ; une relationship non câblée est une erreur de conception | chap. 07 · TD 04 |
-| REST (API REST) | API exposée en HTTP ; celle d'HBase écoute sur le port 9091 | chap. 02, 06 |
 | Région (HBase) | Partition horizontale d'une table HBase, unité de distribution et de disponibilité — 1 Go ici | chap. 06 |
 | RegionServer | Démon HBase qui héberge les régions et exécute les lectures et les écritures | chap. 06 |
 | ResourceManager (RM) | Démon YARN du master : il alloue les ressources et planifie les applications | chap. 02, 04 |
+| REST (API REST) | API exposée en HTTP ; celle d'HBase écoute sur le port 9091 | chap. 02, 06 |
 | RowKey | Clé de ligne HBase, unique, triée en ordre lexicographique | chap. 06 |
 | S3 (*Simple Storage Service*) | Stockage d'objets d'Amazon ; un des backends accessibles derrière HadoopFS | chap. 03, 05 |
 | SafeMode | Mode dégradé du NameNode au démarrage : pas d'écriture tant que les DataNodes n'ont pas déclaré leurs blocs | chap. 03 |

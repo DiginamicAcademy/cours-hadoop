@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="380" viewBox="0 0 960 380" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="nrg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#059669"/>
+    </marker>
+    <marker id="nrr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- processeurs -->
+  <rect x="80" y="90" width="170" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="165" y="128" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">GetFile</text>
+
+  <rect x="395" y="90" width="170" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="480" y="128" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">UpdateRecord</text>
+
+  <rect x="710" y="90" width="170" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="795" y="128" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">PutFile</text>
+
+  <!-- relations success -->
+  <line x1="250" y1="122" x2="390" y2="122" stroke="#059669" stroke-width="2.5" marker-end="url(#nrg)"/>
+  <text x="320" y="110" text-anchor="middle" font-size="13" fill="#059669">success</text>
+  <line x1="565" y1="122" x2="705" y2="122" stroke="#059669" stroke-width="2.5" marker-end="url(#nrg)"/>
+  <text x="635" y="110" text-anchor="middle" font-size="13" fill="#059669">success</text>
+
+  <!-- failure de GetFile, câblée vers le funnel -->
+  <path d="M165 154 L165 290 L418 290" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#nrr)"/>
+  <text x="182" y="235" font-size="13" fill="#dc2626">failure</text>
+
+  <!-- funnel -->
+  <polygon points="430,262 530,262 500,322 460,322" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="480" y="297" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">funnel</text>
+  <text x="480" y="348" text-anchor="middle" font-size="13" fill="#991b1b">à câbler absolument — ou PutFile vers _errors/</text>
+
+  <!-- failure de PutFile, laissée nue : le piège -->
+  <line x1="795" y1="154" x2="795" y2="212" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#nrr)"/>
+  <text x="812" y="190" font-size="13" fill="#dc2626">failure</text>
+  <text x="795" y="242" text-anchor="middle" font-size="18" fill="#dc2626">✗</text>
+  <text x="795" y="268" text-anchor="middle" font-size="12" fill="#dc2626">non connectée</text>
+  <text x="795" y="286" text-anchor="middle" font-size="12" fill="#dc2626">= donnée perdue</text>
+
+</svg>

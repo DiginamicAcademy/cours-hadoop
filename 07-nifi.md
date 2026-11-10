@@ -71,11 +71,7 @@ Un processeur émet son résultat sur des **relationships** : `success` (trait�
 
 **3. La connection** — la file entre deux processeurs. C'est une vraie **queue** avec capacité limitée (back pressure : nombre d'objets / volume de données) ; si elle se remplit, le processeur amont est **arrêté** (stop and wait), pas submergé. La connection porte aussi le nom de la relationship (`success`, `failure`).
 
-```
- GetFile ──success──► UpdateRecord ──success──► PutFile
-    │                                          │
-    └──failure──► (à câbler absolument !)      failure
-```
+![Relations success et failure : la failure se câble toujours](assets/nifi-relationships.svg)
 
 > **Le réflexe de conception** : chaque flux doit définir **que faire des échecs** — une relation `failure` vers un funnel ou un simple `PutFile` dans un dossier `_errors/`. C'est la différence entre un flux d'ingestion et un script fragile.
 
@@ -103,11 +99,7 @@ Concrètement, quand la question arrive — _« Il manque les données du 12 ma
 
 L'EX 07 construira ce flux :
 
-```
-GetFile ──► ConvertRecord/UpdateRecord ──► PutFile ──► hdfs dfs -moveFromLocal
-(CSV dans le conteneur)   (CSV → TSV)     (dossier de   (commande depuis le master,
-                                           sortie NiFi)   pas un processeur)
-```
+![Le flux de l'EX 07 : GetFile, ConvertRecord, PutFile, puis moveFromLocal depuis le master](assets/nifi-flux-ex07.svg)
 
 | Processeur | Rôle dans notre flux |
 |---|---|
@@ -126,17 +118,7 @@ GetFile ──► ConvertRecord/UpdateRecord ──► PutFile ──► hdfs df
 
 NiFi n'est **pas** dans l'image du cluster Hadoop (le conteneur master embarque HDFS, YARN, HBase, Hive — pas d'usine à flux). Il tourne dans un **conteneur dédié** du même `docker-compose.yml` — image officielle `apache/nifi` branche **2.x** :
 
-```
-┌────────────── machine hôte (docker compose) ─────────┐
-│                                                       │
-│  ┌────────────────┐   ┌────────────────────────────┐ │
-│  │  Conteneur     │   │  Conteneur NiFi (dédié)    │ │
-│  │  Hadoop master │◄──┤  UI : https://localhost:8443│ │
-│  │  (HDFS 9000)   │   │  2.x (Java 21 embarqué)    │ │
-│  └────────────────┘   └────────────────────────────┘ │
-│  + 2 conteneurs slaves …        réseau 'hadoop-net'   │
-└───────────────────────────────────────────────────────┘
-```
+![NiFi dans l'environnement du cours : conteneur dédié sur hadoop-net](assets/cluster-docker.svg)
 
 Deux points d'accès :
 
@@ -155,13 +137,7 @@ Deux points d'accès :
 
 Avec NiFi, le cursus couvre la chaîne data de bout en bout :
 
-```
-     07 NiFi          03 HDFS            04 MapReduce / 05 Hive       06 HBase
-  ┌───────────┐     ┌──────────┐        ┌──────────────────────┐   ┌─────────┐
-  │ ingestion │ ──► │ stockage │ ─────► │ calcul (MR batch ou  │◄─┤ service │
-  │ routage   │     │ fichiers │        │ SQL)                 │   │ clé/val │
-  └───────────┘     └──────────┘        └──────────────────────┘   └─────────┘
-```
+![La chaîne data du cursus : NiFi, HDFS, MapReduce/Hive, HBase](assets/chain-complete.svg)
 
 - **07 (NiFi)** amène et transforme la donnée — c'est lui qui ouvre la chaîne ;
 - **03 (HDFS)** stocke ;

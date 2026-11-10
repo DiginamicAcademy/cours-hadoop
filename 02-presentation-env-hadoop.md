@@ -49,28 +49,7 @@ L'environnement est virtualisé avec Docker et se compose de :
     - Redirection de ports nécessaires pour accéder aux interfaces web de Hadoop
 * **Un conteneur NiFi** (séquence 07), image officielle `apache/nifi` 2.x, sur le même réseau
 
-```
-┌──────────────────────────────────────────────────────────┐
-│              Machine hôte (Docker Compose)               │
-│                                                          │
-│  ┌────────────────┐  ┌────────────────┐                  │
-│  │ hadoop-master  │  │ hadoop-slave1  │ + slave2        │
-│  │ NameNode       │  │ DataNode 1     │  idem 2         │
-│  │ + HBase Master │  │ + RegionServer │                  │
-│  │ + HiveServer2  │  │ + NodeManager  │                  │
-│  └────────────────┘  └────────────────┘                  │
-│   réseau 'hadoop-net'                                    │
-│   services : HDFS · YARN · Hive · HBase · Thrift · ZK    │
-│                                                          │
-│  ┌────────────────────┐                                  │
-│  │  conteneur NiFi    │  (réseau hadoop-net, séq. 07)   │
-│  │  UI : port 8443    │  (https, certificat auto-signé) │
-│  └────────────────────┘                                  │
-└──────────────────────────────────────────────────────────┘
-        ▲ http://localhost:9870 (HDFS) · :8088 (YARN) · https://localhost:8443/nifi …
-        │
-   votre navigateur
-```
+![Cluster Docker du cours : master, deux slaves, conteneur NiFi sur hadoop-net](assets/cluster-docker.svg)
 
 > **Note sur les versions :** le cluster local tourne sur **Hadoop 3.3.6** (et non 2.x) : les ports d'interface ont changé entre les deux branches — l'UI du NameNode est sur le **9870** en 3.x (50070 en 2.x). Les cours et exercices utilisent les ports 3.x.
 

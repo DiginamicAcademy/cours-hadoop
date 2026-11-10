@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" font-family="Segoe UI, system-ui, Arial, sans-serif">
+
+  <defs>
+    <marker id="nxb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#059669"/>
+    </marker>
+    <marker id="nxg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- bandeau conteneur NiFi -->
+  <rect x="30" y="88" width="715" height="150" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="52" y="112" font-size="12" fill="#16a34a">conteneur NiFi</text>
+
+  <!-- processeurs -->
+  <rect x="60" y="130" width="180" height="60" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="150" y="166" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">GetFile</text>
+  <text x="150" y="214" text-anchor="middle" font-size="12" fill="#64748b">CSV dans le conteneur</text>
+
+  <rect x="300" y="130" width="180" height="60" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="390" y="158" text-anchor="middle" font-size="14" font-weight="700" fill="#065f46">ConvertRecord</text>
+  <text x="390" y="176" text-anchor="middle" font-size="12" fill="#065f46">/ UpdateRecord</text>
+  <text x="390" y="214" text-anchor="middle" font-size="12" fill="#64748b">CSV → TSV</text>
+
+  <rect x="540" y="130" width="180" height="60" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+  <text x="630" y="166" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">PutFile</text>
+  <text x="630" y="214" text-anchor="middle" font-size="12" fill="#64748b">dossier de sortie NiFi</text>
+
+  <!-- flèches internes -->
+  <line x1="240" y1="160" x2="295" y2="160" stroke="#059669" stroke-width="2.5" marker-end="url(#nxb)"/>
+  <line x1="480" y1="160" x2="535" y2="160" stroke="#059669" stroke-width="2.5" marker-end="url(#nxb)"/>
+
+  <!-- hors NiFi : la commande shell, pas un processeur -->
+  <text x="865" y="112" text-anchor="middle" font-size="12" fill="#64748b">hors NiFi</text>
+  <line x1="720" y1="160" x2="785" y2="160" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#nxg)"/>
+  <rect x="790" y="130" width="150" height="60" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="865" y="155" text-anchor="middle" font-size="13" font-family="Consolas, monospace" fill="#334155">hdfs dfs</text>
+  <text x="865" y="173" text-anchor="middle" font-size="13" font-family="Consolas, monospace" fill="#334155">-moveFromLocal</text>
+  <text x="865" y="214" text-anchor="middle" font-size="12" fill="#64748b">depuis le master</text>
+  <text x="865" y="232" text-anchor="middle" font-size="12" fill="#94a3b8">— pas un processeur</text>
+
+</svg>

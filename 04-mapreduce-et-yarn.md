@@ -44,14 +44,7 @@ MapReduce est le modèle de programmation du framework Hadoop : il permet d'ana
 
 Le traitement d'un job suit une chaîne **fixe**, où chaque étape est jouée par une pièce différente du framework :
 
-```
-bloc ──> split ──> map ──> partition ──> shuffle / sort ──> reduce ──> part-0000N
-  │        │        │          │              │               │            │
-  HDFS   fichier  un task    clés        tri des clés      agrégation   un fichier
-  (128 M) lu par  émettant   routées      vers le bon      par clé      par reducer
-          degré de  clé\tvaleur  vers les      reducer
-          parallélisme           reducers
-```
+![Le pipeline MapReduce : blocs, splits, map, partition, shuffle/sort, reduce](assets/mapreduce-pipeline.svg)
 
 - **Bloc** : le fichier HDFS est découpé en blocs de **128 Mio** (c'est le *block size*, vu en séquence 03). Notre CSV Spotify fait 156 547 octets : **un seul bloc**.
 - **Split** : à chaque job, Hadoop découpe les blocs en *splits* — des « tranches de lecture » attribuées aux mappers. **Un split = une tâche map = un mapper.**

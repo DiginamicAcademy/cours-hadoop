@@ -56,30 +56,7 @@ LIMIT 10;
 
 ### C. Architecture de Hive
 
-```
-        ┌─────────────┐
-        │   Analyste   │
-        └──────┬──────┘
-               │  HiveQL
-        ┌──────▼──────────────────────────────┐
-        │           HiveServer2                │
-        │  ┌──────────────────────────────┐   │
-        │  │ Driver : parse → compile →   │   │
-        │  │ optimise → exécution         │   │
-        │  └──────────┬───────────────────┘   │
-        └─────────────┼───────────────────────┘
-                      │
-        ┌─────────────▼───────────┐     ┌──────────────────────┐
-        │     Metastore           │◄───►│  Base relationnelle    │
-        │ (catalogue : tables,     │     │  (Derby, MySQL…)      │
-        │  schémas, partitions)   │     └──────────────────────┘
-        └─────────────┬───────────┘
-                      │
-        ┌─────────────▼───────────────────────┐
-        │   YARN → jobs MapReduce (calcul)    │
-        │   HDFS  → fichiers (données)         │
-        └─────────────────────────────────────┘
-```
+![Architecture de Hive : HiveServer2, Metastore, YARN et HDFS](assets/hive-architecture.svg)
 
 Trois briques à retenir :
 

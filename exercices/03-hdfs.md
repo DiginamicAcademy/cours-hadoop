@@ -21,7 +21,7 @@ Pour ces commandes, il existe 2 syntaxes possibles:
 - Avec hadoop: avec une syntaxe du type `hadoop fs <commande>`,
 - Avec hdfs: la syntaxe est `hdfs dfs <commande>`.
 
-Ces commandes sont proche de celles utilisées par le Shell linux comme ls, mkdir, rm, cat, etc…
+Ces commandes sont proches de celles utilisées par le Shell linux comme ls, mkdir, rm, cat, etc…
 
 > **1. Lister le contenu d’un répertoire**
 
@@ -45,12 +45,12 @@ Ces commandes sont proche de celles utilisées par le Shell linux comme ls, mkdi
 
 > **5. Copier un fichier de HDFS sur HDFS**
 
-* Pattern : `hdfs dfs -cp <chemin_src> <chemin_dest_HDFS>`
-* Exemple: `hdfs dfs -cp ./TextFile.txt /user/output`
+* Pattern : `hdfs dfs -cp <chemin_src_HDFS> <chemin_dest_HDFS>`
+* Exemple: `hdfs dfs -cp /user/TextFile.txt /user/output/TextFile.txt`
 
 > **6. Récupérer un fichier de HDFS**
 
-* Pattern : `hdfs dfs -get <chemin_dest_HDFS> <chemin_src>`
+* Pattern : `hdfs dfs -get <chemin_src_HDFS> <chemin_dest_local>`
 * Exemple: `hdfs dfs -get /user/HdfsTextFile2.txt ./LocalTextFile2.txt`
 
 > **7. Supprimer un fichier**
@@ -74,8 +74,8 @@ Nous allons utiliser **`Spotify_Most_Streamed_Songs.csv`** comme entrée pour to
 > ⚠️ **Le fichier n'est pas dans le conteneur.** `data/` vit sur *votre* machine ; le master HDFS ne le voit pas encore. Toutes les sessions du cursus partent d'une copie faite **une fois pour toutes** :
 >
 > ```bash
-> # depuis la machine où tourne Docker, pas depuis le conteneur
-> docker cp ../data/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/
+> # depuis la machine où tourne Docker, à la racine du dépôt du cours
+> docker cp data/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/
 > # puis, dans le conteneur :
 > docker exec -it hadoop-master bash
 > ls -l /home/Spotify_Most_Streamed_Songs.csv   # 155593 octets

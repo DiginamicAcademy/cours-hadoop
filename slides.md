@@ -947,7 +947,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card card-blue">
 <div class="card-title">Une seule donnée, toute la chaîne</div>
 
-- `DATA/Spotify_Most_Streamed_Songs.csv` — **156 547 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
+- `data/Spotify_Most_Streamed_Songs.csv` — **155 593 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
 - Ça restera la **seule donnée** des EX 04 à 07 (le TP final travaillera, lui, sur les ventes `dataw_fro03`)
 - Colonnes utiles : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
 
@@ -972,9 +972,9 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 **Déposez le CSV Spotify dans HDFS et vérifiez chaque étape.**
 
-1. `docker cp DATA/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/` (machine hôte)
+1. `docker cp data/Spotify_Most_Streamed_Songs.csv hadoop-master:/home/` (machine hôte)
 2. `hdfs dfs -mkdir -p input` puis `hdfs dfs -put Spotify_Most_Streamed_Songs.csv input/`
-3. `hdfs dfs -ls input` → **156 547 octets, réplication `1`**
+3. `hdfs dfs -ls input` → **155 593 octets, réplication `1`**
 4. `hdfs dfs -cat input/… | tail -10` → les vraies dernières lignes (dernière : `Alone,Burna Boy,…`)
 
 > À repérer dans le `ls` : la réplication **1**, la taille **identique** au fichier local, le chemin absolu `/user/root/input/…`.
@@ -1143,7 +1143,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 - Le CSV tient dans un fichier HDFS, découpé en **blocs** de 128 Mio
 - Un simple programme **séquentiel** sur le cluster : pourquoi faire ?
-- Le **bloc** du cours : 156 547 octets → **1 seul bloc**
+- Le **bloc** du cours : 155 593 octets → **1 seul bloc**
 
 </div>
 
@@ -3160,7 +3160,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 # 🏋️ TD-05 — Tout à l'heure, vous l'avez fait : le pré-échauffement du TP (~15 min)
 
-**La chaîne entière, encore une fois, sur la donnée du TP** (`DATA/dataw_fro03_mini_1000.csv`).
+**La chaîne entière, encore une fois, sur la donnée du TP** (`data/dataw_fro03_mini_1000.csv`).
 
 1. Le pipe complet : `cat dataw_fro03_mini_1000.csv | python3 ANNEXES/utils/8-mapper-ventes.py | sort | python3 ANNEXES/utils/2-structure-reducer.py`
 2. Top 5 des villes — notez `LE MANS` (30) en tête

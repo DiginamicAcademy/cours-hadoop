@@ -34,9 +34,9 @@ Captures et schémas du cours, et où ils servent :
 | `endpoints.png` | orphelin (hygiène §5 du plan de refonte) |
 | `fair-scheduler.jpeg` | `04-mapreduce-et-yarn.md`, `slides.md` |
 | `fsimage-edits-2.png` | `03-hdfs.md`, `slides.md` |
-| `fsimages-edit.jpeg` | `03-hdfs.md` |
+| `fsimages-edit.jpeg` | orphelin (remplacé par `fsimage-edits-2.png` dans le chap. 03) |
 | `hadoop-logo.png` | orphelin (hygiène §5 du plan de refonte) |
-| `hadoop-webviews.png` | `03-hdfs.md` |
+| `hadoop-webviews.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hadoop.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/03-hdfs.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `happybase.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `hbase-cluster.jpeg` | `06-hbase-et-zookeeper.md` |
@@ -49,10 +49,12 @@ Captures et schémas du cours, et où ils servent :
 | `hbase-table-model.jpeg` | `06-hbase-et-zookeeper.md`, `slides.md` |
 | `hbase-table.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hbase.jpeg` | `exercices/06-hbase.md`, `td/TD03.md` |
+| `hdfs-architecture.svg` | `03-hdfs.md` |
+| `hdfs-principe.svg` | `03-hdfs.md` |
 | `hidora.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hive-architecture.svg` | `05-hive.md`, `slides.md` |
 | `logs-trajet.svg` | `slides.md` |
-| `managing-failures.jpeg` | `03-hdfs.md` |
+| `managing-failures.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `mapper.png` | orphelin (hygiène §5 du plan de refonte) |
 | `mapreduce-pipeline.svg` | `04-mapreduce-et-yarn.md`, `slides.md` |
 | `mapreduce_sort.png` | `04-mapreduce-et-yarn.md`, `exercices/04-mapreduce.md` |
@@ -80,7 +82,7 @@ Captures et schémas du cours, et où ils servent :
 | `start-hadoop.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `start-thrift.png` | `06-hbase-et-zookeeper.md` |
 | `tail.jpeg` | `03-hdfs.md`, `exercices/03-hdfs.md` |
-| `working-hdfs.jpeg` | `03-hdfs.md`, `slides.md` |
+| `working-hdfs.jpeg` | `slides.md` |
 | `yarn-config.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
 
 Les deux logos sont des copies du dépôt

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Segoe UI, system-ui, Arial, sans-serif">
+  <defs>
+    <marker id="ha-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="ha-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="ha-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#16a34a"/>
+    </marker>
+    <marker id="ha-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ea580c"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#0f172a">Qui détient quoi : métadonnées au NameNode, données aux DataNodes</text>
+  <text x="480" y="52" text-anchor="middle" font-size="13" fill="#475569">La donnée ne passe jamais par le NameNode : il donne des adresses.</text>
+
+  <!-- Client -->
+  <rect x="30" y="248" width="160" height="92" rx="12" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+  <text x="110" y="280" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Client</text>
+  <text x="110" y="302" text-anchor="middle" font-size="11" fill="#475569">CLI · Java · Hive · NiFi</text>
+  <text x="110" y="322" text-anchor="middle" font-size="11" fill="#475569">lit et écrit les blocs</text>
+
+  <!-- NameNode -->
+  <rect x="330" y="70" width="300" height="150" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="480" y="98" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a8a">NameNode — master</text>
+  <text x="480" y="120" text-anchor="middle" font-size="12" fill="#1e40af">arborescence des répertoires</text>
+  <text x="480" y="138" text-anchor="middle" font-size="12" fill="#1e40af">carte « bloc → DataNodes »</text>
+  <rect x="350" y="156" width="120" height="38" rx="8" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.2"/>
+  <text x="410" y="180" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">fsimage</text>
+  <rect x="490" y="156" width="120" height="38" rx="8" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.2"/>
+  <text x="550" y="180" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">edits</text>
+  <text x="480" y="240" text-anchor="middle" font-size="11" font-style="italic" fill="#1d4ed8">ne transporte jamais les blocs</text>
+
+  <!-- Secondary NameNode -->
+  <rect x="740" y="70" width="190" height="120" rx="14" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="835" y="96" text-anchor="middle" font-size="14" font-weight="600" fill="#0f172a">Secondary NameNode</text>
+  <text x="835" y="118" text-anchor="middle" font-size="11" fill="#475569">fusionne edits → fsimage</text>
+  <text x="835" y="136" text-anchor="middle" font-size="11" fill="#475569">allège le journal</text>
+  <text x="835" y="162" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">⚠ pas un secours</text>
+
+  <!-- checkpoint NN <-> SNN -->
+  <line x1="630" y1="115" x2="740" y2="115" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4" marker-start="url(#ha-arr)" marker-end="url(#ha-arr)"/>
+  <text x="685" y="104" text-anchor="middle" font-size="11" fill="#475569">checkpoint</text>
+
+  <!-- DataNodes -->
+  <rect x="290" y="400" width="180" height="110" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="380" y="428" text-anchor="middle" font-size="15" font-weight="600" fill="#166534">DataNode 1</text>
+  <text x="380" y="448" text-anchor="middle" font-size="11" fill="#15803d">slave1</text>
+  <text x="380" y="478" text-anchor="middle" font-size="12" fill="#166534">stocke les blocs</text>
+  <text x="380" y="496" text-anchor="middle" font-size="11" fill="#15803d">sur son disque local</text>
+
+  <rect x="530" y="400" width="180" height="110" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="620" y="428" text-anchor="middle" font-size="15" font-weight="600" fill="#166534">DataNode 2</text>
+  <text x="620" y="448" text-anchor="middle" font-size="11" fill="#15803d">slave2</text>
+  <text x="620" y="478" text-anchor="middle" font-size="12" fill="#166534">stocke les blocs</text>
+  <text x="620" y="496" text-anchor="middle" font-size="11" fill="#15803d">sur son disque local</text>
+
+  <!-- métadonnées : client -> NN -->
+  <path d="M90 248 L90 145 L330 145" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ha-blue)"/>
+  <text x="100" y="134" font-size="12" font-weight="600" fill="#1d4ed8">métadonnées : où sont les blocs ?</text>
+
+  <!-- données : client -> DataNodes -->
+  <path d="M190 310 L295 420" fill="none" stroke="#16a34a" stroke-width="2.5" marker-end="url(#ha-green)"/>
+  <path d="M190 288 L535 420" fill="none" stroke="#16a34a" stroke-width="2.5" marker-end="url(#ha-green)"/>
+  <text x="40" y="380" font-size="12" font-weight="600" fill="#15803d">données : les blocs</text>
+  <text x="40" y="398" font-size="11" fill="#15803d">lecture / écriture directe</text>
+
+  <!-- heartbeat DataNodes -> NN -->
+  <line x1="380" y1="400" x2="380" y2="220" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ha-orange)"/>
+  <text x="390" y="320" font-size="11" fill="#c2410c">heartbeat + rapport des blocs</text>
+  <line x1="620" y1="400" x2="620" y2="220" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ha-orange)"/>
+
+  <!-- Légende -->
+  <rect x="30" y="530" width="18" height="18" rx="4" fill="#2563eb"/>
+  <text x="56" y="544" font-size="12" fill="#334155">métadonnées</text>
+  <rect x="180" y="530" width="18" height="18" rx="4" fill="#16a34a"/>
+  <text x="206" y="544" font-size="12" fill="#334155">données</text>
+  <line x1="300" y1="539" x2="330" y2="539" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="338" y="544" font-size="12" fill="#334155">heartbeat / rapport des blocs</text>
+  <text x="650" y="544" font-size="12" font-style="italic" fill="#475569">NameNode = annuaire ; DataNodes = stockage.</text>
+</svg>

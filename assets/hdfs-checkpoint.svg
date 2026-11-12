@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" font-family="Segoe UI, system-ui, Arial, sans-serif">
+  <defs>
+    <marker id="ck-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="ck-arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#0f172a">Le Secondary NameNode allège le journal — il ne remplace personne</text>
+
+  <!-- NameNode -->
+  <rect x="60" y="62" width="380" height="196" rx="12" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+  <text x="80" y="88" font-size="14" font-weight="600" fill="#1e3a8a">NameNode — master</text>
+
+  <rect x="86" y="102" width="152" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="162" y="126" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a8a">fsimage</text>
+  <text x="162" y="144" text-anchor="middle" font-size="10" fill="#1e40af">l'image des métadonnées</text>
+
+  <rect x="262" y="102" width="152" height="58" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="338" y="126" text-anchor="middle" font-size="14" font-weight="600" fill="#92400e">edits</text>
+  <text x="338" y="144" text-anchor="middle" font-size="10" fill="#92400e">le journal depuis l'image</text>
+
+  <text x="80" y="188" font-size="11" fill="#475569">Au service, tout est en mémoire : fsimage + edits.</text>
+  <text x="80" y="206" font-size="11" fill="#475569">Chaque écriture ajoute une ligne dans edits.</text>
+  <text x="80" y="230" font-size="11" font-weight="600" fill="#9a3412">Sans checkpoint, edits ne fait que grossir.</text>
+
+  <!-- aller : periodicite -->
+  <line x1="440" y1="120" x2="518" y2="120" stroke="#334155" stroke-width="2" marker-end="url(#ck-arr)"/>
+  <text x="479" y="112" text-anchor="middle" font-size="11" fill="#475569">périodiquement</text>
+  <text x="479" y="140" text-anchor="middle" font-size="10" fill="#475569">fsimage + edits</text>
+
+  <!-- Secondary -->
+  <rect x="520" y="62" width="380" height="196" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="540" y="88" font-size="14" font-weight="600" fill="#166534">Secondary NameNode — un checkpoint</text>
+
+  <rect x="546" y="102" width="328" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2"/>
+  <text x="560" y="124" font-size="12" fill="#166534">1. fusionne les edits dans le fsimage</text>
+
+  <rect x="546" y="144" width="328" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2"/>
+  <text x="560" y="166" font-size="12" fill="#166534">2. écrit un fsimage neuf, à jour</text>
+
+  <rect x="546" y="186" width="328" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.2"/>
+  <text x="560" y="208" font-size="12" fill="#166534">3. le journal repart court</text>
+
+  <!-- retour -->
+  <line x1="520" y1="238" x2="442" y2="238" stroke="#16a34a" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ck-arr-g)"/>
+  <text x="481" y="230" text-anchor="middle" font-size="10" fill="#166534">relu au redémarrage</text>
+
+  <!-- notes -->
+  <line x1="60" y1="284" x2="900" y2="284" stroke="#cbd5e1" stroke-width="1"/>
+
+  <rect x="60" y="300" width="250" height="104" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="76" y="322" font-size="13" font-weight="600" fill="#0f172a">Ce que ça évite</text>
+  <text x="76" y="342" font-size="12" fill="#334155">Un redémarrage qui devrait</text>
+  <text x="76" y="359" font-size="12" fill="#334155">rejouer des centaines de</text>
+  <text x="76" y="376" font-size="12" fill="#334155">milliers de lignes : le chargement</text>
+  <text x="76" y="393" font-size="12" fill="#334155">reste court, le safe mode aussi.</text>
+
+  <rect x="330" y="300" width="270" height="104" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.2"/>
+  <text x="346" y="322" font-size="13" font-weight="600" fill="#991b1b">Ce que ce n'est pas</text>
+  <text x="346" y="342" font-size="12" fill="#7f1d1d">Un secours. Si le NameNode</text>
+  <text x="346" y="359" font-size="12" fill="#7f1d1d">principal tombe, celui-ci ne</text>
+  <text x="346" y="376" font-size="12" fill="#7f1d1d">prend pas la relève : la haute</text>
+  <text x="346" y="393" font-size="12" fill="#7f1d1d">disponibilité est hors périmètre.</text>
+
+  <rect x="620" y="300" width="300" height="104" rx="10" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.2"/>
+  <text x="636" y="322" font-size="13" font-weight="600" fill="#1e3a8a">Au démarrage</text>
+  <text x="636" y="342" font-size="12" fill="#1e40af">Le NameNode recharge fsimage</text>
+  <text x="636" y="359" font-size="12" fill="#1e40af">+ edits, puis attend les rapports</text>
+  <text x="636" y="376" font-size="12" fill="#1e40af">des DataNodes : c'est le safe</text>
+  <text x="636" y="393" font-size="12" fill="#1e40af">mode (IV.D), pas une panne.</text>
+</svg>

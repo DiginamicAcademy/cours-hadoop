@@ -1,12 +1,11 @@
 [← Chapitre précédent](02-presentation-env-hadoop.md) · [Sommaire](Readme.md) · [Chapitre suivant →](04-mapreduce-et-yarn.md)
 
-![Diginamic Logo](assets/diginamic.png) ![Hadoop Logo](assets/hadoop.png)
-
 # 03 - HDFS (Hadoop Distributed File System)
 
 > **Objectifs** : comprendre pourquoi HDFS existe et comment il range les octets (blocs, réplication) · décrire le NameNode, les DataNodes et le Secondary NameNode · maîtriser `ls`, `cat`, `put`, `get`, `rm` · lire les métadonnées d'un fichier (taille, blocs, réplication).
-> **La vérité vient de la mesure** : les chiffres de ce chapitre (128 Mio, réplication 1, 155 593 octets, 1 bloc, port 9870) ont été reproduits sur le cluster du cours (Hadoop 3.3.6). Quand une règle de la littérature ne colle pas à notre cluster, c'est la mesure qui fait foi.
 > **Mise en pratique** : [Exercices](#vi-exercices)
+
+> **La vérité vient de la mesure** : les chiffres de ce chapitre (128 Mio, réplication 1, 155 593 octets, 1 bloc, port 9870) ont été reproduits sur le cluster du cours (Hadoop 3.3.6). Quand une règle de la littérature ne colle pas à notre cluster, c'est la mesure qui fait foi.
 
 ## Sommaire
 
@@ -19,23 +18,23 @@
   - [B. La réplication se fait par bloc](#b-la-réplication-se-fait-par-bloc)
   - [C. Ce que le système corrige tout seul](#c-ce-que-le-système-corrige-tout-seul)
   - [D. Le prix à payer](#d-le-prix-à-payer)
-- [III. L'architecture — qui détient quoi](#iii-larchitecture--qui-détient-quoi)
+- [III. Les commandes HDFS — le geste quotidien](#iii-les-commandes-hdfs--le-geste-quotidien)
+  - [A. Une syntaxe, des chemins](#a-une-syntaxe-des-chemins)
+  - [B. Le mémo](#b-le-mémo)
+  - [C. Lire les métadonnées](#c-lire-les-métadonnées)
+  - [D. Les pièges](#d-les-pièges)
+  - [E. Mise en pratique : le CSV Spotify](#e-mise-en-pratique--le-csv-spotify)
+- [IV. L'architecture — qui détient quoi](#iv-larchitecture--qui-détient-quoi)
   - [A. Le NameNode : l'annuaire](#a-le-namenode--lannuaire)
   - [B. Les DataNodes : les blocs](#b-les-datanodes--les-blocs)
   - [C. Le Secondary NameNode : un checkpoint, pas un secours](#c-le-secondary-namenode--un-checkpoint-pas-un-secours)
   - [D. Le safe mode](#d-le-safe-mode)
   - [E. Une lecture, une écriture : qui parle à qui](#e-une-lecture-une-écriture--qui-parle-à-qui)
   - [F. Tableau des pannes](#f-tableau-des-pannes)
-- [IV. Les commandes HDFS — le geste quotidien](#iv-les-commandes-hdfs--le-geste-quotidien)
-  - [A. Une syntaxe, des chemins](#a-une-syntaxe-des-chemins)
-  - [B. Le mémo](#b-le-mémo)
-  - [C. Lire les métadonnées](#c-lire-les-métadonnées)
-  - [D. Les pièges](#d-les-pièges)
-  - [E. Mise en pratique : le CSV Spotify](#e-mise-en-pratique--le-csv-spotify)
 - [V. Démarrer, vérifier, dépanner](#v-démarrer-vérifier-dépanner)
   - [A. Ne jamais reformater](#a-ne-jamais-reformater)
   - [B. Vérifier que HDFS tourne](#b-vérifier-que-hdfs-tourne)
-  - [C. Le safe mode en pratique](#c-le-safe-mode-en-pratique)
+  - [C. Le safe mode, côté réflexe](#c-le-safe-mode-côté-réflexe)
   - [D. Où sont les logs](#d-où-sont-les-logs)
 - [VI. Exercices](#vi-exercices)
   - [A. Mémo sans filet](#a-mémo-sans-filet)
@@ -47,17 +46,25 @@
 
 Un disque de 1 To ne stocke pas un fichier de 4 To. Un cluster de centaines de disques, oui — encore faut-il savoir où est chaque morceau et quoi faire quand un disque meurt.
 
+Avant toute commande, il faut la raison d'être. HDFS n'est pas un système de fichiers qui aurait grossi : c'est une réponse à trois problèmes qu'une machine seule ne résout pas. Ces trois réponses expliquent tout ce qui suit, y compris les parties qui semblent arbitraires.
+
 ### A. Trois murs du stockage centralisé
+
+Trois choses arrêtent un serveur unique dès qu'on parle de données massives. Regardez-les une par une : chacune a sa réponse, et ces trois réponses *sont* le design d'HDFS.
 
 | Mur | Ce qui bloque | Réponse HDFS |
 |---|---|---|
 | **Volume** | un fichier dépasse le plus gros disque | découper en blocs |
 | **Panne** | plus il y a de disques, plus il y en a qui tombent | répliquer chaque bloc |
-| **Réseau** | rapatrier des téraoctets coûte plus cher que d'y envoyer le calcul | calculer sur place (04) |
+| **Réseau** | rapatrier des téraoctets coûte plus cher que d'y envoyer le calcul | calculer sur place (chapitre 04) |
+
+Retenez la troisième ligne : c'est la moins évidente et la plus décisive. Tant qu'on rapporte la donnée jusqu'au calcul, un cluster de cent nœud ne sert qu'à stocker.
 
 À l'échelle d'un cluster, la panne d'un disque est la norme. HDFS est conçu pour qu'elle ne se voie pas.
 
 ### B. Le contrat HDFS
+
+Le contrat tient en quatre engagements. Leur ordre n'est pas décoratif : c'est l'ordre dans lequel HDFS traite un fichier.
 
 1. **découper** chaque fichier en blocs de taille fixe ;
 2. **répliquer** chaque bloc sur plusieurs machines ;
@@ -70,12 +77,14 @@ En échange : écrire une fois, lire en flux, tolérer la panne. Ce n'est pas un
 
 ### C. Ce que HDFS n'est pas
 
+Le corollaire du contrat tient en quatre idées reçues. Elles reviennent chaque année en salle, et chacune a déjà envoyé quelqu'un construire une architecture qui ne tient pas.
+
 | HDFS n'est pas… | Conséquence |
 |---|---|
-| **une base de données** | pas d'index, pas d'`UPDATE` : on lit en flux, MapReduce (04) ou Hive (05) interroge. |
+| **une base de données** | pas d'index, pas d'`UPDATE` : on lit en flux, MapReduce (chapitre 04) ou Hive (chapitre 05) interroge. |
 | **un système POSIX** | pas d'édition au milieu d'un fichier : on écrit, on ajoute en fin, on relit. |
-| **un terrain pour des millions de petits fichiers** | ~150 octets par objet en RAM du NameNode. |
-| **un entrepôt de données** | il stocke ; Hive donne le schéma et le SQL (05). |
+| **un terrain pour des millions de petits fichiers** | chaque objet vit en mémoire du NameNode ; le chiffre est en II.D. |
+| **un entrepôt de données** | il stocke ; Hive donne le schéma et le SQL (chapitre 05). |
 
 HDFS range des octets. Il ne les comprend pas.
 
@@ -83,22 +92,29 @@ HDFS range des octets. Il ne les comprend pas.
 
 HDFS ne range pas des fichiers : il range des blocs.
 
+C'est la seule notion qu'il faut avoir comprise avant de toucher une commande. La réplication que vous allez lire dans un `ls`, le nombre de tâches du chapitre 04, la mort des petits fichiers — tout découle de là. Prenez ces quatre sous-sections dans l'ordre : la première définit l'objet, les trois suivantes disent ce qu'on en fait.
+
 ### A. Le bloc, unité de stockage
+
+Un bloc est un morceau de fichier de taille fixe, considéré par HDFS comme autonome : c'est lui qu'on stocke, lui qu'on copie, lui qu'on remplace — jamais « le fichier ».
 
 - **128 Mio** par défaut (`dfs.blocksize`), dérogeable à la création.
 - Un fichier = **n blocs** ; seul le dernier peut être partiel.
-- Un bloc n'est ni un fichier ni un split :
+
+Le mot « bloc » désigne ensuite deux choses différentes selon qui parle, et les confondre fait dire n'importe quoi au chapitre 04 :
 
 | Notion | Décidée par | Rôle |
 |---|---|---|
 | **bloc** | HDFS | stockage et réplication |
 | **split** | MapReduce | tranche de lecture, une par tâche map |
 
-Mesuré : le CSV Spotify (155 593 o) tient dans **1 bloc** — et le chapitre 04 lui a donné **2 splits**. Un bloc peut donc nourrir plusieurs mappers. 400 Mio donneraient 4 blocs (3 × 128 + 16).
+Une fois la distinction posée, le reste est une mesure. Mesuré : le CSV Spotify (155 593 o) tient dans **1 bloc** — et le chapitre 04 lui a donné **2 splits**. Un bloc peut donc nourrir plusieurs mappers. 400 Mio donneraient 4 blocs (3 × 128 + 16).
 
 **On lit, on ne devine pas** : `hdfs fsck input/Spotify_Most_Streamed_Songs.csv -files -blocks`.
 
 ### B. La réplication se fait par bloc
+
+Un bloc existe donc en plusieurs exemplaires. Deux questions : combien, et où ?
 
 - **3 par défaut** ; **1 sur le cluster du cours** (`dfs.replication=1`).
 - Elle se lit dans `hdfs dfs -ls` : **le premier chiffre après les droits**.
@@ -118,78 +134,33 @@ Ce sont les **blocs** qui sont répliqués, pas les fichiers. Les répertoires n
 
 ### C. Ce que le système corrige tout seul
 
+Trois copies sur trois nœuds : il arrive qu'il n'en reste plus que deux. Personne n'intervient, et c'est le but.
+
 - **Sous-réplication** : un DataNode ne répond plus → le NameNode recrée les copies manquantes.
 - **Sur-réplication** : `setrep` baisse → le surplus est supprimé.
 - **Contrôle** : `hdfs fsck ...` signale les blocs sous-répliqués ou corrompus.
 
-L'auto-réparation attend que le heartbeat manque depuis assez longtemps : un `fsck` lancé juste après une panne montre encore l'état ancien.
+Une réserve, sinon on se trompe de diagnostic : l'auto-réparation attend que le heartbeat manque depuis assez longtemps. Un `fsck` lancé juste après une panne montre encore l'état ancien.
 
 ### D. Le prix à payer
+
+Ce design se paie à trois endroits, et le deuxième est celui qui coûte le plus cher sans qu'on le voie venir.
 
 | Choix | Ce qu'on paie |
 |---|---|
 | **petits fichiers** | ~150 octets par objet en RAM du NameNode : des millions le tuent |
-| **compression** | du CPU, et certains codecs (**gzip**) empêchent le découpage → **1 seul mapper** (04) |
+| **compression** | du CPU, et parfois tout le parallélisme — détail ci-dessous |
 | **permissions** | propriétaire / groupe / autres, superutilisateur HDFS, Kerberos pour la vraie authentification (hors TP) |
 
-Règle pratique : beaucoup de gros fichiers, compressés seulement si le codec laisse découper.
+**La compression mérite d'être développée, parce qu'on l'interroge en fin de chapitre.** Un *codec* est un programme qui range les octets plus serrés : le fichier pèse moins lourd et se transporte plus vite, contre du temps de CPU à l'écriture et à la lecture. Ça, c'est l'échange annoncé. Le piège est ailleurs, et il est grossier : un fichier compressé en **gzip** (`.gz`) ne se lit qu'en séquence, du premier octet au dernier. HDFS ne peut donc pas le découper, MapReduce (chapitre 04) n'y trouve **qu'un seul split**, donc un seul mapper — et un cluster de dix nœuds regarde un seul nœud travailler. **snappy** (`.snappy`) tombe sous le même coup. **bzip2** (`.bz2`), lui, découpe en blocs indépendants et laisse le parallélisme entier.
 
-## III. L'architecture — qui détient quoi
+D'où la règle : beaucoup de gros fichiers, et la compression seulement quand le codec laisse découper.
 
-Trois rôles : un annuaire, des ouvriers, et un comptable qui n'est pas un secours.
+## III. Les commandes HDFS — le geste quotidien
 
-![Client, NameNode, Secondary NameNode et DataNodes : métadonnées, données, heartbeat](assets/hdfs-architecture.svg)
+Vous savez ce qu'HDFS range, et où il le range. Il reste à y poser les mains.
 
-### A. Le NameNode : l'annuaire
-
-- **Arborescence** des répertoires + **carte « bloc → DataNodes »**.
-- **Ne transporte jamais les données** : il donne des adresses.
-- Sur disque : `fsimage` + `edits`, tout chargé en mémoire (~150 octets par objet).
-- Point unique de défaillance ; la haute disponibilité (standby + ZooKeeper) sort du périmètre.
-
-### B. Les DataNodes : les blocs
-
-- Stockent les blocs sur leur **disque local**.
-- Envoient un **heartbeat** et un **rapport des blocs** au NameNode.
-- Lisent et écrivent les blocs quand le client leur parle, après l'adresse fournie par le NameNode.
-- NameNode sur le master ; DataNodes sur les slaves.
-
-### C. Le Secondary NameNode : un checkpoint, pas un secours
-
-- Fusionne périodiquement `edits` dans `fsimage` : il **allège le journal**.
-- **Ne remplace jamais** le NameNode principal : s'il tombe, on redémarre le principal — ou on passe par la haute disponibilité, hors périmètre.
-
-![fsimage et edits](assets/fsimage-edits-2.png) ![checkpointing : fusion des edits dans le fsimage](assets/checkpointing.png)
-
-### D. Le safe mode
-
-- Au démarrage, le NameNode charge `fsimage` + `edits` et **attend les rapports des DataNodes**.
-- **Lecture seule** : les lectures passent, les écritures sont bloquées.
-- Sortie automatique, ou `hdfs dfsadmin -safemode get` / `leave`.
-- Un `put` qui échoue juste après le démarrage n'est pas un bug : c'est le safe mode.
-
-### E. Une lecture, une écriture : qui parle à qui
-
-| Opération | Déroulé |
-|---|---|
-| **Lire** | client → NameNode (adresses) → DataNodes (lecture directe) |
-| **Écrire** | client → NameNode (où écrire) → pipeline de DataNodes → accusé |
-
-Le NameNode ne voit passer que des noms et des adresses ; les octets vont du client aux DataNodes.
-
-![Écriture : le client demande où déposer, puis écrit aux DataNodes](assets/operation-1.png)
-![Lecture : le client demande où sont les blocs, puis les lit directement](assets/operation-2.png)
-
-### F. Tableau des pannes
-
-| Panne | Conséquence | Réaction |
-|---|---|---|
-| DataNode | blocs sous-répliqués | re-réplication automatique |
-| Disque | réplica perdu | idem, via les autres réplicas |
-| NameNode | cluster indisponible | redémarrage ; HA hors périmètre |
-| Secondary NameNode | aucun secours | il allège seulement le journal |
-
-## IV. Les commandes HDFS — le geste quotidien
+Douze commandes suffisent pour tout ce que fait le cours, et elles se ressemblent toutes. On les prend dans l'ordre du geste — une syntaxe, le mémo, la lecture des métadonnées — puis on regarde ce qui marche mal et pourquoi, et on dépose le CSV du cours pour de bon.
 
 ### A. Une syntaxe, des chemins
 
@@ -198,12 +169,16 @@ Le NameNode ne voit passer que des noms et des adresses ; les octets vont du cli
 - `hdfs://namenode:9000/...` ne sert qu'à lever une ambiguïté : la couche **HadoopFS** choisit le backend selon le schéma (`hdfs://`, `file://`, `s3a://`…).
 - CLI, API Java, Hive et NiFi passent tous par cette couche.
 
+Retenez le deuxième point : c'est ce qui fait qu'on écrit `input` et non un chemin absolu partout dans le cours.
+
 ### B. Le mémo
+
+Le mémo d'abord, pour l'avoir sous les yeux pendant la manipulation de III.E. La colonne *Usage* dit ce que la commande fait ; les limites sont toutes en III.D.
 
 | Commande | Exemple | Usage |
 |---|---|---|
 | `ls` | `hdfs dfs -ls input` | lister (déjà long : pas de `-l`) |
-| `mkdir -p` | `hdfs dfs -mkdir -p input/2026` | créer, parents compris |
+| `mkdir -p` | `hdfs dfs -mkdir -p input/2026` | créer, parents compris comme en shell |
 | `put` | `hdfs dfs -put fichier.csv input/` | local → HDFS (refuse d'écraser sans `-f`) |
 | `cat` | `hdfs dfs -cat input/fichier.csv` | afficher |
 | `get` | `hdfs dfs -get input/fichier.csv ./` | HDFS → local |
@@ -217,7 +192,7 @@ Le NameNode ne voit passer que des noms et des adresses ; les octets vont du cli
 
 ### C. Lire les métadonnées
 
-`hdfs dfs -ls` est déjà long : droits, **réplication**, propriétaire / groupe, taille, date, chemin absolu. Pour cibler une valeur, `stat` évite de parser :
+`hdfs dfs -ls` est déjà long : droits, **réplication**, propriétaire / groupe, taille, date, chemin absolu. Quand on veut une valeur seule, `stat` évite de la découper à la main :
 
 | Format | Ce qu'il affiche | Mesure |
 |---|---|---|
@@ -229,8 +204,13 @@ Le NameNode ne voit passer que des noms et des adresses ; les octets vont du cli
 
 ### D. Les pièges
 
+Six pièges. Tous réels, tous rencontrés au moins une fois en salle — aucun n'est une hypothèse d'école.
+
 - **`-ls` est déjà long** : `hdfs dfs -ls -l` échoue, `-l` n'existe pas.
-- **`-tail` ne lit pas des lignes** : il renvoie les **1024 derniers octets**, sans égard aux fins de ligne. Sur notre CSV : 7 lignes, la première coupée. Pour N lignes : `hdfs dfs -cat … | tail -N`.
+- **`-tail` ne lit pas des lignes** : il renvoie les **1024 derniers octets**, sans égard aux fins de ligne. Sur notre CSV : 7 lignes, la première coupée en plein milieu d'un champ. Pour « les N dernières lignes », l'outil est `hdfs dfs -cat … | tail -N`. `-tail` n'est pas pour autant un jouet cassé : c'est **l'outil qu'il faut** pour surveiller un fichier qui grossit sous vos yeux — un log, un `part-*` en cours d'écriture. Il ne sait pas où commence une ligne, il sait se placer à `taille − 1024` ; ça a un usage, et ce n'est pas celui-là.
+
+![Sortie de `hdfs dfs -tail` sur le CSV Spotify : 7 lignes, la première entamée en cours de champ](assets/tail.jpeg)
+
 - **`-cp` reste dans HDFS** : local → HDFS, c'est `-put` ; HDFS → local, c'est `-get`.
 - **`-get` prend la source HDFS d'abord** : `<source_HDFS> <destination_locale>`.
 - **`-put` n'écrase pas sans `-f`** : c'est une protection, pas un bug.
@@ -258,9 +238,79 @@ Found 1 items
 -rw-r--r--   1 root supergroup    155593 2026-09-11 18:33 /user/root/input/Spotify_Most_Streamed_Songs.csv
 ```
 
-Quatre choses à lire : le **1** après les droits (réplication, pas 3), la taille **155 593** identique au local, le chemin absolu `/user/root/...`, et la date de l'envoi. Le `cat | tail -10` rend 10 lignes de 25 champs, dont des valeurs entre guillemets (`"Feid, Paulo Londra"`) : même contenu que le local (954 lignes). Le fichier est dans le cluster ; le chapitre 04 le traite.
+Quatre choses à lire dans cette ligne, toutes vérifiables : le **1** après les droits (réplication — pas 3 ; un `3` signifierait que vous n'êtes pas sur le cluster du cours), la taille **155 593** identique au local (personne n'a transformé le fichier), le chemin absolu `/user/root/...` (`input`, sans `/`, est relatif à votre répertoire utilisateur), et la date de l'envoi — les vôtres différeront, c'est normal.
 
-![tail](assets/tail.jpeg)
+Le `cat | tail -10` rend 10 lignes de 25 champs, dont des valeurs entre guillemets parce qu'elles contiennent des virgules (`"Feid, Paulo Londra"`) ; la toute dernière est `Alone,Burna Boy,…`. Même contenu que le local (954 lignes) : comparez pour vous en assurer. Le fichier est dans le cluster ; le chapitre 04 le traite.
+
+## IV. L'architecture — qui détient quoi
+
+Vous avez déposé un fichier et lu une ligne de `ls` en une demi-seconde. Qui sait quoi, dans ce cluster, pour répondre aussi vite ? Et qui porte les octets, vous l'avez déjà deviné : pas celui qui répond.
+
+Trois rôles : un annuaire, des ouvriers, et un comptable qui n'est pas un secours.
+
+![Client, NameNode, Secondary NameNode et DataNodes : métadonnées, données, heartbeat](assets/hdfs-architecture.svg)
+
+### A. Le NameNode : l'annuaire
+
+- **Arborescence** des répertoires + **carte « bloc → DataNodes »**.
+- **Ne transporte jamais les données** : il donne des adresses.
+- Sur disque : `fsimage` + `edits`, tout chargé en mémoire (~150 octets par objet).
+- Point unique de défaillance ; la haute disponibilité (standby + ZooKeeper) sort du périmètre.
+
+Ce dernier point est le plus important du chapitre côté production : tout ce que vous voyez ici tient parce qu'un seul serveur sait où est tout.
+
+### B. Les DataNodes : les blocs
+
+- Stockent les blocs sur leur **disque local**.
+- Envoient un **heartbeat** et un **rapport des blocs** au NameNode.
+- Lisent et écrivent les blocs quand le client leur parle, après l'adresse fournie par le NameNode.
+- NameNode sur le master ; DataNodes sur les slaves.
+
+Reste une question ouverte par le premier point de A : le NameNode tient sa carte en mémoire. Au redémarrage, comment la retrouve-t-il ?
+
+### C. Le Secondary NameNode : un checkpoint, pas un secours
+
+C'est le rôle le plus mal compris du cours, et le QCM vous y enverra. Deux phrases suffisent à ne plus se tromper :
+
+- Fusionne périodiquement `edits` dans `fsimage` : il **allège le journal**.
+- **Ne remplace jamais** le NameNode principal : s'il tombe, on redémarre le principal — ou on passe par la haute disponibilité, hors périmètre.
+
+![fsimage et edits, et la fusion périodique des edits dans le fsimage par le Secondary NameNode](assets/hdfs-checkpoint.svg)
+
+### D. Le safe mode
+
+Le redémarrage du NameNode a une phase que tout le monde prend pour une panne :
+
+- Au démarrage, le NameNode charge `fsimage` + `edits` et **attend les rapports des DataNodes**.
+- **Lecture seule** : les lectures passent, les écritures sont bloquées.
+- Sortie automatique, ou `hdfs dfsadmin -safemode get` / `leave`.
+- Un `put` qui échoue juste après le démarrage n'est pas un bug : c'est le safe mode.
+
+Le réflexe côté dépannage est en V.C.
+
+### E. Une lecture, une écriture : qui parle à qui
+
+Un même principe, deux trajets : le NameNode indique, les DataNodes transportent.
+
+| Opération | Déroulé |
+|---|---|
+| **Lire** | client → NameNode (adresses) → DataNodes (lecture directe) |
+| **Écrire** | client → NameNode (où écrire) → pipeline de DataNodes → accusé |
+
+Le NameNode ne voit passer que des noms et des adresses ; les octets vont du client aux DataNodes.
+
+![Écriture et lecture : le client demande l'adresse au NameNode, puis parle directement aux DataNodes — ici sur le cluster du cours, réplication 1](assets/hdfs-lecture-ecriture.svg)
+
+### F. Tableau des pannes
+
+De quoi le chapitre a parlé, mise à plat : ce qui tombe, ce qu'on perd, et ce qui se répare tout seul.
+
+| Panne | Conséquence | Réaction |
+|---|---|---|
+| DataNode | blocs sous-répliqués | re-réplication automatique |
+| Disque | réplica perdu | idem, via les autres réplicas |
+| NameNode | cluster indisponible | redémarrage ; HA hors périmètre |
+| Secondary NameNode | aucun secours | il allège seulement le journal |
 
 ## V. Démarrer, vérifier, dépanner
 
@@ -274,6 +324,8 @@ Le chapitre 02 a monté le cluster. Ici : ce qui est propre à HDFS et ce qu'on 
 
 ### B. Vérifier que HDFS tourne
 
+Quatre vérifications, dans cet ordre — elles vont du processus à l'interface :
+
 | Vérification | Commande | Attendu |
 |---|---|---|
 | master | `jps` | `NameNode`, `SecondaryNameNode` |
@@ -283,12 +335,13 @@ Le chapitre 02 a monté le cluster. Ici : ce qui est propre à HDFS et ce qu'on 
 
 Le démarrage standard reste `./start-dfs.sh` depuis le master (déjà vu en 02) ; l'arrêt, `./stop-dfs.sh`. `jps` ne montre que le conteneur où on le lance : les DataNodes sont sur les slaves.
 
-### C. Le safe mode en pratique
+### C. Le safe mode, côté réflexe
+
+Le *pourquoi* est en IV.D. Ici, seulement le geste :
 
 - **Symptôme** : une écriture échoue avec `Safe mode is ON`, une lecture passe.
 - **Reconnaître** : `hdfs dfsadmin -safemode get`.
 - **Attendre** la sortie automatique ; `leave` force la sortie si le NameNode a fini de charger.
-- Ce n'est pas une panne : c'est la reconstruction de la carte des blocs.
 
 ### D. Où sont les logs
 
@@ -296,15 +349,15 @@ Le démarrage standard reste `./start-dfs.sh` depuis le master (déjà vu en 02)
 
 ## VI. Exercices
 
-La feuille complète est dans [`exercices/03-hdfs.md`](exercices/03-hdfs.md). Version cours :
+Une heure environ sur le cluster du cours. Les résultats attendus sont donnés au fil de l'eau : c'est la sortie qui tranche, pas l'énoncé.
 
 ### A. Mémo sans filet
 
-Sans regarder IV.B, écrivez la commande qui : crée `input/2026` avec les parents ; dépose `fichier.csv` dans `input/` ; liste `input/` ; affiche les 5 dernières lignes d'un fichier HDFS ; récupère un fichier HDFS dans le répertoire courant ; supprime un répertoire non vide. Vérifiez ensuite dans le tableau : c'est la sortie qui tranche.
+Sans regarder III.B, écrivez la commande qui : crée `input/2026` avec les parents ; dépose `fichier.csv` dans `input/` ; liste `input/` ; affiche les 5 dernières lignes d'un fichier HDFS ; récupère un fichier HDFS dans le répertoire courant ; supprime un répertoire non vide. Vérifiez ensuite dans le tableau : c'est la sortie qui tranche.
 
 ### B. Manipulation Spotify
 
-Refaites IV.E sans regarder, puis vérifiez : fichier dans `/user/root/input/` ; `1` en réplication et `155593` en taille ; 10 lignes de 25 champs ; contenu identique au local.
+Refaites III.E sans regarder, puis vérifiez : fichier dans `/user/root/input/` ; `1` en réplication et `155593` en taille ; 10 lignes de 25 champs dont la dernière est `Alone,Burna Boy,…` ; contenu identique au local.
 
 ### C. Défi blocs et réplication
 

@@ -887,7 +887,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/fsimage-edits-2.png" style="max-width: 55%; max-height: 24vh; height: auto;" />
+<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -913,16 +913,10 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 **Le NameNode indique l'adresse (un annuaire), les DataNodes transportent les données — la donnée ne passe jamais par le NameNode.**
 
-<div class="flex justify-center" style="gap: 1rem;">
-  <figure>
-    <img src="assets/operation-1.png" style="max-width: 46%; max-height: 34vh; height: auto;" />
-    <figcaption style="font-size: 14px; margin-top: 4px;"><b>Écriture</b> — le client demande où déposer, puis écrit directement aux DataNodes</figcaption>
-  </figure>
-  <figure>
-    <img src="assets/operation-2.png" style="max-width: 46%; max-height: 34vh; height: auto;" />
-    <figcaption style="font-size: 14px; margin-top: 4px;"><b>Lecture</b> — le client demande où sont les blocs, puis les lit directement</figcaption>
-  </figure>
-</div>
+<figure class="flex justify-center">
+  <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
+  <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
+</figure>
 
 ---
 

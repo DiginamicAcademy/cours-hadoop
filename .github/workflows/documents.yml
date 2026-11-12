@@ -406,6 +406,7 @@ jobs:
         env:
           WHITE_STYLE: |
             style: |
+              section {font-size: 20px}
               section table {font-size: 0.85em}
               blockquote {border: 2px green solid; border-left-width: 15px; padding: 0.5em 15px;font-style: italic }
               section.lead {text-align: center}

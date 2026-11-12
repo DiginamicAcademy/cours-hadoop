@@ -585,6 +585,8 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 > Les conteneurs démarrent **froids** : aucun service n'est lancé — c'est voulu, vous apprenez à les démarrer à l'EX/02.
 
+<div class="cols-2">
+
 <div class="card card-yellow">
 <div class="card-title">Dans le master</div>
 
@@ -603,9 +605,11 @@ RESTServer · RunJar (HiveServer2) · QuorumPeerMain (ZooKeeper)
 DataNode · NodeManager · HRegionServer
 ```
 
+
 </div>
 
-> ⚠️ `QuorumPeerMain` = le vrai ZooKeeper de cette distribution (pas `HQuorumPeer`). Les DataNodes/NodeManagers ne s'affichent **pas** dans le master — ils tournent sur les slaves.
+
+> ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`). DataNodes et NodeManagers tournent sur les slaves, pas dans le master.
 
 ---
 
@@ -760,6 +764,8 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 
 # 🔁 La réplication par blocs
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">Ce sont les blocs qui sont répliqués, pas les fichiers</div>
 
@@ -778,6 +784,8 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 
 </div>
 
+</div>
+
 > 📌 On verra à l'EX/03/`fsck` : la réplication se lit dans le listing HDFS (**le `1` après les droits**).
 
 ---
@@ -791,7 +799,7 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 
 - **128 Mio** par défaut (configurable dans `hdfs-site.xml`, dérogable par fichier)
 - Gros blocs → adaptés aux **gros fichiers peu nombreux**
-- Petits blocs → adaptés aux **petits fichiers nombreux** (moins de surcoût)
+- Petits fichiers → le surcoût est en **RAM du NameNode**, pas sur le disque
 
 </div>
 
@@ -914,7 +922,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 **Le NameNode indique l'adresse (un annuaire), les DataNodes transportent les données — la donnée ne passe jamais par le NameNode.**
 
-<figure class="flex justify-center">
+<figure style="text-align: center;">
   <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
   <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
 </figure>
@@ -932,8 +940,8 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 | `hdfs dfs -get <hdfs> <local>` | récupérer depuis HDFS |
 | `hdfs dfs -rm -r <dir>` | supprimer (récursif) |
 
-> **2 syntaxes équivalentes** : `hadoop fs` ou `hdfs dfs` — très proches du shell Linux.
-> ⚠️ **Piège : `-tail`** relit les **derniers 1024 octets** sans égard aux fins de ligne → il coupe une ligne en plein milieu ! Pour "les N dernières lignes" : `hdfs dfs -cat … | tail -N`.
+> **2 syntaxes équivalentes** : `hadoop fs` ou `hdfs dfs` — comme le shell Linux.
+> ⚠️ **`-tail`** = 1024 **octets**, pas des lignes. Les N dernières : `hdfs dfs -cat … | tail -N`.
 
 ---
 
@@ -956,7 +964,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 </div>
 
-> Saisissez le fichier tel quel dans HDFS : on découvrira ses pièges en les croisant dans les exercices.
+> Saisissez le fichier **tel quel** : on découvrira ses pièges dans les exercices.
 
 ---
 
@@ -986,12 +994,12 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 **~30 min guidées — créez les deux squelettes, lancez les trois variants de pipe.**
 
 1. Écrire `mapper.py` (découpe les mots, émet `mot\t1`) et `reducer.py` (additionne les clés **regroupées**)
-2. `echo "bonjour bonsoir bonjour bonsoir" | python3 mapper.py` — sortie brute : une paire par mot
+2. `echo "bonjour bonsoir bonjour bonsoir" | python3 mapper.py` — une paire par mot
 3. `… | mapper.py | reducer.py` **sans tri** — sort **comme le mapper** : clés non regroupées, comptage faux
 4. `… | mapper.py | sort | reducer.py` — le `sort` **simule le shuffle** : `bonjour\t2, bonsoir\t2`
 
 > ⚠️ **La règle sonnante** : si ça marche avec `| sort |` en local, ça marchera sur le cluster. Un pipe sans tri cache un shuffle maladroit.
-> Windows : `python` (pas `python3`) — `echo` ajoute des guillemets au texte, préférez `type fichier`.
+> Windows : `python`, pas `python3` — `echo` ajoute des guillemets, préférez `type`.
 
 <!-- Tempo A guidé : on bloque jusqu'à ce que chaque finisher valide le variant 3. Les tempos B (questions) et Pour aller plus loin (CSV Spotify) partent ensuite en autonomie. Circuler. -->
 
@@ -1007,9 +1015,9 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card card-green">
 <div class="card-title">Le variant 2 ment en silence</div>
 
-- `mapper | reducer` **sans tri** : les clés n'arrivent jamais deux fois d'affilée (`bonjour, bonsoir, bonjour, bonsoir`)
+- `mapper | reducer` **sans tri** : aucune clé n'arrive deux fois d'affilée
 - Le reducer imprime chaque ligne au **premier changement de mot** → il recrache le mapper
-- Le programme ne plante pas : il rend un résultat faux, **plausible** si on n'a pas la réponse attendue
+- Il ne plante pas : il rend un faux résultat, **plausible** sans la réponse attendue
 
 </div>
 
@@ -1025,7 +1033,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 </div>
 
-> **Pour aller plus loin** : mapper Spotify (`released_year`, colonne 3 / `streams`, colonne 8) — ⚠️ **en-tête** à écarter par la valeur (`row[0] == 'track_name'`), ⚠️ **ligne 576** (`streams` corrompu) à protéger : c'est le debug local qui fait voir la panne **avant** le cluster. 50 années mesurées, total 489 458 828 542, sortie triée par année.
+> **Pour aller plus loin** : mapper Spotify (`released_year` col. 3, `streams` col. 8) — écarter l'**en-tête** par la valeur (`row[0] == 'track_name'`), protéger la **ligne 576**. Le debug local fait voir la panne **avant** le cluster : 50 années, total 489 458 828 542.
 
 <!-- Correction tempo B (variant 2 = clés non regroupées) et Pour aller plus loin (ligne 576 + en-tête). Le même geste se revoit au TD-02 (Hive), où la même requête passe en SQL. -->
 
@@ -1060,9 +1068,9 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card card-pink">
 <div class="card-title">Ce qu'il faut retenir</div>
 
-- ✅ Hadoop = **scale-out** : stockage distribué, traitement parallèle sur des machines standards
+- ✅ Hadoop = **scale-out** : stockage distribué, calcul parallèle sur machines standards
 - ✅ 7 briques du cours : **HDFS, YARN, MapReduce, ZooKeeper, Hive, HBase, NiFi**
-- ✅ L'environnement : 4 conteneurs Docker, scripts `./start-*.sh`, `jps`, UI 9870/8088/8443
+- ✅ L'environnement : 4 conteneurs Docker, `./start-*.sh`, `jps`, UI 9870/8088
 - ✅ **HDFS** : blocs 128 Mio, réplication **1** ici, NameNode (métadonnées) + DataNodes (blocs)
 - ✅ Commandes : `ls`, `mkdir`, `put`, `cat`, `get`, `rm` — et le piège `-tail`
 - ✅ TD-01 : le **pipe local** mapper `|` sort `|` reducer — le `| sort |` **simule le shuffle**, et le CSV Spotify se débogue à la maison (en-tête, **ligne 576**)
@@ -1661,25 +1669,25 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 </div>
 
-> 📅 **Demain** : YARN en détail (qui orchestre la mémoire), puis surtout **Hive** — le SQL sur vos données HDFS (les exercices EX/04 partie II restent en autonomie, cf. `EX/04-mapreduce.md`).
+> 📅 **Demain** : YARN puis **Hive** (le SQL sur HDFS) — EX/04 II reste en autonomie.
 
 ---
 
 <!-- _class: exercise -->
 <!-- Repère formateur : td/TD02.md — Tempo A — guide -->
 
-# 🏋️ TD-02 — Premier contact Hive (Tempo A, ~40 min)
+# 🏋️ TD-02 — Premier contact Hive (~40 min)
 
 **La question remplace le traitement : on n'écrit plus de mapper/reducer, on pose une requête.**
 
 1. **Connectez-vous** : `./start-hive.sh` puis `beeline -u jdbc:hive2://localhost:10000`
-2. **La donnée** : `python3 ANNEXES/utils/7-prepare-spotify-tsv.py …` → TSV, `wc -l` = **954**, puis `hdfs dfs -put` dans `/user/root/spotify/clean`
+2. **La donnée** : `ANNEXES/utils/7-prepare-spotify-tsv.py` → TSV, puis `hdfs dfs -put`
 3. **La DDL fournie** : `CREATE EXTERNAL TABLE spotify …` (recopiez telle quelle — c'est votre « mapper », décrire l'entrée pas l'algorithme)
 4. Les comptages : `SELECT COUNT(*)` = **954**, `SELECT COUNT(streams)` = **952**
 5. La question du TD01 : `SELECT released_year, SUM(streams) GROUP BY released_year` — **à comparer ligne à ligne avec vos pipes**
 6. Le top des artistes : comparez aux six clés de tête de votre `part-00000` de l'EX 04
 
-> ⚠️ Personne ne prévient : Hive met `NULL` en silence (en-tête + ligne 576). La preuve que la requête « marche » = la **concordance avec vos commandes d'hier**, pas le confort du SQL.
+> ⚠️ Hive met `NULL` **en silence** : la preuve = la **concordance avec vos pipes d'hier**.
 
 <!-- Tempo A guidé ~30 min : on bloque sur le COUNT(*) 954/952, puis le GROUP BY et sa comparaison aux pipes du TD01. Tempo B et Pour aller plus loin partent ensuite en autonomie. Circuler. -->
 
@@ -1697,7 +1705,7 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 - `COUNT(*)` = **954** : l'en-tête du TSV est **compté comme une chanson** — Hive ne saute rien
 - `COUNT(streams)` = **952** : `streams` non numérique (en-tête + **ligne 576**) → `NULL` **en silence**
-- Le `GROUP BY released_year` retombe **exactement** sur vos pipes du TD01 — c'est le sort du pipeline, écrit par le moteur
+- Le `GROUP BY` retombe **exactement** sur vos pipes du TD01
 
 </div>
 
@@ -1705,15 +1713,15 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card-title">Les pièges</div>
 
 1. **Beeline ~30 s au premier contact** (Metastore Derby) — ne pas abandonner
-2. **51 groupes** (pas 50) : l'en-tête a « travaillé » une année `NULL` de plus
-3. **Top artistes** : conventions de duos → comparer **chiffre pour chiffre**, pas la tête seule
-4. **Aucun avertissement** : c'est la comparaison Hive ↔ pipes qui détecte l'anomalie
+2. **51 groupes** (pas 50) : l'en-tête crée une année `NULL`
+3. **Top artistes** : duos → comparer **chiffre pour chiffre**
+4. **Aucun avertissement** : la comparaison Hive ↔ pipes seule détecte
 
 </div>
 
 </div>
 
-> **Pour aller plus loin** : `EXPLAIN SELECT … GROUP BY artist_name` — vous y verrez les **stages Map/Reduce** : le moteur a écrit le mapper et le reducer à votre place.
+> **Pour aller plus loin** : `EXPLAIN SELECT … GROUP BY artist_name`.
 
 <!-- La suite se poursuit demain (séquence 05) : Hive compile la requête en job MapReduce ; EX 05 reprend ces requêtes pour les maîtriser. -->
 
@@ -1826,21 +1834,21 @@ Qui décide, dans un cluster, quelle tâche tourne **où et quand** ?
 <div class="card card-blue">
 <div class="card-title">ResourceManager</div>
 
-Le chef d'orchestre : répartit la **mémoire** et les **cœurs** du cluster entre les applications. Un par cluster (UI 8088).
+Le chef d'orchestre : répartit **mémoire** et **cœurs** entre les applications. Un par cluster (UI 8088).
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">NodeManager</div>
 
-Un **par machine** : rapporte au RM les ressources disponibles, lance les **conteneurs** de tâches. (UI 8041/8042)
+Un **par machine** : rapporte les ressources au RM, lance les **conteneurs**. (UI 8041/8042)
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">ApplicationMaster</div>
 
-Un **par job** : négocie les conteneurs auprès du RM, coordonne maps et reduces, gère la **reprise sur erreur**.
+Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la **reprise sur erreur**.
 
 </div>
 
@@ -1850,7 +1858,7 @@ Un **par job** : négocie les conteneurs auprès du RM, coordonne maps et reduc
 <img src="assets/yarn-config.png" style="max-width: 70%; max-height: 30vh; height: auto;" />
 </div>
 
-> Début de réponse à la question du sondage : un job a besoin du **RM** (ressources) puis de l'**AM** (exécution) — regardez l'AM, pas le RM, pour débugger.
+> Sondage : **RM** pour la ressource, **AM** pour l'exécution — débuggez par l'**AM**.
 
 ---
 
@@ -1859,18 +1867,18 @@ Un **par job** : négocie les conteneurs auprès du RM, coordonne maps et reduc
 <div class="card card-yellow">
 <div class="card-title">FIFO · Fair · Capacity — qui va passer en premier ?</div>
 
-- **Capacity** : des files dédiées (par équipe/tenant), chacune avec sa garantie — le défaut des distributions historiques (CDH/HDP)
-- **Fair** : toutes les applications se partagent également la capacité, avec moindre coût si elles n'ont pas de grosse demande
-- **FIFO** : une file unique, les jobs en ordre d'arrivée — **simple, mais famine** des jobs courts derrière un gros
+- **Capacity** : des files par équipe, chacune avec sa garantie (défaut CDH/HDP)
+- **Fair** : les applications se partagent la capacité **à parts égales**
+- **FIFO** : une file unique, ordre d'arrivée — **simple, mais famine** des jobs courts
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/scheduler.png" style="max-width: 42%; max-height: 24vh; height: auto;" />
-<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 24vh; height: auto;" />
+<img src="assets/scheduler.png" style="max-width: 42%; max-height: 16vh; height: auto;" />
+<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 16vh; height: auto;" />
 </div>
 
 </div>
 
-> Face à une UI YARN, sachez **reconnaître** la politique appliquée (Capacity = files hiérarchiques, Fair = partis égales).
+> À l'UI YARN, **reconnaissez** la politique : Capacity = files, Fair = parts égales.
 
 ---
 
@@ -1884,20 +1892,20 @@ Un **par job** : négocie les conteneurs auprès du RM, coordonne maps et reduc
 | `yarn.nodemanager.resource.memory-mb` | 256 | RAM max *par nœud* allouable à YARN |
 | `mapreduce.map.memory.mb` | 192 | mémoire demandée par chaque tâche **map** |
 
-Les conteneurs sont **petits — un choix, pas un oubli** : un mapper Python tient, mais le parallélisme et ce qu'une tâche garde en mémoire sont **modestes**.
+Conteneurs **petits — un choix** : un mapper Python tient, mais **modestement**.
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">Traduction concrète</div>
 
-- Sur **slave1/slave2** : 256 Mio de YARN par nœud → un mapper de 192 tient, sans plus
-- Si une tâche demande **plus que la limite**, YARN **refuse** le conteneur — c'est YARN qui bloque, pas Hadoop
+- Sur **slave1/slave2** : 256 Mio par nœud → un mapper de 192 tient, sans plus
+- Au-delà de la limite, YARN **refuse** le conteneur — c'est YARN qui bloque
 - Pour des jobs gourmands, on augmente le **nombre de tâches**, pas la mémoire de chacune
 
 </div>
 
-> Morale : **la RAM se lit et se respecte**. Un mapper trop gourmand, c'est YARN qui bloque.
+> Morale : **la RAM se lit et se respecte** — un mapper trop gourmand, YARN bloque.
 
 ---
 
@@ -1921,15 +1929,15 @@ Les conteneurs sont **petits — un choix, pas un oubli** : un mapper Python ti
 # 💡 Corps de réponse — le trajet des logs
 
 <div class="flex justify-center">
-<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 42vh; height: auto;" />
+<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 36vh; height: auto;" />
 </div>
 
 <div class="card card-green">
 <div class="card-title">Le chemin d'un log de tâche</div>
 
-- **Le plus rapide** : cliquer l'application sur **8088** puis l'onglet **Logs** (vu l'agrégation)
-- **Le plus précis en CLI** : `yarn logs -applicationId application_…` (sur le master, à la racine du job)
-- Les ports **8041/8042** donnent l'état du NodeManager, pas forcément les logs de la tâche
+- **Le plus rapide** : l'application sur **8088**, onglet **Logs**
+- **Le plus précis** : `yarn logs -applicationId application_…`
+- Les ports **8041/8042** : l'état du NodeManager, pas les logs de la tâche
 
 </div>
 
@@ -1991,7 +1999,7 @@ Est-ce que ça ressemblerait à MySQL ? Comment la requête serait-elle exécut
 
 - _« Quels sont nos dix titres les plus streamés ? »_ → mapper, reducer, tester, lancer, lire
 - Une heure plus tard : _« Et la moyenne des streams par année ? »_ → **tout** recommencer
-- Les analystes ne connaissent **ni Python ni Java** — et on ne peut pas attendre un dev pour chaque question
+- Les analystes ne connaissent **ni Python ni Java**, et n'attendent pas un dev
 
 </div>
 
@@ -2000,7 +2008,7 @@ Est-ce que ça ressemblerait à MySQL ? Comment la requête serait-elle exécut
 
 - MapReduce répond au **comment** ; l'exploration a besoin du **quoi**
 - Il faut un langage **déclaratif** : on décrit le résultat, le moteur décide des étapes
-- Solution historique de l'écosystème : **Hive**, né chez **Facebook en 2008**, Apache 2009
+- Solution de l'écosystème : **Hive**, né chez **Facebook en 2008**, Apache 2009
 
 </div>
 
@@ -2012,7 +2020,7 @@ Est-ce que ça ressemblerait à MySQL ? Comment la requête serait-elle exécut
 <div class="card-title">Un data warehouse SQL au-dessus de Hadoop</div>
 
 - **HiveQL** : un langage proche du SQL pour interroger les fichiers HDFS
-- Traduction automatique : **une requête SQL de 6 lignes = un job MapReduce complet** (mapper + tri + reducer) — sans écrire de Python/Java
+- **Traduction auto** : **6 lignes de SQL = un job MapReduce complet** (mapper + tri + reducer)
 - **Entrepôt (OLAP)** plutôt que base (OLTP) : batch, gros volumes, il ne stocke pas lui-même — les données restent **des fichiers HDFS**
 
 </div>
@@ -2032,10 +2040,10 @@ LIMIT 10;
 # 🏗️ Architecture de Hive
 
 <div class="flex justify-center">
-<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
+<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 38vh; height: auto;" />
 </div>
 
-- **HiveServer2** : le service qui reçoit les requêtes ; on s'y connecte avec **Beeline** (client JDBC officiel depuis Hive 4 — la CLI `hive` a disparu)
+- **HiveServer2** : reçoit les requêtes ; client = **Beeline** (la CLI `hive` a disparu)
 - **Metastore** : le **catalogue** — table `spotify` → ces fichiers, ces colonnes, ce format. ⚠️ **Aucune donnée**, que des métadonnées, stockées dans Derby (embarqué ici).
 
 ---
@@ -2130,16 +2138,20 @@ STAGE DEPENDENCIES:
 
 </div>
 
-<div class="card card-yellow">
-<div class="card-title">La boucle se referme avec le J2</div>
+**Hive n'est pas un nouveau moteur : c'est un compilateur de SQL vers MapReduce.**
 
-- le **map** lit chaque ligne, émet `(artiste, streams)` — comme votre mapper Python
+---
+
+# 🔁 La boucle se referme avec le J2
+
+<div class="card card-yellow">
+
+- le **map** émet `(artiste, streams)` — comme votre mapper
 - le **shuffle** regroupe par clé — comme le `sort` local
 - le **reduce** agrège — comme votre reducer
 
-**Hive n'est pas un nouveau moteur : c'est un compilateur de SQL vers MapReduce.**
 
-> **Quand Hive, quand MapReduce ?** Exploration ad-hoc et ETL déclaratifs → Hive. Logique métier fine, formats exotiques → MapReduce manuel (séquence 04 vous a fait écrire ce que Hive compile pour vous).
+> **Quand Hive, quand MapReduce ?** Exploration ad-hoc et ETL → Hive ; logique fine, formats exotiques → MapReduce manuel (vous l'avez écrit au J2).
 
 </div>
 

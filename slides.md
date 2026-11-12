@@ -2280,19 +2280,19 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 - ✅ **YARN** : ResourceManager / NodeManager / ApplicationMaster ; 3 schedulers ; RAM mesurable (256 Mio/nœud, 192/map)
 - ✅ **Hive** : le SQL qui compile en MapReduce ; externes vs managées ; le reflexe DROP ; le Metastore qui ne stocke rien
-- ✅ **TD-02** : premier contact Hive (COUNT 954/952, GROUP BY, top artistes) — la validation croisée prouve que le moteur écrit le pipeline
+- ✅ **TD-02** : COUNT 954/952, GROUP BY, top artistes — la validation croisée fait foi
 - ✅ **TD-03** : premier contact HBase — rowkey qui trie, `put` qui ne confirme rien, `get` = la seule preuve
 
 </div>
 
-> 📅 **Demain (J4)** : **HBase** en détail (EX 06 partie IV), **NiFi** (l'ingestion visuelle), et la **chaîne complète** avant le TP final.
+> 📅 **Demain (J4)** : **HBase** (EX 06 IV), **NiFi**, puis la **chaîne complète**.
 
 ---
 
 <!-- _class: exercise -->
 <!-- Repère formateur : td/TD03.md — Tempo A — départ lancé -->
 
-# 🏋️ TD-03 — HBase : une table triée avant d'être interrogée (Tempo A, ~30 min)
+# 🏋️ TD-03 — Une table triée (~30 min)
 
 **Premier contact — le shell HBase, sans connaissance HBase.**
 
@@ -2373,16 +2373,16 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-pink">
 <div class="card-title">🌇 Après-midi</div>
 
-- **TD-04** — premier contact NiFi : le fichier qui raconte son histoire (avant le cours)
+- **TD-04** — NiFi, premier contact
 - **II. NiFi** — l'usine à flux : le CSV entre tout seul dans HDFS
 - **EX/07** — flux complet CSV→TSV→HDFS + Data Provenance
-- **III. La chaîne complète** + **TD-05** (rejouer sur les ventes) — l'ouverture du **TP final**
+- **III. La chaîne complète** + **TD-05** — l'ouverture du **TP final**
 
 </div>
 
 </div>
 
-> Depuis J1, chaque brique s'est ajoutée à la précédente. Aujourd'hui on les **assemble** — et vendredi, c'est vous qui le ferez seul.
+> Depuis J1, chaque brique s'est ajoutée à la précédente. Aujourd'hui on les **assemble**.
 
 <!-- TD-04 (NiFi) est un premier contact posé à la pause de midi : GetFile→PutFile + Data Provenance. Il arrive AVANT le cours NiFi (II), pour que les apprenants aient déjà touché la donnée qui bouge. TD-05 (replay ventes) termine la journée : le mini-jeu dataw_fro03_mini, même geste que toute la semaine.-->
 
@@ -2467,8 +2467,8 @@ Comment lire une seule clé très vite dans un cluster ?
 <div class="card-title">Hadoop est fait pour le batch</div>
 
 - **HDFS** : stockage de gros fichiers ; **MapReduce** : traitement séquentiel
-- Les fichiers volumineux produits en sont… d'autres fichiers volumineux
-- **Impossible d'accéder aléatoirement** à une donnée précise, en temps réel
+- Les sorties sont d'autres **gros fichiers**
+- **Pas d'accès aléatoire** à une donnée précise
 
 </div>
 
@@ -2494,7 +2494,7 @@ Comment lire une seule clé très vite dans un cluster ?
 <div class="cols-2">
 
 <div class="card card-yellow">
-<div class="card-title">« Not Only SQL » — pas une base unique, quatre familles</div>
+<div class="card-title">« Not Only SQL » — quatre familles</div>
 
 | Famille | Exemples | Caractéristique |
 |---|---|---|
@@ -2508,7 +2508,7 @@ Comment lire une seule clé très vite dans un cluster ?
 <div class="card card-blue">
 <div class="card-title">Pour les Big Data</div>
 
-- **Scalabilité horizontale** : on ajoute des machines, pas de la puissance
+- **Scale-out** : ajouter des machines
 - **Flexibilité** : sans schéma strict (ou schéma évolutif)
 - **Performance** : accès rapide à de très grands volumes
 - ⚠️ NoSQL **complète** les SGBDR / les data warehouses, il ne les remplace pas
@@ -2553,27 +2553,27 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card card-green">
 <div class="card-title">Les règles du jeu</div>
 
-- **RowKey** : une clé unique par ligne (toutes les données sont des `byte[]`)
-- Les **familles de colonnes** seules sont déclarées à l'avance (`cf1`, `cf2`)
-- Les **colonnes** naissent dynamiquement à l'insertion (`cf1:name`, `cf1:city`…)
-- Une **cellule** = `(rowkey, famille:colonne, version)` → valeur
-- Les valeurs absentes **ne sont pas stockées** (pas de `NULL`)
+- **RowKey** : une clé unique par ligne
+- **Familles** déclarées d'avance (`cf1`, `cf2`)
+- **Colonnes** créées à l'insertion (`cf1:name`)
+- Une **cellule** = rowkey, famille:colonne, version — tout en `byte[]`
+- Les valeurs absentes **ne sont pas stockées**
 
 </div>
 
 <div class="card card-yellow">
 <div class="card-title">Le tri — la règle d'or</div>
 
-- Les lignes sont **stockées dans l'ordre lexicographique (binaire) des rowkeys**
+- Stocké en **ordre lexicographique** des rowkeys
 - Les colonnes d'une même famille sont **aussi ordonnées**
-- **L'ordre de l'insertion n'a aucune importance** : `scan` rendra les rowkeys **triées** — comme le shuffle triait les clés MapReduce (J2 !)
+- **L'insertion ne compte pas** : `scan` rend les rowkeys triées (comme le shuffle du J2)
 
 </div>
 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/hbase-table-model.jpeg" style="max-width: 70%; max-height: 30vh; height: auto;" />
+<img src="assets/hbase-table-model.jpeg" style="max-width: 70%; max-height: 20vh; height: auto;" />
 </div>
 
 ---
@@ -2600,9 +2600,9 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card card-blue">
 <div class="card-title">HBase Master (1 actif)</div>
 
-- Gère les opérations **globales** (création/suppression de tables, familles)
+- **Globales** : créer/supprimer les tables et les familles
 - **Assigne les régions** aux RegionServers, équilibre la charge
-- S'appuie sur ZooKeeper pour la **haute disponibilité** (veille active)
+- ZooKeeper pour la **disponibilité**
 
 </div>
 

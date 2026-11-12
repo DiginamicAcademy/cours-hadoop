@@ -2,7 +2,7 @@
 marp: true
 theme: default
 style: |
-  section {background-color: #121114}
+  section {background-color: #121114; font-size: 20px}
   h1,h2,h3 {color: #8393f0}
   p,ul,li,td,th {color: #ccc}
   section table {font-size: 0.85em}
@@ -32,6 +32,18 @@ style: |
 paginate: true
 header: "Hadoop — écosystème Big Data"
 footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/PublicAssets/refs/heads/main/Logo-diginamic-color-blk.png)"
+---
+
+<!-- _class: lead -->
+
+# Exploiter l'écosystème Hadoop
+
+## HDFS · MapReduce · Hive · HBase · NiFi
+
+**5 jours** — 4 jours de cours, 1 jour de TP · RNCP40573
+
+Robin Hotton · Diginamic
+
 ---
 
 <!-- _class: lead -->
@@ -127,7 +139,7 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 </div>
 
 <div class="flex justify-center">
-<img src="assets/cluster.jpeg" style="max-width: 55%; max-height: 30vh; height: auto;" />
+<img src="assets/cluster.jpeg" style="max-width: 55%; max-height: 22vh; height: auto;" />
 </div>
 
 ---
@@ -251,7 +263,7 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/sps.jpeg" style="max-width: 65%; max-height: 32vh; height: auto;" />
+<img src="assets/sps.jpeg" style="max-width: 65%; max-height: 24vh; height: auto;" />
 </div>
 
 ---
@@ -276,7 +288,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧱 L'architecture en 4 acteurs
 
 <div class="flex justify-center">
-<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 36vh; height: auto;" />
+<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 28vh; height: auto;" />
 </div>
 
 <div class="cols-2">
@@ -424,8 +436,8 @@ Le langage commun des data engineers : tant qu'on maîtrise HDFS, le shuffle, l
 </div>
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/70percent.png" style="max-width: 45%; max-height: 26vh; height: auto;" />
-<img src="assets/skills.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
+<img src="assets/70percent.png" style="max-width: 45%; max-height: 18vh; height: auto;" />
+<img src="assets/skills.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
 </div>
 
 ---
@@ -511,7 +523,7 @@ Hadoop est **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien
 # 🐳 Un cluster Docker local
 
 <div class="flex justify-center">
-<img src="assets/cluster-docker.svg" style="max-width: 92%; max-height: 60vh; height: auto;" />
+<img src="assets/cluster-docker.svg" style="max-width: 92%; max-height: 50vh; height: auto;" />
 </div>
 
 ---
@@ -640,8 +652,8 @@ DataNode · NodeManager · HRegionServer
 </div>
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/9870.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
-<img src="assets/8088.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
+<img src="assets/9870.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
+<img src="assets/8088.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
 </div>
 
 ---
@@ -817,7 +829,7 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 </div>
 
 <div class="flex justify-center">
-<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
+<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -885,7 +897,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
+<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -914,7 +926,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 30vh; height: auto;" />
+<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 22vh; height: auto;" />
 </div>
 
 ---
@@ -956,7 +968,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 **Le NameNode indique l'adresse (un annuaire), les DataNodes transportent les données — la donnée ne passe jamais par le NameNode.**
 
 <figure style="text-align: center;">
-  <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
+  <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 32vh; height: auto;" />
   <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
 </figure>
 

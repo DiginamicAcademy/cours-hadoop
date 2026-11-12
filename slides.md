@@ -1543,16 +1543,16 @@ cat Spotify_Most_Streamed_Songs.csv | python3 mapper.py | sort | python3 reducer
 
 - On **simule le shuffle** Hadoop : le `sort` fait le tri
 - **Vérifie** le contrat : stdin/stdout tabulé, pas de `print` parasite
-- Débugue sur le poste, pas en attendant un job de 40 s (latence : page suivante)
+- Débugue sur le poste, pas en attendant 40 s par job
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">⚠️ Limites du test local</div>
 
-- Test sur la **machine locale**, pas le cluster : mémoire et parallélisme différents
+- Test sur la **machine locale**, pas le cluster
 - Le `sort` GNU n'est pas le tri YARN (encodage, séparateur `\t`)
-- Conclusion : test local **pré-requis mais insuffisant** → on valide toujours sur le cluster
+- Conclusion : test local **insuffisant** → on valide sur le cluster
 
 </div>
 
@@ -1580,11 +1580,11 @@ hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar \
 
 - `-input` / `-output` : HDFS d'entrée / **sortie (à ne PAS exister !)**
 - `-mapper` / `-reducer` : la commande exécutée par chaque tâche
-- `-file` : envoie le **script local** dans chaque conteneur (sinon « file not found »)
+- `-file` : envoie le **script local** dans chaque conteneur
 
 </div>
 
-> ⚠️ **Sortie déjà existante** → le job **échoue** : changez le nom avant de relancer.
+> ⚠️ **Sortie déjà existante** → le job **échoue** : changez le nom.
 
 ---
 
@@ -1638,8 +1638,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-blue">
 <div class="card-title">La mesure, encore</div>
 
-- Sur ce cluster Docker, un job WordCount sur 1 petit fichier prend **35 s à ~1 min** (2 mappers, 1 reducer)
-- Pourquoi si "lent" ? **Coût de démarrage** : YARN (ResourceManager), AM, demandes de conteneurs, dispatch des tâches
+- Un WordCount sur 1 petit fichier : **35 s à 1 min** (2 mappers, 1 reducer)
+- Pourquoi si « lent » ? **Coût de démarrage** : YARN (RM), AM, conteneurs, dispatch
 
 </div>
 
@@ -1648,7 +1648,7 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 - **On réfléchit avant de lancer** — un job coûte 1 min même pour un micro-résultat
 - On **teste en local** (pipeline `cat | sort`) pour ne pas saturer le cluster partagé
-- NB. sur un vrai cluster, la fraction « calcul » devient vite dominante devant cette latence
+- NB. sur un vrai cluster, le « calcul » domine vite cette latence
 
 </div>
 
@@ -1678,9 +1678,9 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-pink">
 <div class="card-title">Les 5 pierres du jour</div>
 
-- ✅ **Modèle** : map (clé\tvaleur) → partition/shuffle/sort → reduce (il regroupe par clé)
+- ✅ **Modèle** : map (clé\tvaleur) → shuffle/sort → reduce (regroupe par clé)
 - ✅ **Mesure** : 1 fichier → **2 splits**, 954 lignes lues, tri lexicographique de la sortie
-- ✅ **Contrat** : 1 processus/tâche, l'en-tête dans le 1er split, en-tête ≠ donnée, `int()` à protéger
+- ✅ **Contrat** : 1 processus/tâche, en-tête dans le 1er split, `int()` à protéger
 - ✅ **Geste** : `cat | mapper | sort | reducer` en local, puis `hadoop jar … -file`
 - ✅ **Sortie** : `part-00000` (trié) + `_SUCCESS`, logs YARN 8088
 

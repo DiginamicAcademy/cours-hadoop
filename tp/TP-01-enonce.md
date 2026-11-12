@@ -67,7 +67,7 @@ Vous utiliserez **Hadoop MapReduce** pour calculer, **HappyBase** pour stocker, 
 
 ## II. HDFS — accueillir le fichier
 
-> Exercice d'origine : [`../exercices/03-hdfs.md`](../exercices/03-hdfs.md).
+> Exercice d'origine : [chapitre 03, III.E — Mise en pratique](../03-hdfs.md#e-mise-en-pratique--le-csv-spotify).
 
 **1.** Déposez le mini-fichier dans le conteneur puis dans HDFS :
 

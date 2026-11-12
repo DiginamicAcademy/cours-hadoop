@@ -23,21 +23,19 @@ Captures et schémas du cours, et où ils servent :
 | `block-size.jpeg` | `slides.md` |
 | `blocks.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `chain-complete.svg` | `07-nifi.md`, `slides.md` |
-| `checkpointing.png` | `03-hdfs.md` |
 | `cluster-docker.svg` | `02-presentation-env-hadoop.md`, `07-nifi.md`, `slides.md` |
 | `cluster.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `create_vm.png` | orphelin (hygiène §5 du plan de refonte) |
-| `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/03-hdfs.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
+| `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `dn-name-node.png` | orphelin (hygiène §5 du plan de refonte) |
 | `dn.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `ecosystem-hadoop.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `endpoints.png` | orphelin (hygiène §5 du plan de refonte) |
 | `fair-scheduler.jpeg` | `04-mapreduce-et-yarn.md`, `slides.md` |
-| `fsimage-edits-2.png` | `03-hdfs.md`, `slides.md` |
-| `fsimages-edit.jpeg` | orphelin (remplacé par `fsimage-edits-2.png` dans le chap. 03) |
+| `fsimages-edit.jpeg` | orphelin (remplacé par `hdfs-checkpoint.svg` dans le chap. 03) |
 | `hadoop-logo.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hadoop-webviews.png` | orphelin (hygiène §5 du plan de refonte) |
-| `hadoop.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/03-hdfs.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
+| `hadoop.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `happybase.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `hbase-cluster.jpeg` | `06-hbase-et-zookeeper.md` |
 | `hbase-list.png` | orphelin (hygiène §5 du plan de refonte) |
@@ -50,6 +48,8 @@ Captures et schémas du cours, et où ils servent :
 | `hbase-table.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hbase.jpeg` | `exercices/06-hbase.md`, `td/TD03.md` |
 | `hdfs-architecture.svg` | `03-hdfs.md` |
+| `hdfs-checkpoint.svg` | `03-hdfs.md`, `slides.md` |
+| `hdfs-lecture-ecriture.svg` | `03-hdfs.md`, `slides.md` |
 | `hdfs-principe.svg` | `03-hdfs.md` |
 | `hidora.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hive-architecture.svg` | `05-hive.md`, `slides.md` |
@@ -69,8 +69,6 @@ Captures et schémas du cours, et où ils servent :
 | `namenode_datanode.png` | `01-introduction-hadoop.md`, `slides.md` |
 | `nifi-flux-ex07.svg` | `07-nifi.md` |
 | `nifi-relationships.svg` | `07-nifi.md` |
-| `operation-1.png` | `03-hdfs.md`, `slides.md` |
-| `operation-2.png` | `03-hdfs.md`, `slides.md` |
 | `overview.png` | orphelin (hygiène §5 du plan de refonte) |
 | `ressourcemanger.jpeg` | `04-mapreduce-et-yarn.md` |
 | `scheduler.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
@@ -81,7 +79,7 @@ Captures et schémas du cours, et où ils servent :
 | `sps.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `start-hadoop.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `start-thrift.png` | `06-hbase-et-zookeeper.md` |
-| `tail.jpeg` | `03-hdfs.md`, `exercices/03-hdfs.md` |
+| `tail.jpeg` | `03-hdfs.md` |
 | `working-hdfs.jpeg` | `slides.md` |
 | `yarn-config.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
 
@@ -113,7 +111,11 @@ Quelques règles évitent les mauvaises surprises :
 - **la casse compte** : le workflow tourne sous Linux, où `Schema.png` et
   `schema.png` sont deux fichiers différents. Windows et macOS tolèrent l'écart,
   la construction du PDF non ;
-- le **SVG** pour les schémas, le **PNG** pour les captures d'écran.
+- le **SVG** pour les schémas, le **PNG** pour les captures d'écran ;
+- une **sortie de terminal** n'est pas une image : c'est du texte, et elle se
+  recopie dans un bloc de code — elle devient copiable et cherchable ;
+- une **capture d'interface réelle** reste une image : la redessiner en SVG
+  produirait un faux écran.
 
 ## Ce qu'en fait le workflow
 

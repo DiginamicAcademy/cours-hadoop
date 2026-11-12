@@ -960,7 +960,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 ---
 
 <!-- _class: exercise -->
-<!-- Repère formateur : exercices/03-hdfs.md — Mémo + manipulations -->
+<!-- Repère formateur : 03-hdfs.md — III.B le mémo, III.E la manipulation -->
 
 # ✏️ Exercice 03 — HDFS
 

@@ -2702,6 +2702,8 @@ ROW       COLUMN+CELL
 
 <!-- Laisser 45 s-1 min sans répondre. Rappel de l'EX 06 : HBase 'lit peu' et ne confirme presque jamais les écritures ; la seule preuve est get/scan. C'est le dernier grand piège du cours à faire passer aux apprenants. -->
 
+---
+
 # 💡 Réponse — « 0 row(s) »
 
 <div class="card card-green">
@@ -2787,7 +2789,7 @@ connection.close()
 <!-- _class: exercise -->
 <!-- Repère formateur : td/TD04.md — Tempo A — départ lancé -->
 
-# 🏋️ TD-04 — NiFi : le fichier qui raconte son histoire (Tempo A, ~20 min)
+# 🏋️ TD-04 — NiFi : le fichier qui raconte son histoire
 
 **Premier contact — un seul processeur, une seule preuve.**
 
@@ -3152,7 +3154,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 <!-- _class: exercise -->
 <!-- Repère formateur : td/TD05.md — Tempo A — départ lancé -->
 
-# 🏋️ TD-05 — Tout à l'heure, vous l'avez fait : le pré-échauffement du TP (~15 min)
+# 🏋️ TD-05 — Le pré-échauffement du TP (~15 min)
 
 **La chaîne entière, encore une fois, sur la donnée du TP** (`data/dataw_fro03_mini_1000.csv`).
 

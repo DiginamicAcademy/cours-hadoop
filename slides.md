@@ -296,7 +296,7 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-blue">
 <div class="card-title">MasterNode — le coordinateur</div>
 
-- **NameNode** : gère les **métadonnées** HDFS (fichiers, blocs, réplication)
+- **NameNode** : les **métadonnées** HDFS (fichiers, blocs)
 - Coordination globale du cluster
 
 </div>
@@ -2616,7 +2616,7 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card-title">Visualiser la compensation</div>
 
 <div class="flex justify-center">
-<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 24vh; height: auto;" />
+<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 16vh; height: auto;" />
 </div>
 
 - La table relationnelle impose **ligne + colonnes fixes** ; HBase tolère des lignes **clairsemées** et des colonnes **personnalisées par ligne**

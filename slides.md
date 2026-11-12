@@ -2497,9 +2497,9 @@ Comment lire une seule clé très vite dans un cluster ?
 
 | Besoin | Pourquoi Hadoop ne suit pas |
 |---|---|
-| **Écritures aléatoires fréquentes** | le batch n'écrit des fichiers complets |
-| **Lectures aléatoires rapides** | pas d'index, lecture séquentielle |
-| **Réponse en millisecondes** | un job = du MapReduce |
+| **Écritures aléatoires** | batch, fichiers entiers |
+| **Lectures aléatoires** | pas d'index, séquentiel |
+| **Réponse en ms** | un job = MapReduce |
 
 </div>
 
@@ -2604,7 +2604,7 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card-title">Visualiser la compensation</div>
 
 <div class="flex justify-center">
-<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 32vh; height: auto;" />
+<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 24vh; height: auto;" />
 </div>
 
 - La table relationnelle impose **ligne + colonnes fixes** ; HBase tolère des lignes **clairsemées** et des colonnes **personnalisées par ligne**
@@ -2620,8 +2620,8 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card card-blue">
 <div class="card-title">HBase Master (1 actif)</div>
 
-- **Globales** : créer/supprimer les tables et les familles
-- **Assigne les régions** aux RegionServers, équilibre la charge
+- Créer/supprimer **tables et familles**
+- **Assigne les régions**, équilibre la charge
 - ZooKeeper pour la **disponibilité**
 
 </div>
@@ -2637,9 +2637,9 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 </div>
 
 <div class="card card-yellow">
-<div class="card-title">Le client ne passe jamais par le Master</div>
+<div class="card-title">Le Master administre, il ne sert pas les requêtes</div>
 
-Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **directement**. Le Master administre, il ne sert pas les requêtes.
+Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **directement**.
 
 </div>
 

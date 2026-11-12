@@ -1228,7 +1228,7 @@ Hadoop = l'**implémentation libre** du modèle (MapReduce 1.0) exécutée par *
 # 🎢 La pipeline complète
 
 <div class="flex justify-center">
-<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 46vh; height: auto;" />
+<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 40vh; height: auto;" />
 </div>
 
 > Chaque étape est orchestrée par **YARN** sur l'un des nœuds du cluster.
@@ -1322,6 +1322,8 @@ Que se passe-t-il ? Le job recommence-t-il de zéro ?
 
 # 🔒 Un processus par tâche
 
+<div class="cols-2">
+
 <div class="card card-yellow">
 <div class="card-title">La contrainte clé du modèle</div>
 
@@ -1340,15 +1342,19 @@ Que se passe-t-il ? Le job recommence-t-il de zéro ?
 
 </div>
 
+</div>
+
 ---
 
 # 🧾 L'en-tête n'existe que dans le premier split
+
+<div class="cols-2">
 
 <div class="card card-pink">
 <div class="card-title">Un des pièges les plus rentables du cours</div>
 
 - `pandas.read_csv()` saute l'en-tête de lui-même… **mais MapReduce ne sait pas ce qu'est un en-tête**
-- Le fichier est découpé en splits **sans se soucier des lignes CSV** → si l'en-tête est dans le **split 1**, seul le split 1 le voit
+- Le fichier est découpé en splits **sans se soucier des lignes CSV** : seul le split 1 voit l'en-tête
 - Conséquence : les **map** qui reçoivent les lignes 2…n traiteraient cet en-tête comme une **donnée** si on ne le gère pas
 
 </div>
@@ -1357,8 +1363,10 @@ Que se passe-t-il ? Le job recommence-t-il de zéro ?
 <div class="card-title">Conclusion</div>
 
 - **On ne supprime pas** l'en-tête — il est de toute façon déjà l'affaire des splits
-- Pour les agrégations où l'en-tête n'est pas un nombre, on **ignore** la ligne 1 de chaque mapper : `if line.startswith("track_name"): continue`
+- Quand l'en-tête n'est pas un nombre, on **ignore** la ligne 1 du mapper : `if line.startswith("track_name"): continue`
 - À l'EX/04 partie II, la **ligne 576** montre exactement ce qui arrive avec `int()` sur une chaîne
+
+</div>
 
 </div>
 
@@ -1366,26 +1374,30 @@ Que se passe-t-il ? Le job recommence-t-il de zéro ?
 
 # ♻️ Combien de reducers ? 1 par défaut
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">Le mapper en phase, tout passe par un seul reducer</div>
 
 - Le **nombre de reducers** est **configurable** (`-D mapreduce.job.reduces=N`)
 - **Par défaut : 1** → un seul fichier `part-00000`
-- Conséquence : **tout le shuffle converge vers le même nœud** — sur un vrai cluster on monte à N pour paralléliser
+- **Tout le shuffle converge sur un nœud** — sur un vrai cluster, on monte à N
 
 </div>
 
 <div class="card card-yellow">
 <div class="card-title">⚠️ Combiner : le piège</div>
 
-- Le **combiner** est un reducer **côté map** qui **pré-agrège** avant le shuffle (diminue le volume)
+- Le **combiner** pré-agrège **côté map**, avant le shuffle : moins de volume sur le réseau
 - Contrainte : il doit être **associatif et commutatif**
-- Conséquence : un reducer "fais la moyenne" **ne peut pas** être un combiner (moyenne(moyennes) ≠ moyenne)
+- Conséquence : un reducer « moyenne » **ne peut pas** être un combiner — moyenne(moyennes) ≠ moyenne
+
+</div>
 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/mr-word-count-2.png" style="max-width: 55%; max-height: 26vh; height: auto;" />
+<img src="assets/mr-word-count-2.png" style="max-width: 55%; max-height: 20vh; height: auto;" />
 </div>
 
 ---
@@ -1398,9 +1410,7 @@ Que se passe-t-il ? Le job recommence-t-il de zéro ?
 - YARN écrit un **log du job** quand l'application se termine :
   ```text
   20/05/13 10:47:24 INFO client.RMProxy: Connecting to ResourceManager ...
-  ...
   20/05/13 10:47:24 INFO mapreduce.Job: Running job: job_1705417740450_0001
-  ...
   20/05/13 10:47:24 INFO mapreduce.Job: Job job_1705417740450_0001 running in uber mode : false
   ```
 - La **liste des tentatives** + le nombre d'**attempts** (défaut 4) conditionnent la fiabilité
@@ -1474,7 +1484,7 @@ En quel langage ? Et comment Hadoop fera-t-il tourner votre programme sur le cl
 <div class="card card-blue">
 <div class="card-title">3 règles à ne jamais oublier</div>
 
-1. **stdin → stdout** : le mapper lit stdin et écrit sur stdout ; le reducer lit le flux sorti du shuffle et écrit la réponse sur stdout
+1. **stdin → stdout** : on lit stdin (ou le shuffle), on écrit sur stdout
 2. **Une tabulation sépare clé et valeur** : `clé\tvaleur`
 3. **La sortie du reducer** est l'**une seule** clé/valeur par ligne
 
@@ -1506,16 +1516,16 @@ part-00000 (trié)
 cat Spotify_Most_Streamed_Songs.csv | python3 mapper.py | sort | python3 reducer.py
 ```
 
-- On **simule exactement** le shuffle Hadoop (le `sort` fait le tri, le reducer se base dessus)
+- On **simule le shuffle** Hadoop : le `sort` fait le tri
 - **Vérifie** le contrat : stdin/stdout tabulé, pas de `print` parasite
-- Débugue **sur le poste**, pas en attendant un job de 40 s (voir la latence page suivante)
+- Débugue sur le poste, pas en attendant un job de 40 s (latence : page suivante)
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">⚠️ Limites du test local</div>
 
-- On teste sur la **machine locale**, pas sur le cluster → mémoire, parallélisme réels différents
+- Test sur la **machine locale**, pas le cluster : mémoire et parallélisme différents
 - Le `sort` GNU n'est pas le tri YARN (encodage, séparateur `\t`)
 - Conclusion : test local **pré-requis mais insuffisant** → on valide toujours sur le cluster
 
@@ -1545,11 +1555,11 @@ hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar \
 
 - `-input` / `-output` : HDFS d'entrée / **sortie (à ne PAS exister !)**
 - `-mapper` / `-reducer` : la commande exécutée par chaque tâche
-- `-file` : transmet le **script local** à chaque conteneur (sinon "file not found" sur YARN)
+- `-file` : envoie le **script local** dans chaque conteneur (sinon « file not found »)
 
 </div>
 
-> ⚠️ Une **sortie déjà existante** → le job **échoue** : supprimer ou changer le nom avant chaque relance.
+> ⚠️ **Sortie déjà existante** → le job **échoue** : changez le nom avant de relancer.
 
 ---
 

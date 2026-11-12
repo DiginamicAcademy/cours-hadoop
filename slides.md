@@ -278,7 +278,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧱 L'architecture en 4 acteurs
 
 <div class="flex justify-center">
-<img src="assets/namenode_datanode.png" style="max-width: 70%; max-height: 34vh; height: auto;" />
+<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
 </div>
 
 <div class="cols-2">
@@ -806,7 +806,7 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 </div>
 
 <div class="flex justify-center">
-<img src="assets/block-size.jpeg" style="max-width: 55%; max-height: 28vh; height: auto;" />
+<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
 </div>
 
 ---
@@ -858,7 +858,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/working-hdfs.jpeg" style="max-width: 60%; max-height: 30vh; height: auto;" />
+<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
 </div>
 
 ---

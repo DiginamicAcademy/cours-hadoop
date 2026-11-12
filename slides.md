@@ -608,6 +608,7 @@ DataNode · NodeManager · HRegionServer
 
 </div>
 
+</div>
 
 > ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`). DataNodes et NodeManagers tournent sur les slaves, pas dans le master.
 
@@ -2753,10 +2754,12 @@ ROW       COLUMN+CELL
 
 # 💡 Réponse — « 0 row(s) »
 
+<div class="cols-2">
+
 <div class="card card-green">
 <div class="card-title">HBase ne confirme pas les écritures</div>
 
-- `put` → `0 row(s) in …` = **rien à redire**, pas « rien écrit » : c'est l'absence de confirmation
+- `put` → `0 row(s) in …` = **rien à redire**, pas « rien écrit »
 - **La seule preuve** : `get 'store','1001'` (ou `scan`) qui affiche la cellule
 
 ```text
@@ -2779,9 +2782,13 @@ sales:product       timestamp=…, value=Chairs
 
 </div>
 
+</div>
+
 ---
 
 # 🐍 HappyBase & Thrift
+
+<div class="cols-2">
 
 <div class="card card-blue">
 <div class="card-title">Python → HBase, via Thrift (port 9090)</div>
@@ -2803,17 +2810,18 @@ jps | grep Thrift      # → ThriftServer
 
 ```python
 import happybase
-connection = happybase.Connection('127.0.0.1', 9090)
-connection.open()
-table = connection.table('store')
+conn = happybase.Connection('127.0.0.1', 9090)
+conn.open()
+table = conn.table('store')
 for key, data in table.scan():
     print(key, data)
-connection.close()
+conn.close()
 ```
-
-> Depuis la machine hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
+</div>
 
 </div>
+
+> Depuis la machine hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
 
 ---
 
@@ -2848,7 +2856,7 @@ connection.close()
 6. Ajoutez **PutFile** : `/opt/nifi/output`, `Conflict Resolution = replace`, auto-terminate **success** et **failure** → relancez → le fichier **apparaît** dans `nifi/output/`
 7. **Data Provenance** : 2 événements — `RECEIVE` + écriture — la traînée complète
 
-> ⚠️ NiFi ne « valide » pas le contenu : un fichier corrompu traverse sans erreur. C'est `ConvertRecord` (present dans l'EX/07) qui le rejettera sur `failure`.
+> ⚠️ NiFi ne valide pas : un fichier corrompu **traverse** (voir `ConvertRecord`).
 
 <!-- Tempo A guidé ~15 min. Bloquer sur Data Provenance : c'est la preuve visuelle que le fichier a bougé. Les tempos B/C partent ensuite en autonomie. Placé entre midi J4 — premier contact avant le cours NiFi de l'après-midi. -->
 
@@ -2906,8 +2914,8 @@ Déposer le fichier à la main avec `hdfs dfs -put` ? Comment automatiser et fi
 <div class="card card-pink">
 <div class="card-title">Depuis J1, une seule porte : votre `hdfs dfs -put`</div>
 
-- Le CSV de la promo arrive le lundi par mail, le jeudi par FTP : **qui le dépose à la main**, au bon endroit, au bon nom ?
-- L'ingestion échouée à 3 h du matin (disque plein, réseau coupé) : **ni suivie, ni rejouée**
+- Le CSV arrive lundi par mail, jeudi par FTP : **qui le dépose, à la main ?**
+- L'ingestion qui échoue à 3 h (disque plein) : **ni suivie, ni rejouée**
 - **Rien ne trace** qui a déposé quoi, quand, depuis où
 - Multiplier les sources = multiplier les **petits scripts fragiles**
 
@@ -2916,7 +2924,7 @@ Déposer le fichier à la main avec `hdfs dfs -put` ? Comment automatiser et fi
 <div class="card card-green">
 <div class="card-title">Le métier oublié : l'ingestion</div>
 
-C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers** (CSV, logs, JSON), la référence reste **Apache NiFi** (Sqoop, pour le relationnel, est désaffecté — remplacé par Spark JDBC / Kafka Connect).
+C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers**, la référence est **Apache NiFi** (Sqoop est désaffecté, remplacé par Spark JDBC / Kafka Connect).
 
 </div>
 
@@ -2928,10 +2936,10 @@ C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers** (CS
 <div class="card-title">L'ancêtre à l'ADN militaire</div>
 
 - Né au sein de la **NSA** (« **Ni**agara **Fi**les ») → Apache **2015**
-- Une **plateforme de routage et de transformation de données visuelle** : le dataflow se construit **à la souris**
+- **Plateforme de routage et transformation visuelle** : tout se construit **à la souris**
 - Trois forces héritées de la NSA :
-  - **Guaranteed delivery** — un événement entré est acké de bout en bout, jamais perdu silencieusement
-  - **Back pressure** — si un maillon ralentit, le flux se met en pression (et s'arrête proprement) au lieu de déborder
+  - **Guaranteed delivery** — un événement entré est acké de bout en bout
+  - **Back pressure** — un maillon qui ralentit met le flux en pression, il ne déborde pas
   - **Data Provenance** — historique complet et requêtable de chaque événement
 
 </div>
@@ -2939,7 +2947,7 @@ C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers** (CS
 <div class="card card-yellow">
 <div class="card-title">Usages types</div>
 
-Collecte de logs · ingestion fichiers → datalake (**notre cas**) · sync entre systèmes · ETL léger · IoT/edge (MiNiFi)
+Logs · ingestion fichiers → datalake (**notre cas**) · ETL léger · IoT (MiNiFi)
 
 </div>
 
@@ -2947,20 +2955,24 @@ Collecte de logs · ingestion fichiers → datalake (**notre cas**) · sync entr
 
 # 🧩 Les 3 objets du modèle mental
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">1. Le FlowFile = l'unité en mouvement</div>
 
 - **Contenu** : le fichier lui-même (CSV…)
 - **Attributs** : clé/valeur attachées (`filename`, `path`, `ingestion_date`)
-- *Une enveloppe (contenu) + une fiche de renseignement (attributs)* qui s'enrichit à chaque étape
+- *Une enveloppe (contenu) + une fiche de renseignement (attributs)*
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">2. Le processeur = la brique</div>
 
-- **Source** (`GetFile`, `ListenHTTP`) · **Transfo** (`ConvertRecord`, `UpdateAttribute`) · **Routage** (`RouteOnAttribute`) · **Destination** (`PutFile`, `PutS3Object`)
-- Émet vers des **relationships** : `success` / `failure` — **une relation non câblée = de la donnée perdue silencieusement**
+- **Source** (`GetFile`) · **Transfo** (`ConvertRecord`) · **Routage** (`RouteOnAttribute`) · **Destination** (`PutFile`)
+- Émet vers des **relationships** : `success` / `failure` — **non câblée = donnée perdue**
+
+</div>
 
 </div>
 
@@ -2997,10 +3009,12 @@ GetFile ──success──► ConvertRecord ──success──► PutFile
 
 # 🎨 L'interface : le canvas
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">https://localhost:8443/nifi</div>
 
-- Déposer des processeurs depuis la **palette**, les relier par des **connections**
+- Déposer des processeurs depuis la **palette**, les relier par **connections**
 - Configurer via **Properties / Settings / Scheduling** (fréquence, run schedule)
 - Le cycle : **conception → configuration → ▶ Start → supervision → itération**
 
@@ -3015,12 +3029,9 @@ GetFile ──success──► ConvertRecord ──success──► PutFile
 
 </div>
 
-<div class="card card-pink">
-<div class="card-title">⚠️ 2.x impose le HTTPS (certificat autosigné) puis un login</div>
-
-Le couple se lit dans `nifi/credentials.env` (ou `docker logs hadoop-nifi` s'il a été généré aléatoirement — il change à chaque recréation). Un mot de passe < **12 caractères** est rejeté silencieusement.
-
 </div>
+
+> ⚠️ **2.x impose HTTPS** (autosigné) puis un login. Couple dans `nifi/credentials.env` (ou `docker logs hadoop-nifi`). Mot de passe < **12 caractères** = rejet silencieux.
 
 ---
 
@@ -3059,6 +3070,10 @@ La **reprise sur erreur avec traçabilité** : c'est un pipeline, pas un script
 
 </div>
 
+---
+
+# 🚧 Pourquoi `moveFromLocal` n'est pas un processeur
+
 <div class="card card-pink">
 <div class="card-title">⚠️ Pourquoi le dernier pas n'est PAS un processeur</div>
 
@@ -3071,6 +3086,8 @@ L'image officielle `apache/nifi:2.x` embarque **aucun NAR Hadoop** : `PutHDFS`/
 ---
 
 # 🛸 NiFi en 2026
+
+<div class="cols-2">
 
 <div class="card card-green">
 <div class="card-title">2.x = la génération du cours</div>
@@ -3087,6 +3104,8 @@ L'image officielle `apache/nifi:2.x` embarque **aucun NAR Hadoop** : `PutHDFS`/
 - **Airbyte** : sync API/SaaS → entrepôt
 - **Spark JDBC** : le remplaçant de Sqoop pour le relationnel
 - **NiFi** : la référence du **routage et de la transformation visuels** multi-sources (et MiNiFi sur l'edge/IoT)
+
+</div>
 
 </div>
 
@@ -3131,8 +3150,19 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 # 🔗 La chaîne complète
 
 <div class="flex justify-center">
-<img src="assets/chain-complete.svg" style="max-width: 88%; max-height: 36vh; height: auto;" />
+<img src="assets/chain-complete.svg" style="max-width: 88%; max-height: 32vh; height: auto;" />
 </div>
+
+<div class="card card-blue">
+<div class="card-title">Une seule donnée, cinq briques</div>
+
+**NiFi** amène et transforme · **HDFS** stocke · **MapReduce/Hive** calculent (deux langages, un moteur) · **HBase** sert les accès temps réel.
+
+</div>
+
+---
+
+# 🔗 La chaîne, en clair
 
 ```text
  NiFi (07)     HDFS (03)     MapReduce (04) / Hive (05)     HBase (06)
@@ -3141,13 +3171,6 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 │ routage │   │ fichiers │   │                           │   │ clé/valeur│
 └─────────┘   └──────────┘   └──────────────────────────┘   └─────────┘
 ```
-
-<div class="card card-blue">
-<div class="card-title">Une seule donnée, cinq briques</div>
-
-**NiFi** amène et transforme · **HDFS** stocke · **MapReduce/Hive** calculent (deux langages, un moteur) · **HBase** sert les accès temps réel.
-
-</div>
 
 ---
 
@@ -3175,24 +3198,28 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 - Une **journée (4 à 5 h)** : le TP de synthèse évalué du cursus
 - **Une seule donnée** traverse toute la chaîne : HDFS → MapReduce → Hive → HBase → NiFi → visualisation → **documentation**
-- **Plusieurs questions** : Q1 classement des villes · Q2 clé composite ville#année · Q3 Hive (validation croisée MR ↔ SQL) · Q4 HBase (rowkey ville) · Q5 NiFi (ingestion) · graphique du top 10
+- **Plusieurs questions** : Q1 villes · Q2 clé composite ville#année · Q3 Hive (validation croisée MR ↔ SQL) · Q4 HBase (rowkey ville) · Q5 NiFi · graphique du top 10
 - Donnée : `dataw_fro03_mini_1000.csv` (mini dans l'énoncé, fichier complet ~135 000 lignes en bonus)
 
 </div>
+
+---
+
+# 🏁 TP final : renvois et livrables
 
 <div class="card card-green">
 <div class="card-title">Rien de nouveau à inventer</div>
 
 > **Chaque commande du TP a déjà été faite dans un EX.** En cas de doute, le lien vers l'exercice d'origine est donné dans l'énoncé.
 
-- **II. HDFS** → EX/03 · **III-IV. MapReduce** → EX/04 (9-mapper-ventes-annee.py, clé composite) · **V. Hive** → EX/05 + TD-02 · **VI. HBase** → EX/06 + TD-03 · **VII. NiFi** → EX/07 + TD-04 · **VIII. visu** → EX/06 partie IV · **chaîne entière** → TD-05 (juste après)
+- **II. HDFS** → EX/03 · **III-IV. MapReduce** → EX/04 · **V. Hive** → EX/05 + TD-02 · **VI. HBase** → EX/06 + TD-03 · **VII. NiFi** → EX/07 + TD-04 · **VIII. visu** → EX/06 IV · **chaîne** → TD-05
 
 </div>
 
 <div class="card card-yellow">
 <div class="card-title">Livrables</div>
 
-**Documentation des actions et de leurs retours** (commande lancée → retour observé → conclusion), + les scripts, les résultats (`part-00000`, requêtes, `scan`/`get`) et le PDF du graphique.
+**Documentation des actions et de leurs retours** (commande → retour → conclusion), + les scripts, les résultats (`part-00000`, requêtes, `scan`) et le PDF du graphique.
 
 </div>
 
@@ -3225,7 +3252,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 - LE MANS 30 · MAMERS 18 · DOMFRONT EN POIRAIE 16 · LAVAL 15 · DOUDEVILLE 15
 - Le mapper extrait villecli (col 5) et qte (col 15) ; le reducer additionne
-- La requête sqlite `GROUP BY ville` rend le **même** classement — validation croisée
+- La requête sqlite `GROUP BY ville` rend le **même** classement
 
 </div>
 
@@ -3234,13 +3261,13 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer (et une ligne de plus sur le fichier complet)
 2. **Ligne 576** : inexistante ici, mais le réflexe « protège `int()` » reste
-3. Le mini-jeu est un **échantillon local** : le fichier complet (~135 000 lignes) change de tête
+3. Le mini-jeu est un **échantillon local** : le fichier complet change de tête
 
 </div>
 
 </div>
 
-> L'essentiel : vous maîtrisez déjà les commandes du TP. Demain, elles passent sur le cluster — la question du rapport est simplement « où **chaque** outil intervient dans la chaîne ».
+> L'essentiel : vous maîtrisez déjà les commandes du TP. Demain, elles passent sur le cluster.
 
 ---
 
@@ -3249,20 +3276,20 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 <div class="card card-blue">
 <div class="card-title">Ce que vous savez faire, en une slide</div>
 
-- ✅ **HBase** : rowkey qui trie, familles/colonnes dynamiques, WAL→MemStore→HFile, régions (1 Go vs blocs 128 Mio), ZooKeeper d'abord, `put` ne confirme rien — vérifier par `get`/`scan`
-- ✅ **NiFi** : FlowFile/processeur/connection, failure câblée, Data Provenance, `GetFile→ConvertRecord→PutFile→moveFromLocal`, en-tête & `File Filter`
-- ✅ **La chaîne** : NiFi (ingère) → HDFS (stocke) → MapReduce/Hive (calculent) → HBase (sert), avec **la même donnée** partout
+- ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions (1 Go vs 128 Mio), ZooKeeper d'abord, `put` ne confirme rien — vérifiez par `get`
+- ✅ **NiFi** : FlowFile/processeur/connection, failure câblée, Data Provenance
+- ✅ **La chaîne** : NiFi → HDFS → MapReduce/Hive → HBase, **la même donnée** partout
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">⚡ Le fil d'Ariane</div>
 
-Depuis J1 : le **CSV Spotify**, nouvelle brique à chaque séquence — **déposé à la main, découpé en blocs, parallélisé par MapReduce, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi : à vous de la refaire entièrement.
+Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé à la main, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
 
 </div>
 
-> Q&R puis point matériel (lancement des decks, export PDF, mode présentateur) avant de vous rendre autonomes sur le TP.
+> Q&R puis point matériel (decks, PDF, présentateur) avant l'autonomie sur le TP.
 
 ---
 

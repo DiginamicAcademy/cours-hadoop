@@ -728,28 +728,28 @@ Comment le stocker ? Et comment savoir, à tout moment, où se trouve chaque mo
 <div class="card card-blue">
 <div class="card-title">Distribué</div>
 
-Un système de fichiers réparti sur des **centaines / milliers de serveurs**
+Réparti sur **des centaines de serveurs**
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">Répliqué</div>
 
-Chaque donnée stockée à **plusieurs emplacements** pour éviter les pertes
+Chaque donnée à **plusieurs emplacements**
 
 </div>
 
 <div class="card card-blue">
 <div class="card-title">Big Data</div>
 
-Des dizaines de **millions de fichiers** supportés, avec **cohérence** et **intégrité**
+**Millions de fichiers**, cohérents et intègres
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">Portable</div>
 
-Fonctionne sur du **commodity hardware** (serveurs standards)
+Sur **commodity hardware** (serveurs standards)
 
 </div>
 
@@ -758,7 +758,7 @@ Fonctionne sur du **commodity hardware** (serveurs standards)
 <div class="card card-yellow">
 <div class="card-title">⚠️ HDFS n'est pas une base de données</div>
 
-On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requête en SQL (séquence 05)
+On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requête (séq. 05)
 
 </div>
 
@@ -781,14 +781,14 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 <div class="card-title">Défaut 3, mais pas ici</div>
 
 - La **documentation** dit : ratio 3 par défaut
-- **Notre cluster : `dfs.replication=1`** (configuré dans `hdfs-site.xml`) → l'économie de place au prix de la redondance
+- **Ici `dfs.replication=1`** : économie de place, pas de redondance
 - Ajustable par fichier/répertoire avec `hdfs dfs -setrep`
 
 </div>
 
 </div>
 
-> 📌 On verra à l'exercice (`fsck`) : la réplication se lit dans le listing HDFS (**le `1` après les droits**).
+> 📌 À l'exercice (`fsck`) : la réplication se lit après les droits.
 
 ---
 
@@ -968,8 +968,8 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card-title">Une seule donnée, toute la chaîne</div>
 
 - `data/Spotify_Most_Streamed_Songs.csv` — **155 593 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
-- Ça restera la **seule donnée** des EX 04 à 07 (le TP final travaillera, lui, sur les ventes `dataw_fro03`)
-- Colonnes utiles : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
+- **Seule donnée** des EX 04 à 07 (le TP final prend les ventes `dataw_fro03`)
+- Colonnes : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
 
 </div>
 
@@ -1088,13 +1088,13 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 - ✅ Hadoop = **scale-out** : stockage distribué, calcul parallèle sur machines standards
 - ✅ 7 briques du cours : **HDFS, YARN, MapReduce, ZooKeeper, Hive, HBase, NiFi**
 - ✅ L'environnement : 4 conteneurs Docker, `./start-*.sh`, `jps`, UI 9870/8088
-- ✅ **HDFS** : blocs 128 Mio, réplication **1** ici, NameNode (métadonnées) + DataNodes (blocs)
+- ✅ **HDFS** : blocs 128 Mio, réplication **1** ici, NameNode (index) + DataNodes (blocs)
 - ✅ Commandes : `ls`, `mkdir`, `put`, `cat`, `get`, `rm` — et le piège `-tail`
 - ✅ TD-01 : le **pipe local** mapper `|` sort `|` reducer — le `| sort |` **simule le shuffle**, et le CSV Spotify se débogue à la maison (en-tête, **ligne 576**)
 
 </div>
 
-> 📅 **Demain** : on rentre dans le vif — le **modèle MapReduce** : comment Hadoop calcule sur les blocs que vous venez de déposer.
+> 📅 **Demain** : le **modèle MapReduce** — comment Hadoop calcule sur vos blocs.
 
 ---
 

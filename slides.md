@@ -1699,14 +1699,14 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 1. **Connectez-vous** : `./start-hive.sh` puis `beeline -u jdbc:hive2://localhost:10000`
 2. **La donnée** : `ANNEXES/utils/7-prepare-spotify-tsv.py` → TSV, puis `hdfs dfs -put`
-3. **La DDL fournie** : `CREATE EXTERNAL TABLE spotify …` (recopiez telle quelle — c'est votre « mapper », décrire l'entrée pas l'algorithme)
+3. **La DDL fournie** : `CREATE EXTERNAL TABLE spotify …` (recopiez telle quelle)
 4. Les comptages : `SELECT COUNT(*)` = **954**, `SELECT COUNT(streams)` = **952**
-5. La question du TD01 : `SELECT released_year, SUM(streams) GROUP BY released_year` — **à comparer ligne à ligne avec vos pipes**
+5. La question du TD01 : `SELECT released_year, SUM(streams) GROUP BY released_year`
 6. Le top des artistes : comparez aux six clés de tête de votre `part-00000` de l'EX 04
 
 > ⚠️ Hive met `NULL` **en silence** : la preuve = la **concordance avec vos pipes d'hier**.
 
-<!-- Tempo A guidé ~30 min : on bloque sur le COUNT(*) 954/952, puis le GROUP BY et sa comparaison aux pipes du TD01. Tempo B et Pour aller plus loin partent ensuite en autonomie. Circuler. -->
+<!-- Tempo A guidé ~30 min : on bloque sur le COUNT(*) 954/952, puis le GROUP BY et sa comparaison aux pipes du TD01. Tempo B et Pour aller plus loin partent ensuite en autonomie. Circuler. La DDL est le « mapper » de Hive : décrire l'entrée, pas l'algorithme — d'où le recopiage tel quel. -->
 
 ---
 
@@ -1720,8 +1720,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-green">
 <div class="card-title">Les chiffres parlent</div>
 
-- `COUNT(*)` = **954** : l'en-tête du TSV est **compté comme une chanson** — Hive ne saute rien
-- `COUNT(streams)` = **952** : `streams` non numérique (en-tête + **ligne 576**) → `NULL` **en silence**
+- `COUNT(*)` = **954** : l'en-tête est **compté comme une chanson**
+- `COUNT(streams)` = **952** : en-tête + **ligne 576** → `NULL` **en silence**
 - Le `GROUP BY` retombe **exactement** sur vos pipes du TD01
 
 </div>
@@ -1729,8 +1729,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-pink">
 <div class="card-title">Les pièges</div>
 
-1. **Beeline ~30 s au premier contact** (Metastore Derby) — ne pas abandonner
-2. **51 groupes** (pas 50) : l'en-tête crée une année `NULL`
+1. **~30 s au 1er Beeline** — continuez (Derby)
+2. **51 groupes, pas 50** : l'en-tête → `NULL`
 3. **Top artistes** : duos → comparer **chiffre pour chiffre**
 4. **Aucun avertissement** : la comparaison Hive ↔ pipes seule détecte
 
@@ -1851,28 +1851,28 @@ Qui décide, dans un cluster, quelle tâche tourne **où et quand** ?
 <div class="card card-blue">
 <div class="card-title">ResourceManager</div>
 
-Le chef d'orchestre : répartit **mémoire** et **cœurs** entre les applications. Un par cluster (UI 8088).
+Le chef d'orchestre : répartit **mémoire** et **cœurs**. Un par cluster (UI 8088).
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">NodeManager</div>
 
-Un **par machine** : rapporte les ressources au RM, lance les **conteneurs**. (UI 8041/8042)
+Un **par machine** : rapporte les ressources au RM, lance les **conteneurs** (8041/8042).
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">ApplicationMaster</div>
 
-Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la **reprise sur erreur**.
+Un **par job** : négocie les conteneurs, coordonne maps et reduces, **reprise sur erreur**.
 
 </div>
 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/yarn-config.png" style="max-width: 70%; max-height: 30vh; height: auto;" />
+<img src="assets/yarn-config.png" style="max-width: 70%; max-height: 22vh; height: auto;" />
 </div>
 
 > Sondage : **RM** pour la ressource, **AM** pour l'exécution — débuggez par l'**AM**.
@@ -1906,8 +1906,8 @@ Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la *
 
 | Paramètre | Valeur | Sens |
 |---|---|---|
-| `yarn.nodemanager.resource.memory-mb` | 256 | RAM max *par nœud* allouable à YARN |
-| `mapreduce.map.memory.mb` | 192 | mémoire demandée par chaque tâche **map** |
+| `yarn.nodemanager.resource.memory-mb` | 256 | RAM max *par nœud* |
+| `mapreduce.map.memory.mb` | 192 | mémoire par tâche **map** |
 
 Conteneurs **petits — un choix** : un mapper Python tient, mais **modestement**.
 

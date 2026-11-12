@@ -2343,7 +2343,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-pink">
 <div class="card-title">Les pièges</div>
 
-1. **`put` répond `0 row(s)`** — c'est aussi ce que HBase répond pour « table créée » : on ne croit pas la réponse, on **vérifie par `get`/`scan`**
+1. **`put` répond `0 row(s)`** : on ne croit pas la réponse, on **vérifie par `get`**
 2. **Le tri est lexicographique** : `99` passerait **après** `100` — comme au TD01 et en MapReduce
 3. **50 lignes attendues** si on recharge les années du TD02 : si 49, un `put` manqué, pas un bug HBase
 
@@ -2351,9 +2351,9 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 </div>
 
-> Le lien avec le TD01 : le `sort` de vos pipes et le `scan` de HBase font **exactement le même travail** — regrouper et trier par clé.
+> Le lien avec le TD01 : `sort` et `scan` font **le même travail** — trier par clé.
 
-<!-- La séquence 06 formalise les familles, le versionnage, les régions, ZooKeeper. L'EX/06 fait écrire en HBase depuis un reducer MapReduce. -->
+<!-- La séquence 06 formalise les familles, le versionnage, les régions, ZooKeeper. L'EX/06 fait écrire en HBase depuis un reducer MapReduce. « 0 row(s) » est aussi la réponse de HBase à « table créée » : ne jamais croire la réponse du shell. -->
 
 ---
 
@@ -2390,8 +2390,8 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card-title">🌇 Après-midi</div>
 
 - **TD-04** — NiFi, premier contact
-- **II. NiFi** — l'usine à flux : le CSV entre tout seul dans HDFS
-- **EX/07** — flux complet CSV→TSV→HDFS + Data Provenance
+- **II. NiFi** — le flux CSV → HDFS
+- **EX/07** — CSV→TSV→HDFS + Provenance
 - **III. La chaîne complète** + **TD-05** — l'ouverture du **TP final**
 
 </div>
@@ -2406,11 +2406,13 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 # 🔁 Retour J3 : le tri et les chiffres de la veille
 
-<div class="card card-yellow">
-<div class="card-title">Hive retrouve MapReduce — mais la leçon du jour est le tri</div>
+<div class="cols-2">
 
-- **EX/05 + TD-02** : les 954/952/953 mesurés à Hive sont les mêmes que les pipes
-- **TD-03** (fait hier) : le `scan` HBase affiche les années **triées** — comme le `sort` du TD01
+<div class="card card-yellow">
+<div class="card-title">Hive retrouve MapReduce — la leçon : le tri</div>
+
+- **EX/05 + TD-02** : les 954/952 mesurés à Hive sont les mêmes que les pipes
+- **TD-03** (fait hier) : le `scan` HBase affiche les années **triées**
 - Le rowkey trie **lexicographiquement** : 1975 avant 2023, comme 100 après 99
 
 </div>
@@ -2418,8 +2420,10 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-green">
 <div class="card-title">À vérifier aujourd'hui</div>
 
-- `put` → pas de confirmation → `get` = la seule preuve — c'est le réflexe HBase
+- `put` → pas de confirmation → `get` = la seule preuve — le réflexe HBase
 - Si une année **manque** dans le `scan`, c'est un `put` oublié, pas un bug HBase
+
+</div>
 
 </div>
 

@@ -579,6 +579,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 </div>
 
 </div>
+
 ---
 
 # 🔍 `jps` : vérifier ce qui tourne
@@ -930,6 +931,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 > Question 7 de « Vérifiez vos acquis » : un collègue propose de re-formater « pour repartir proprement ». Que répondez-vous ?
+
 ---
 
 # 🛠️ DataNode — les ouvriers

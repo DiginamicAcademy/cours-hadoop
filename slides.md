@@ -2649,6 +2649,8 @@ Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **dir
 
 # 🐝 Le rôle de ZooKeeper
 
+<div class="cols-2">
+
 <div class="card card-pink">
 <div class="card-title">Le coordinateur indispensable</div>
 
@@ -2668,9 +2670,12 @@ jps | grep Quorum        # → QuorumPeerMain
 ./start-hbase.sh
 ```
 
-> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → lancez toujours **avec `./`**, sinon le shell exécute le script d'HBase du même nom.
+</div>
 
 </div>
+
+> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → lancez toujours **avec `./`**.
+<!-- sinon le shell exécute le script d'HBase du même nom -->
 
 ---
 
@@ -2733,7 +2738,8 @@ ROW       COLUMN+CELL
 <div class="card card-pink">
 <div class="card-title">Conséquence pour le TD-03</div>
 
-> Une rowkey numeric (`100` < `99` en ASCII) peut paraître incohérente : préfixez (pad) vos clés (`0099`, `0100`) quand l'ordre numérique compte. C'est le piège du lexicographique déjà vu au TD01 (pipe `sort`).
+> Une rowkey numeric (`100` < `99` en ASCII) paraît incohérente : préfixez (pad) vos clés (`0099`, `0100`) quand l'ordre numérique compte.
+<!-- Piège du lexicographique déjà vu au TD01 (pipe sort). -->
 
 </div>
 
@@ -2813,8 +2819,8 @@ sales:product       timestamp=…, value=Chairs
 <div class="card card-blue">
 <div class="card-title">Python → HBase, via Thrift (port 9090)</div>
 
-- Seul **Java** accède directement à HBase ; **ThriftServer** fait le pont réseau
-- `happybase` est **déjà installé** (1.3.0) — le ThriftServer doit juste tourner :
+- **Java** seul parle HBase ; Thrift fait le pont
+- `happybase` est **déjà installé** (1.3.0) :
 
 ```bash
 ./start-zookeeper.sh
@@ -2841,7 +2847,7 @@ conn.close()
 
 </div>
 
-> Depuis la machine hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
+> Depuis l'hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
 
 ---
 

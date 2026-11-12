@@ -1889,8 +1889,8 @@ Un **par job** : négocie les conteneurs, coordonne maps et reduces, **reprise 
 - **FIFO** : une file unique, ordre d'arrivée — **simple, mais famine** des jobs courts
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/scheduler.png" style="max-width: 42%; max-height: 16vh; height: auto;" />
-<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 16vh; height: auto;" />
+<img src="assets/scheduler.png" style="max-width: 42%; max-height: 11vh; height: auto;" />
+<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 11vh; height: auto;" />
 </div>
 
 </div>
@@ -1946,7 +1946,7 @@ Conteneurs **petits — un choix** : un mapper Python tient, mais **modestement
 # 💡 Corps de réponse — le trajet des logs
 
 <div class="flex justify-center">
-<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 36vh; height: auto;" />
+<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 28vh; height: auto;" />
 </div>
 
 <div class="card card-green">
@@ -2037,8 +2037,8 @@ Est-ce que ça ressemblerait à MySQL ? Comment la requête serait-elle exécut
 <div class="card-title">Un data warehouse SQL au-dessus de Hadoop</div>
 
 - **HiveQL** : un langage proche du SQL pour interroger les fichiers HDFS
-- **Traduction auto** : **6 lignes de SQL = un job MapReduce complet** (mapper + tri + reducer)
-- **Entrepôt (OLAP)** plutôt que base (OLTP) : batch, gros volumes, il ne stocke pas lui-même — les données restent **des fichiers HDFS**
+- **Traduction auto** : **6 lignes de SQL = un job MapReduce complet**
+- **Entrepôt (OLAP), pas base (OLTP)** : batch, gros volumes — il ne stocke rien, les données restent **sur HDFS**
 
 </div>
 
@@ -2057,7 +2057,7 @@ LIMIT 10;
 # 🏗️ Architecture de Hive
 
 <div class="flex justify-center">
-<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 38vh; height: auto;" />
+<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 30vh; height: auto;" />
 </div>
 
 - **HiveServer2** : reçoit les requêtes ; client = **Beeline** (la CLI `hive` a disparu)

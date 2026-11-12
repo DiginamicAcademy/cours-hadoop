@@ -2878,7 +2878,13 @@ conn.close()
 2. `https://localhost:8443/nifi` → certificat auto-signé → login (`etudiant` / `etudiant`)
 3. Déposez un petit `test.csv` (3 lignes) dans `nifi/input/` (sur la machine hôte)
 4. **GetFile** : `/opt/nifi/input`, `File Filter = .*\.csv`, auto-terminate **success** → démarrer → compteur **out** = 1 → le fichier **disparaît**
-5. **Data Provenance** : `RECEIVE`, horodaté — c'est la trace du premier passage
+
+---
+
+# 🏋️ TD-04 — suite : la preuve par Data Provenance
+
+**La trace de chaque fichier qui passe — c'est là que NiFi se justifie.**
+
 6. Ajoutez **PutFile** : `/opt/nifi/output`, `Conflict Resolution = replace`, auto-terminate **success** et **failure** → relancez → le fichier **apparaît** dans `nifi/output/`
 7. **Data Provenance** : 2 événements — `RECEIVE` + écriture — la traînée complète
 
@@ -2967,15 +2973,7 @@ C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers**, la
   - **Guaranteed delivery** — un événement entré est acké de bout en bout
   - **Back pressure** — un maillon qui ralentit met le flux en pression, il ne déborde pas
   - **Data Provenance** — historique complet et requêtable de chaque événement
-
-</div>
-
-<div class="card card-yellow">
-<div class="card-title">Usages types</div>
-
-Logs · ingestion fichiers → datalake (**notre cas**) · ETL léger · IoT (MiNiFi)
-
-</div>
+- **Usages types** : logs · ingestion → datalake (**notre cas**) · ETL léger · IoT
 
 ---
 
@@ -2995,8 +2993,8 @@ Logs · ingestion fichiers → datalake (**notre cas**) · ETL léger · IoT (Mi
 <div class="card card-green">
 <div class="card-title">2. Le processeur = la brique</div>
 
-- **Source** (`GetFile`) · **Transfo** (`ConvertRecord`) · **Routage** (`RouteOnAttribute`) · **Destination** (`PutFile`)
-- Émet vers des **relationships** : `success` / `failure` — **non câblée = donnée perdue**
+- **Source** (`GetFile`) · **Transfo** (`ConvertRecord`) · **Routage** · **Destination** (`PutFile`)
+- `success` / `failure` : **non câblée = perdue**
 
 </div>
 

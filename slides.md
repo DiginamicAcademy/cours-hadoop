@@ -61,13 +61,13 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 - **III. HDFS** — blocs, réplication, commandes
 - **EX/02** — lancer le cluster
 - **Exercice 03** — HDFS (dans le chapitre)
-- **TD-01** — MapReduce en local, avant le cluster (premier temps en autonomie)
+- **TD-01** — MapReduce en local
 
 </div>
 
 </div>
 
-**Objectif du jour** — comprendre d'où vient Hadoop, démarrer son cluster et poser les premières données dans HDFS.
+**Objectif** — comprendre Hadoop, démarrer le cluster, poser les données dans HDFS.
 
 <!-- Accueillir le groupe, présenter le déroulé et le fil rouge de la semaine (le CSV Spotify + le TP final). Annoncer le ratio cours/exercices. -->
 
@@ -276,7 +276,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧱 L'architecture en 4 acteurs
 
 <div class="flex justify-center">
-<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
+<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 36vh; height: auto;" />
 </div>
 
 <div class="cols-2">
@@ -304,7 +304,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧩 L'écosystème Hadoop
 
 <div class="flex justify-center">
-<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 30vh; height: auto;" />
+<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 24vh; height: auto;" />
 </div>
 
 <div class="card card-blue">
@@ -321,8 +321,8 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-pink">
 <div class="card-title">Retirés du périmètre (plus maintenus)</div>
 
-- **Sqoop** (vers les bases SQL) : à l'Attic depuis 2021 → **Spark JDBC, Kafka Connect**
-- **Oozie** (ordonnanceur) : en maintenance depuis 2018 → **Airflow / Dagster / Prefect**
+- **Sqoop** → **Spark JDBC, Kafka Connect** (Attic 2021)
+- **Oozie** → **Airflow, Dagster, Prefect** (maintenance 2018)
 - **Pig** (flux SQL-like) : supplanté par Spark et Hive
 
 </div>
@@ -330,8 +330,8 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-green">
 <div class="card-title">Toujours actifs — et couverts par le cours</div>
 
-- **Hive (4.x)** : évolue vers le **lakehouse** (Iceberg), toujours très déployé
-- **NiFi** : la référence de l'ingestion visuelle multi-sources
+- **Hive (4.x)** : vers le **lakehouse** (Iceberg), très déployé
+- **NiFi** : référence de l'ingestion visuelle
 
 </div>
 
@@ -356,7 +356,7 @@ ls -l $HADOOP_HOME/etc/hadoop
 <div class="card card-blue">
 <div class="card-title">`core-site.xml`</div>
 
-Cœur de Hadoop : **emplacement du NameNode**
+**Emplacement du NameNode**
 
 ```xml
 <property>
@@ -370,7 +370,7 @@ Cœur de Hadoop : **emplacement du NameNode**
 <div class="card card-green">
 <div class="card-title">`hdfs-site.xml`</div>
 
-Emplacements NameNode/DataNode + **réplication**
+Emplacements NN/DN + **réplication**
 
 ```xml
 <property>
@@ -397,7 +397,7 @@ Le framework de calcul
 
 </div>
 
-> ⚠️ `dfs.replication=1` ici — chaque bloc a **une seule copie** (pas le ratio 3 de la doc historique).
+> ⚠️ `dfs.replication=1` ici : chaque bloc n'a **qu'une copie** (pas le 3 de la doc).
 
 ---
 
@@ -470,14 +470,14 @@ Une machine unique ? Plusieurs machines virtuelles ? Docker ? Et pourquoi ?
 <div class="card card-pink">
 <div class="card-title">1 machine unique</div>
 
-Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** : ni pannes, ni réseau, ni coordination du réel.
+Hadoop est **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** : ni pannes, ni réseau.
 
 </div>
 
 <div class="card card-yellow">
 <div class="card-title">Plusieurs VMs</div>
 
-**Gourmandes** : chaque VM embarque son propre OS (RAM et CPU). Pour simuler 3-4 nœuds, il faut déjà un poste costaud, et le démarrage est lent.
+**Gourmandes** : chacune son OS (RAM, CPU). Simuler 3-4 nœuds demande un poste costaud, et démarre lentement.
 
 </div>
 
@@ -490,7 +490,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 </div>
 
-> C'est l'objet de la **deuxième partie** de la journée : ce mini-cluster, vous allez l'allumer vous-mêmes.
+> C'est la **deuxième partie** de la journée : vous allumerez ce mini-cluster vous-mêmes.
 
 ---
 
@@ -570,11 +570,11 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 | Script | Rôle |
 |---|---|
-| `./start-all.sh` | tout, dans l'ordre des dépendances |
+| `./start-all.sh` | tout, dans l'ordre |
 | `./start-dfs.sh` | HDFS (NameNode + DataNodes) |
 | `./start-yarn.sh` | YARN (RM + NodeManagers) |
-| `./start-hive.sh` | HiveServer2 (JDBC 10000) |
-| `./start-hbase.sh` / `./start-thrift.sh` | HBase + Thrift (9090) |
+| `./start-hive.sh` | HiveServer2 (10000) |
+| `./start-hbase.sh` · `start-thrift.sh` | HBase + Thrift |
 
 </div>
 
@@ -584,7 +584,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 # 🔍 `jps` : vérifier ce qui tourne
 
-> Les conteneurs démarrent **froids** : aucun service n'est lancé — c'est voulu, vous apprenez à les démarrer à l'EX/02.
+> Les conteneurs démarrent **froids** : aucun service lancé (vous les démarrez à l'EX/02).
 
 <div class="cols-2">
 
@@ -611,7 +611,7 @@ DataNode · NodeManager · HRegionServer
 
 </div>
 
-> ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`). DataNodes et NodeManagers tournent sur les slaves, pas dans le master.
+> ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`).
 
 ---
 

@@ -2,7 +2,7 @@
 marp: true
 theme: default
 style: |
-  section {background-color: #121114}
+  section {background-color: #121114; font-size: 20px}
   h1,h2,h3 {color: #8393f0}
   p,ul,li,td,th {color: #ccc}
   section table {font-size: 0.85em}
@@ -36,6 +36,18 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 
 <!-- _class: lead -->
 
+# Exploiter l'écosystème Hadoop
+
+## HDFS · MapReduce · Hive · HBase · NiFi
+
+**5 jours** — 4 jours de cours, 1 jour de TP · RNCP40573
+
+Robin Hotton · Diginamic
+
+---
+
+<!-- _class: lead -->
+
 # Jour 1 — Les fondations d'Hadoop
 
 ## Pourquoi Hadoop ? L'environnement de TP · HDFS
@@ -61,13 +73,13 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 - **III. HDFS** — blocs, réplication, commandes
 - **EX/02** — lancer le cluster
 - **Exercice 03** — HDFS (dans le chapitre)
-- **TD-01** — MapReduce en local, avant le cluster (premier temps en autonomie)
+- **TD-01** — MapReduce en local
 
 </div>
 
 </div>
 
-**Objectif du jour** — comprendre d'où vient Hadoop, démarrer son cluster et poser les premières données dans HDFS.
+**Objectif** — comprendre Hadoop, démarrer le cluster, poser les données dans HDFS.
 
 <!-- Accueillir le groupe, présenter le déroulé et le fil rouge de la semaine (le CSV Spotify + le TP final). Annoncer le ratio cours/exercices. -->
 
@@ -127,7 +139,7 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 </div>
 
 <div class="flex justify-center">
-<img src="assets/cluster.jpeg" style="max-width: 55%; max-height: 30vh; height: auto;" />
+<img src="assets/cluster.jpeg" style="max-width: 55%; max-height: 22vh; height: auto;" />
 </div>
 
 ---
@@ -251,7 +263,7 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/sps.jpeg" style="max-width: 65%; max-height: 32vh; height: auto;" />
+<img src="assets/sps.jpeg" style="max-width: 65%; max-height: 24vh; height: auto;" />
 </div>
 
 ---
@@ -276,7 +288,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧱 L'architecture en 4 acteurs
 
 <div class="flex justify-center">
-<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
+<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 28vh; height: auto;" />
 </div>
 
 <div class="cols-2">
@@ -304,7 +316,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧩 L'écosystème Hadoop
 
 <div class="flex justify-center">
-<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 30vh; height: auto;" />
+<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 24vh; height: auto;" />
 </div>
 
 <div class="card card-blue">
@@ -321,8 +333,8 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-pink">
 <div class="card-title">Retirés du périmètre (plus maintenus)</div>
 
-- **Sqoop** (vers les bases SQL) : à l'Attic depuis 2021 → **Spark JDBC, Kafka Connect**
-- **Oozie** (ordonnanceur) : en maintenance depuis 2018 → **Airflow / Dagster / Prefect**
+- **Sqoop** → **Spark JDBC, Kafka Connect** (Attic 2021)
+- **Oozie** → **Airflow, Dagster, Prefect** (maintenance 2018)
 - **Pig** (flux SQL-like) : supplanté par Spark et Hive
 
 </div>
@@ -330,8 +342,8 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-green">
 <div class="card-title">Toujours actifs — et couverts par le cours</div>
 
-- **Hive (4.x)** : évolue vers le **lakehouse** (Iceberg), toujours très déployé
-- **NiFi** : la référence de l'ingestion visuelle multi-sources
+- **Hive (4.x)** : vers le **lakehouse** (Iceberg), très déployé
+- **NiFi** : référence de l'ingestion visuelle
 
 </div>
 
@@ -356,7 +368,7 @@ ls -l $HADOOP_HOME/etc/hadoop
 <div class="card card-blue">
 <div class="card-title">`core-site.xml`</div>
 
-Cœur de Hadoop : **emplacement du NameNode**
+**Emplacement du NameNode**
 
 ```xml
 <property>
@@ -370,7 +382,7 @@ Cœur de Hadoop : **emplacement du NameNode**
 <div class="card card-green">
 <div class="card-title">`hdfs-site.xml`</div>
 
-Emplacements NameNode/DataNode + **réplication**
+Emplacements NN/DN + **réplication**
 
 ```xml
 <property>
@@ -397,7 +409,7 @@ Le framework de calcul
 
 </div>
 
-> ⚠️ `dfs.replication=1` ici — chaque bloc a **une seule copie** (pas le ratio 3 de la doc historique).
+> ⚠️ `dfs.replication=1` ici : chaque bloc n'a **qu'une copie** (pas le 3 de la doc).
 
 ---
 
@@ -424,8 +436,8 @@ Le langage commun des data engineers : tant qu'on maîtrise HDFS, le shuffle, l
 </div>
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/70percent.png" style="max-width: 45%; max-height: 26vh; height: auto;" />
-<img src="assets/skills.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
+<img src="assets/70percent.png" style="max-width: 45%; max-height: 18vh; height: auto;" />
+<img src="assets/skills.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
 </div>
 
 ---
@@ -470,14 +482,14 @@ Une machine unique ? Plusieurs machines virtuelles ? Docker ? Et pourquoi ?
 <div class="card card-pink">
 <div class="card-title">1 machine unique</div>
 
-Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** : ni pannes, ni réseau, ni coordination du réel.
+Hadoop est **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** : ni pannes, ni réseau.
 
 </div>
 
 <div class="card card-yellow">
 <div class="card-title">Plusieurs VMs</div>
 
-**Gourmandes** : chaque VM embarque son propre OS (RAM et CPU). Pour simuler 3-4 nœuds, il faut déjà un poste costaud, et le démarrage est lent.
+**Gourmandes** : chacune son OS (RAM, CPU). Simuler 3-4 nœuds demande un poste costaud, et démarre lentement.
 
 </div>
 
@@ -490,7 +502,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 </div>
 
-> C'est l'objet de la **deuxième partie** de la journée : ce mini-cluster, vous allez l'allumer vous-mêmes.
+> C'est la **deuxième partie** de la journée : vous allumerez ce mini-cluster vous-mêmes.
 
 ---
 
@@ -511,7 +523,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 # 🐳 Un cluster Docker local
 
 <div class="flex justify-center">
-<img src="assets/cluster-docker.svg" style="max-width: 92%; max-height: 60vh; height: auto;" />
+<img src="assets/cluster-docker.svg" style="max-width: 92%; max-height: 50vh; height: auto;" />
 </div>
 
 ---
@@ -570,20 +582,21 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 | Script | Rôle |
 |---|---|
-| `./start-all.sh` | tout, dans l'ordre des dépendances |
+| `./start-all.sh` | tout, dans l'ordre |
 | `./start-dfs.sh` | HDFS (NameNode + DataNodes) |
 | `./start-yarn.sh` | YARN (RM + NodeManagers) |
-| `./start-hive.sh` | HiveServer2 (JDBC 10000) |
-| `./start-hbase.sh` / `./start-thrift.sh` | HBase + Thrift (9090) |
+| `./start-hive.sh` | HiveServer2 (10000) |
+| `./start-hbase.sh` · `start-thrift.sh` | HBase + Thrift |
 
 </div>
 
 </div>
+
 ---
 
 # 🔍 `jps` : vérifier ce qui tourne
 
-> Les conteneurs démarrent **froids** : aucun service n'est lancé — c'est voulu, vous apprenez à les démarrer à l'EX/02.
+> Les conteneurs démarrent **froids** : aucun service lancé (vous les démarrez à l'EX/02).
 
 <div class="cols-2">
 
@@ -610,7 +623,7 @@ DataNode · NodeManager · HRegionServer
 
 </div>
 
-> ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`). DataNodes et NodeManagers tournent sur les slaves, pas dans le master.
+> ⚠️ `QuorumPeerMain` = le ZooKeeper d'ici (pas `HQuorumPeer`).
 
 ---
 
@@ -639,8 +652,8 @@ DataNode · NodeManager · HRegionServer
 </div>
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/9870.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
-<img src="assets/8088.jpeg" style="max-width: 45%; max-height: 26vh; height: auto;" />
+<img src="assets/9870.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
+<img src="assets/8088.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
 </div>
 
 ---
@@ -727,28 +740,28 @@ Comment le stocker ? Et comment savoir, à tout moment, où se trouve chaque mo
 <div class="card card-blue">
 <div class="card-title">Distribué</div>
 
-Un système de fichiers réparti sur des **centaines / milliers de serveurs**
+Réparti sur **des centaines de serveurs**
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">Répliqué</div>
 
-Chaque donnée stockée à **plusieurs emplacements** pour éviter les pertes
+Chaque donnée à **plusieurs emplacements**
 
 </div>
 
 <div class="card card-blue">
 <div class="card-title">Big Data</div>
 
-Des dizaines de **millions de fichiers** supportés, avec **cohérence** et **intégrité**
+**Millions de fichiers**, cohérents et intègres
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">Portable</div>
 
-Fonctionne sur du **commodity hardware** (serveurs standards)
+Sur **commodity hardware** (serveurs standards)
 
 </div>
 
@@ -757,7 +770,7 @@ Fonctionne sur du **commodity hardware** (serveurs standards)
 <div class="card card-yellow">
 <div class="card-title">⚠️ HDFS n'est pas une base de données</div>
 
-On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requête en SQL (séquence 05)
+On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requête (séq. 05)
 
 </div>
 
@@ -780,14 +793,14 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 <div class="card-title">Défaut 3, mais pas ici</div>
 
 - La **documentation** dit : ratio 3 par défaut
-- **Notre cluster : `dfs.replication=1`** (configuré dans `hdfs-site.xml`) → l'économie de place au prix de la redondance
+- **Ici `dfs.replication=1`** : économie de place, pas de redondance
 - Ajustable par fichier/répertoire avec `hdfs dfs -setrep`
 
 </div>
 
 </div>
 
-> 📌 On verra à l'exercice (`fsck`) : la réplication se lit dans le listing HDFS (**le `1` après les droits**).
+> 📌 À l'exercice (`fsck`) : la réplication se lit après les droits.
 
 ---
 
@@ -816,7 +829,7 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 </div>
 
 <div class="flex justify-center">
-<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 44vh; height: auto;" />
+<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -884,7 +897,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
+<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -913,7 +926,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 <div class="flex justify-center">
-<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 30vh; height: auto;" />
+<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 22vh; height: auto;" />
 </div>
 
 ---
@@ -930,6 +943,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 </div>
 
 > Question 7 de « Vérifiez vos acquis » : un collègue propose de re-formater « pour repartir proprement ». Que répondez-vous ?
+
 ---
 
 # 🛠️ DataNode — les ouvriers
@@ -954,7 +968,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 **Le NameNode indique l'adresse (un annuaire), les DataNodes transportent les données — la donnée ne passe jamais par le NameNode.**
 
 <figure style="text-align: center;">
-  <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
+  <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 32vh; height: auto;" />
   <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
 </figure>
 
@@ -966,8 +980,8 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card-title">Une seule donnée, toute la chaîne</div>
 
 - `data/Spotify_Most_Streamed_Songs.csv` — **155 593 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
-- Ça restera la **seule donnée** des EX 04 à 07 (le TP final travaillera, lui, sur les ventes `dataw_fro03`)
-- Colonnes utiles : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
+- **Seule donnée** des EX 04 à 07 (le TP final prend les ventes `dataw_fro03`)
+- Colonnes : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
 
 </div>
 
@@ -1008,12 +1022,12 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 **~30 min guidées — créez les deux squelettes, lancez les trois variants de pipe.**
 
-1. Écrire `mapper.py` (découpe les mots, émet `mot\t1`) et `reducer.py` (additionne les clés **regroupées**)
+1. Écrire `mapper.py` (émets `mot\t1`) et `reducer.py` (additionne les clés **regroupées**)
 2. `echo "bonjour bonsoir bonjour bonsoir" | python3 mapper.py` — une paire par mot
 3. `… | mapper.py | reducer.py` **sans tri** — sort **comme le mapper** : clés non regroupées, comptage faux
 4. `… | mapper.py | sort | reducer.py` — le `sort` **simule le shuffle** : `bonjour\t2, bonsoir\t2`
 
-> ⚠️ **La règle sonnante** : si ça marche avec `| sort |` en local, ça marchera sur le cluster. Un pipe sans tri cache un shuffle maladroit.
+> ⚠️ **Règle sonnante** : `| sort |` OK en local ⇒ job OK sur le cluster.
 > Windows : `python`, pas `python3` — `echo` ajoute des guillemets, préférez `type`.
 
 <!-- Tempo A guidé : on bloque jusqu'à ce que chaque finisher valide le variant 3. Les tempos B (questions) et Pour aller plus loin (CSV Spotify) partent ensuite en autonomie. Circuler. -->
@@ -1039,18 +1053,18 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card card-pink">
 <div class="card-title">Le variant 3 = la simulation du shuffle</div>
 
-- `sort` → regroupe les clés → le reducer additionne : `bonjour\t2, bonsoir\t2`
+- `sort` regroupe, le reducer additionne : `bonjour\t2, bonsoir\t2`
 - Sur le cluster, c'est Hadoop (shuffle + sort) qui fait exactement ça
 - **Règle** : `| sort |` OK en local ⇒ job OK sur le cluster
-- Question B : le reducer doit voir **chaque clé en un seul bloc** — jamais le contraire
+- Question B : **une clé, un seul bloc**
 
 </div>
 
 </div>
 
-> **Pour aller plus loin** : mapper Spotify (`released_year` col. 3, `streams` col. 8) — écarter l'**en-tête** par la valeur (`row[0] == 'track_name'`), protéger la **ligne 576**. Le debug local fait voir la panne **avant** le cluster : 50 années, total 489 458 828 542.
+> **Pour aller plus loin** : mapper Spotify (`released_year` col. 3, `streams` col. 8) — écarter l'**en-tête** par la valeur (`row[0] == 'track_name'`), protéger la **ligne 576**.
 
-<!-- Correction tempo B (variant 2 = clés non regroupées) et Pour aller plus loin (ligne 576 + en-tête). Le même geste se revoit au TD-02 (Hive), où la même requête passe en SQL. -->
+<!-- Correction tempo B (variant 2 = clés non regroupées) et Pour aller plus loin (ligne 576 + en-tête). Le même geste se revoit au TD-02 (Hive), où la même requête passe en SQL. Attendus du variant Spotify : 50 années, total 489 458 828 542. -->
 
 ---
 
@@ -1086,13 +1100,13 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 - ✅ Hadoop = **scale-out** : stockage distribué, calcul parallèle sur machines standards
 - ✅ 7 briques du cours : **HDFS, YARN, MapReduce, ZooKeeper, Hive, HBase, NiFi**
 - ✅ L'environnement : 4 conteneurs Docker, `./start-*.sh`, `jps`, UI 9870/8088
-- ✅ **HDFS** : blocs 128 Mio, réplication **1** ici, NameNode (métadonnées) + DataNodes (blocs)
+- ✅ **HDFS** : blocs 128 Mio, réplication **1** ici, NameNode (index) + DataNodes (blocs)
 - ✅ Commandes : `ls`, `mkdir`, `put`, `cat`, `get`, `rm` — et le piège `-tail`
 - ✅ TD-01 : le **pipe local** mapper `|` sort `|` reducer — le `| sort |` **simule le shuffle**, et le CSV Spotify se débogue à la maison (en-tête, **ligne 576**)
 
 </div>
 
-> 📅 **Demain** : on rentre dans le vif — le **modèle MapReduce** : comment Hadoop calcule sur les blocs que vous venez de déposer.
+> 📅 **Demain** : le **modèle MapReduce** — comment Hadoop calcule sur vos blocs.
 
 ---
 
@@ -1251,7 +1265,7 @@ Hadoop = l'**implémentation libre** du modèle (MapReduce 1.0) exécutée par *
 # 🎢 La pipeline complète
 
 <div class="flex justify-center">
-<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 40vh; height: auto;" />
+<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 32vh; height: auto;" />
 </div>
 
 > Chaque étape est orchestrée par **YARN** sur l'un des nœuds du cluster.
@@ -1541,16 +1555,16 @@ cat Spotify_Most_Streamed_Songs.csv | python3 mapper.py | sort | python3 reducer
 
 - On **simule le shuffle** Hadoop : le `sort` fait le tri
 - **Vérifie** le contrat : stdin/stdout tabulé, pas de `print` parasite
-- Débugue sur le poste, pas en attendant un job de 40 s (latence : page suivante)
+- Débugue sur le poste, pas en attendant 40 s par job
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">⚠️ Limites du test local</div>
 
-- Test sur la **machine locale**, pas le cluster : mémoire et parallélisme différents
+- Test sur la **machine locale**, pas le cluster
 - Le `sort` GNU n'est pas le tri YARN (encodage, séparateur `\t`)
-- Conclusion : test local **pré-requis mais insuffisant** → on valide toujours sur le cluster
+- Conclusion : test local **insuffisant** → on valide sur le cluster
 
 </div>
 
@@ -1578,11 +1592,11 @@ hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar \
 
 - `-input` / `-output` : HDFS d'entrée / **sortie (à ne PAS exister !)**
 - `-mapper` / `-reducer` : la commande exécutée par chaque tâche
-- `-file` : envoie le **script local** dans chaque conteneur (sinon « file not found »)
+- `-file` : envoie le **script local** dans chaque conteneur
 
 </div>
 
-> ⚠️ **Sortie déjà existante** → le job **échoue** : changez le nom avant de relancer.
+> ⚠️ **Sortie déjà existante** → le job **échoue** : changez le nom.
 
 ---
 
@@ -1636,8 +1650,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-blue">
 <div class="card-title">La mesure, encore</div>
 
-- Sur ce cluster Docker, un job WordCount sur 1 petit fichier prend **35 s à ~1 min** (2 mappers, 1 reducer)
-- Pourquoi si "lent" ? **Coût de démarrage** : YARN (ResourceManager), AM, demandes de conteneurs, dispatch des tâches
+- Un WordCount sur 1 petit fichier : **35 s à 1 min** (2 mappers, 1 reducer)
+- Pourquoi si « lent » ? **Coût de démarrage** : YARN (RM), AM, conteneurs, dispatch
 
 </div>
 
@@ -1646,7 +1660,7 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 - **On réfléchit avant de lancer** — un job coûte 1 min même pour un micro-résultat
 - On **teste en local** (pipeline `cat | sort`) pour ne pas saturer le cluster partagé
-- NB. sur un vrai cluster, la fraction « calcul » devient vite dominante devant cette latence
+- NB. sur un vrai cluster, le « calcul » domine vite cette latence
 
 </div>
 
@@ -1676,9 +1690,9 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-pink">
 <div class="card-title">Les 5 pierres du jour</div>
 
-- ✅ **Modèle** : map (clé\tvaleur) → partition/shuffle/sort → reduce (il regroupe par clé)
+- ✅ **Modèle** : map (clé\tvaleur) → shuffle/sort → reduce (regroupe par clé)
 - ✅ **Mesure** : 1 fichier → **2 splits**, 954 lignes lues, tri lexicographique de la sortie
-- ✅ **Contrat** : 1 processus/tâche, l'en-tête dans le 1er split, en-tête ≠ donnée, `int()` à protéger
+- ✅ **Contrat** : 1 processus/tâche, en-tête dans le 1er split, `int()` à protéger
 - ✅ **Geste** : `cat | mapper | sort | reducer` en local, puis `hadoop jar … -file`
 - ✅ **Sortie** : `part-00000` (trié) + `_SUCCESS`, logs YARN 8088
 
@@ -1697,14 +1711,14 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 
 1. **Connectez-vous** : `./start-hive.sh` puis `beeline -u jdbc:hive2://localhost:10000`
 2. **La donnée** : `ANNEXES/utils/7-prepare-spotify-tsv.py` → TSV, puis `hdfs dfs -put`
-3. **La DDL fournie** : `CREATE EXTERNAL TABLE spotify …` (recopiez telle quelle — c'est votre « mapper », décrire l'entrée pas l'algorithme)
+3. **La DDL fournie** : `CREATE EXTERNAL TABLE spotify …` (recopiez telle quelle)
 4. Les comptages : `SELECT COUNT(*)` = **954**, `SELECT COUNT(streams)` = **952**
-5. La question du TD01 : `SELECT released_year, SUM(streams) GROUP BY released_year` — **à comparer ligne à ligne avec vos pipes**
+5. La question du TD01 : `SELECT released_year, SUM(streams) GROUP BY released_year`
 6. Le top des artistes : comparez aux six clés de tête de votre `part-00000` de l'EX 04
 
 > ⚠️ Hive met `NULL` **en silence** : la preuve = la **concordance avec vos pipes d'hier**.
 
-<!-- Tempo A guidé ~30 min : on bloque sur le COUNT(*) 954/952, puis le GROUP BY et sa comparaison aux pipes du TD01. Tempo B et Pour aller plus loin partent ensuite en autonomie. Circuler. -->
+<!-- Tempo A guidé ~30 min : on bloque sur le COUNT(*) 954/952, puis le GROUP BY et sa comparaison aux pipes du TD01. Tempo B et Pour aller plus loin partent ensuite en autonomie. Circuler. La DDL est le « mapper » de Hive : décrire l'entrée, pas l'algorithme — d'où le recopiage tel quel. -->
 
 ---
 
@@ -1718,8 +1732,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-green">
 <div class="card-title">Les chiffres parlent</div>
 
-- `COUNT(*)` = **954** : l'en-tête du TSV est **compté comme une chanson** — Hive ne saute rien
-- `COUNT(streams)` = **952** : `streams` non numérique (en-tête + **ligne 576**) → `NULL` **en silence**
+- `COUNT(*)` = **954** : l'en-tête est **compté comme une chanson**
+- `COUNT(streams)` = **952** : en-tête + **ligne 576** → `NULL` **en silence**
 - Le `GROUP BY` retombe **exactement** sur vos pipes du TD01
 
 </div>
@@ -1727,8 +1741,8 @@ cat hadoop.log | grep -i ERROR   # le log côté client à scruter
 <div class="card card-pink">
 <div class="card-title">Les pièges</div>
 
-1. **Beeline ~30 s au premier contact** (Metastore Derby) — ne pas abandonner
-2. **51 groupes** (pas 50) : l'en-tête crée une année `NULL`
+1. **~30 s au 1er Beeline** — continuez (Derby)
+2. **51 groupes, pas 50** : l'en-tête → `NULL`
 3. **Top artistes** : duos → comparer **chiffre pour chiffre**
 4. **Aucun avertissement** : la comparaison Hive ↔ pipes seule détecte
 
@@ -1849,28 +1863,28 @@ Qui décide, dans un cluster, quelle tâche tourne **où et quand** ?
 <div class="card card-blue">
 <div class="card-title">ResourceManager</div>
 
-Le chef d'orchestre : répartit **mémoire** et **cœurs** entre les applications. Un par cluster (UI 8088).
+Le chef d'orchestre : répartit **mémoire** et **cœurs**. Un par cluster (UI 8088).
 
 </div>
 
 <div class="card card-green">
 <div class="card-title">NodeManager</div>
 
-Un **par machine** : rapporte les ressources au RM, lance les **conteneurs**. (UI 8041/8042)
+Un **par machine** : rapporte les ressources au RM, lance les **conteneurs** (8041/8042).
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">ApplicationMaster</div>
 
-Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la **reprise sur erreur**.
+Un **par job** : négocie les conteneurs, coordonne maps et reduces, **reprise sur erreur**.
 
 </div>
 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/yarn-config.png" style="max-width: 70%; max-height: 30vh; height: auto;" />
+<img src="assets/yarn-config.png" style="max-width: 70%; max-height: 22vh; height: auto;" />
 </div>
 
 > Sondage : **RM** pour la ressource, **AM** pour l'exécution — débuggez par l'**AM**.
@@ -1887,8 +1901,8 @@ Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la *
 - **FIFO** : une file unique, ordre d'arrivée — **simple, mais famine** des jobs courts
 
 <div class="flex justify-center" style="gap: 1rem;">
-<img src="assets/scheduler.png" style="max-width: 42%; max-height: 16vh; height: auto;" />
-<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 16vh; height: auto;" />
+<img src="assets/scheduler.png" style="max-width: 42%; max-height: 11vh; height: auto;" />
+<img src="assets/fair-scheduler.jpeg" style="max-width: 42%; max-height: 11vh; height: auto;" />
 </div>
 
 </div>
@@ -1904,8 +1918,8 @@ Un **par job** : négocie les conteneurs, coordonne maps et reduces, gère la *
 
 | Paramètre | Valeur | Sens |
 |---|---|---|
-| `yarn.nodemanager.resource.memory-mb` | 256 | RAM max *par nœud* allouable à YARN |
-| `mapreduce.map.memory.mb` | 192 | mémoire demandée par chaque tâche **map** |
+| `yarn.nodemanager.resource.memory-mb` | 256 | RAM max *par nœud* |
+| `mapreduce.map.memory.mb` | 192 | mémoire par tâche **map** |
 
 Conteneurs **petits — un choix** : un mapper Python tient, mais **modestement**.
 
@@ -1944,7 +1958,7 @@ Conteneurs **petits — un choix** : un mapper Python tient, mais **modestement
 # 💡 Corps de réponse — le trajet des logs
 
 <div class="flex justify-center">
-<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 36vh; height: auto;" />
+<img src="assets/logs-trajet.svg" style="max-width: 92%; max-height: 28vh; height: auto;" />
 </div>
 
 <div class="card card-green">
@@ -2035,8 +2049,8 @@ Est-ce que ça ressemblerait à MySQL ? Comment la requête serait-elle exécut
 <div class="card-title">Un data warehouse SQL au-dessus de Hadoop</div>
 
 - **HiveQL** : un langage proche du SQL pour interroger les fichiers HDFS
-- **Traduction auto** : **6 lignes de SQL = un job MapReduce complet** (mapper + tri + reducer)
-- **Entrepôt (OLAP)** plutôt que base (OLTP) : batch, gros volumes, il ne stocke pas lui-même — les données restent **des fichiers HDFS**
+- **Traduction auto** : **6 lignes de SQL = un job MapReduce complet**
+- **Entrepôt (OLAP), pas base (OLTP)** : batch, gros volumes — il ne stocke rien, les données restent **sur HDFS**
 
 </div>
 
@@ -2055,7 +2069,7 @@ LIMIT 10;
 # 🏗️ Architecture de Hive
 
 <div class="flex justify-center">
-<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 38vh; height: auto;" />
+<img src="assets/hive-architecture.svg" style="max-width: 92%; max-height: 30vh; height: auto;" />
 </div>
 
 - **HiveServer2** : reçoit les requêtes ; client = **Beeline** (la CLI `hive` a disparu)
@@ -2341,7 +2355,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-pink">
 <div class="card-title">Les pièges</div>
 
-1. **`put` répond `0 row(s)`** — c'est aussi ce que HBase répond pour « table créée » : on ne croit pas la réponse, on **vérifie par `get`/`scan`**
+1. **`put` répond `0 row(s)`** : on ne croit pas la réponse, on **vérifie par `get`**
 2. **Le tri est lexicographique** : `99` passerait **après** `100` — comme au TD01 et en MapReduce
 3. **50 lignes attendues** si on recharge les années du TD02 : si 49, un `put` manqué, pas un bug HBase
 
@@ -2349,9 +2363,9 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 </div>
 
-> Le lien avec le TD01 : le `sort` de vos pipes et le `scan` de HBase font **exactement le même travail** — regrouper et trier par clé.
+> Le lien avec le TD01 : `sort` et `scan` font **le même travail** — trier par clé.
 
-<!-- La séquence 06 formalise les familles, le versionnage, les régions, ZooKeeper. L'EX/06 fait écrire en HBase depuis un reducer MapReduce. -->
+<!-- La séquence 06 formalise les familles, le versionnage, les régions, ZooKeeper. L'EX/06 fait écrire en HBase depuis un reducer MapReduce. « 0 row(s) » est aussi la réponse de HBase à « table créée » : ne jamais croire la réponse du shell. -->
 
 ---
 
@@ -2388,8 +2402,8 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card-title">🌇 Après-midi</div>
 
 - **TD-04** — NiFi, premier contact
-- **II. NiFi** — l'usine à flux : le CSV entre tout seul dans HDFS
-- **EX/07** — flux complet CSV→TSV→HDFS + Data Provenance
+- **II. NiFi** — le flux CSV → HDFS
+- **EX/07** — CSV→TSV→HDFS + Provenance
 - **III. La chaîne complète** + **TD-05** — l'ouverture du **TP final**
 
 </div>
@@ -2404,11 +2418,13 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 # 🔁 Retour J3 : le tri et les chiffres de la veille
 
-<div class="card card-yellow">
-<div class="card-title">Hive retrouve MapReduce — mais la leçon du jour est le tri</div>
+<div class="cols-2">
 
-- **EX/05 + TD-02** : les 954/952/953 mesurés à Hive sont les mêmes que les pipes
-- **TD-03** (fait hier) : le `scan` HBase affiche les années **triées** — comme le `sort` du TD01
+<div class="card card-yellow">
+<div class="card-title">Hive retrouve MapReduce — la leçon : le tri</div>
+
+- **EX/05 + TD-02** : les 954/952 mesurés à Hive sont les mêmes que les pipes
+- **TD-03** (fait hier) : le `scan` HBase affiche les années **triées**
 - Le rowkey trie **lexicographiquement** : 1975 avant 2023, comme 100 après 99
 
 </div>
@@ -2416,8 +2432,10 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-green">
 <div class="card-title">À vérifier aujourd'hui</div>
 
-- `put` → pas de confirmation → `get` = la seule preuve — c'est le réflexe HBase
+- `put` → pas de confirmation → `get` = la seule preuve — le réflexe HBase
 - Si une année **manque** dans le `scan`, c'est un `put` oublié, pas un bug HBase
+
+</div>
 
 </div>
 
@@ -2491,9 +2509,9 @@ Comment lire une seule clé très vite dans un cluster ?
 
 | Besoin | Pourquoi Hadoop ne suit pas |
 |---|---|
-| **Écritures aléatoires fréquentes** | le batch n'écrit des fichiers complets |
-| **Lectures aléatoires rapides** | pas d'index, lecture séquentielle |
-| **Réponse en millisecondes** | un job = du MapReduce |
+| **Écritures aléatoires** | batch, fichiers entiers |
+| **Lectures aléatoires** | pas d'index, séquentiel |
+| **Réponse en ms** | un job = MapReduce |
 
 </div>
 
@@ -2598,7 +2616,7 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card-title">Visualiser la compensation</div>
 
 <div class="flex justify-center">
-<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 32vh; height: auto;" />
+<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 24vh; height: auto;" />
 </div>
 
 - La table relationnelle impose **ligne + colonnes fixes** ; HBase tolère des lignes **clairsemées** et des colonnes **personnalisées par ligne**
@@ -2614,8 +2632,8 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card card-blue">
 <div class="card-title">HBase Master (1 actif)</div>
 
-- **Globales** : créer/supprimer les tables et les familles
-- **Assigne les régions** aux RegionServers, équilibre la charge
+- Créer/supprimer **tables et familles**
+- **Assigne les régions**, équilibre la charge
 - ZooKeeper pour la **disponibilité**
 
 </div>
@@ -2631,9 +2649,9 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 </div>
 
 <div class="card card-yellow">
-<div class="card-title">Le client ne passe jamais par le Master</div>
+<div class="card-title">Le Master administre, il ne sert pas les requêtes</div>
 
-Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **directement**. Le Master administre, il ne sert pas les requêtes.
+Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **directement**.
 
 </div>
 
@@ -2642,6 +2660,8 @@ Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **dir
 ---
 
 # 🐝 Le rôle de ZooKeeper
+
+<div class="cols-2">
 
 <div class="card card-pink">
 <div class="card-title">Le coordinateur indispensable</div>
@@ -2662,9 +2682,12 @@ jps | grep Quorum        # → QuorumPeerMain
 ./start-hbase.sh
 ```
 
-> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → lancez toujours **avec `./`**, sinon le shell exécute le script d'HBase du même nom.
+</div>
 
 </div>
+
+> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → lancez toujours **avec `./`**.
+<!-- sinon le shell exécute le script d'HBase du même nom -->
 
 ---
 
@@ -2727,7 +2750,8 @@ ROW       COLUMN+CELL
 <div class="card card-pink">
 <div class="card-title">Conséquence pour le TD-03</div>
 
-> Une rowkey numeric (`100` < `99` en ASCII) peut paraître incohérente : préfixez (pad) vos clés (`0099`, `0100`) quand l'ordre numérique compte. C'est le piège du lexicographique déjà vu au TD01 (pipe `sort`).
+> Une rowkey numeric (`100` < `99` en ASCII) paraît incohérente : préfixez (pad) vos clés (`0099`, `0100`) quand l'ordre numérique compte.
+<!-- Piège du lexicographique déjà vu au TD01 (pipe sort). -->
 
 </div>
 
@@ -2807,8 +2831,8 @@ sales:product       timestamp=…, value=Chairs
 <div class="card card-blue">
 <div class="card-title">Python → HBase, via Thrift (port 9090)</div>
 
-- Seul **Java** accède directement à HBase ; **ThriftServer** fait le pont réseau
-- `happybase` est **déjà installé** (1.3.0) — le ThriftServer doit juste tourner :
+- **Java** seul parle HBase ; Thrift fait le pont
+- `happybase` est **déjà installé** (1.3.0) :
 
 ```bash
 ./start-zookeeper.sh
@@ -2835,7 +2859,7 @@ conn.close()
 
 </div>
 
-> Depuis la machine hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
+> Depuis l'hôte (hors conteneur), remplacez `127.0.0.1` par l'adresse qui héberge Docker.
 
 ---
 
@@ -2866,7 +2890,13 @@ conn.close()
 2. `https://localhost:8443/nifi` → certificat auto-signé → login (`etudiant` / `etudiant`)
 3. Déposez un petit `test.csv` (3 lignes) dans `nifi/input/` (sur la machine hôte)
 4. **GetFile** : `/opt/nifi/input`, `File Filter = .*\.csv`, auto-terminate **success** → démarrer → compteur **out** = 1 → le fichier **disparaît**
-5. **Data Provenance** : `RECEIVE`, horodaté — c'est la trace du premier passage
+
+---
+
+# 🏋️ TD-04 — suite : la preuve par Data Provenance
+
+**La trace de chaque fichier qui passe — c'est là que NiFi se justifie.**
+
 6. Ajoutez **PutFile** : `/opt/nifi/output`, `Conflict Resolution = replace`, auto-terminate **success** et **failure** → relancez → le fichier **apparaît** dans `nifi/output/`
 7. **Data Provenance** : 2 événements — `RECEIVE` + écriture — la traînée complète
 
@@ -2955,14 +2985,7 @@ C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers**, la
   - **Guaranteed delivery** — un événement entré est acké de bout en bout
   - **Back pressure** — un maillon qui ralentit met le flux en pression, il ne déborde pas
   - **Data Provenance** — historique complet et requêtable de chaque événement
-
-</div>
-
-<div class="card card-yellow">
-<div class="card-title">Usages types</div>
-
-Logs · ingestion fichiers → datalake (**notre cas**) · ETL léger · IoT (MiNiFi)
-
+- **Usages types** : logs · ingestion → datalake (**notre cas**) · ETL léger · IoT
 </div>
 
 ---
@@ -2983,8 +3006,8 @@ Logs · ingestion fichiers → datalake (**notre cas**) · ETL léger · IoT (Mi
 <div class="card card-green">
 <div class="card-title">2. Le processeur = la brique</div>
 
-- **Source** (`GetFile`) · **Transfo** (`ConvertRecord`) · **Routage** (`RouteOnAttribute`) · **Destination** (`PutFile`)
-- Émet vers des **relationships** : `success` / `failure` — **non câblée = donnée perdue**
+- **Source** (`GetFile`) · **Transfo** (`ConvertRecord`) · **Routage** · **Destination** (`PutFile`)
+- `success` / `failure` : **non câblée = perdue**
 
 </div>
 
@@ -3044,7 +3067,8 @@ GetFile ──success──► ConvertRecord ──success──► PutFile
 </div>
 
 </div>
-
+> ⚠️ **2.x impose HTTPS** (autosigné) + login : couple dans `nifi/credentials.env`.
+<!-- Sinon : docker logs hadoop-nifi. Mot de passe < 12 caractères = rejet silencieux. -->
 > ⚠️ **2.x impose HTTPS** (autosigné) puis un login. Couple dans `nifi/credentials.env` (ou `docker logs hadoop-nifi`). Mot de passe < **12 caractères** = rejet silencieux.
 
 ---
@@ -3272,9 +3296,10 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-pink">
 <div class="card-title">Les pièges à rapporter à demain</div>
-
+1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer
 1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer (et une ligne de plus sur le fichier complet)
-2. **Ligne 576** : inexistante ici, mais le réflexe « protège `int()` » reste
+3. Le mini-jeu est un **échantillon local**
+<!-- Deux détails à garder en tête : la casse ajoute une ligne sur le fichier complet ; et le fichier complet change de tête par rapport au mini-jeu. -->
 3. Le mini-jeu est un **échantillon local** : le fichier complet change de tête
 
 </div>
@@ -3289,7 +3314,8 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-blue">
 <div class="card-title">Ce que vous savez faire, en une slide</div>
-
+- ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions
+<!-- Aussi dans la récap : ZooKeeper d'abord ; `put` ne confirme rien, vérifiez par `get`. -->
 - ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions (1 Go vs 128 Mio), ZooKeeper d'abord, `put` ne confirme rien — vérifiez par `get`
 - ✅ **NiFi** : FlowFile/processeur/connection, failure câblée, Data Provenance
 - ✅ **La chaîne** : NiFi → HDFS → MapReduce/Hive → HBase, **la même donnée** partout
@@ -3298,7 +3324,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-pink">
 <div class="card-title">⚡ Le fil d'Ariane</div>
-
+Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
 Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé à la main, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
 
 </div>

@@ -60,7 +60,7 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 
 - **III. HDFS** — blocs, réplication, commandes
 - **EX/02** — lancer le cluster
-- **EX/03** — HDFS
+- **Exercice 03** — HDFS (dans le chapitre)
 - **TD-01** — MapReduce en local, avant le cluster (premier temps en autonomie)
 
 </div>
@@ -138,7 +138,7 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 <div class="card-title">Un fil rouge, quatre jours</div>
 
 - Une **donnée réelle et modeste** pour éprouver toute la pipeline
-- Elle arrivera en **EX/03** et circulera dans les EX 04 à 07 — le **TP final** de vendredi enchaînera la même chaîne sur un autre jeu (les ventes `dataw_fro03`)
+- Elle arrivera à l'**Exercice 03** et circulera dans les EX 04 à 07 — le **TP final** de vendredi enchaînera la même chaîne sur un autre jeu (les ventes `dataw_fro03`)
 - Objectif d'ici vendredi : la faire traverser **HDFS → MapReduce → Hive → HBase → NiFi**
 
 </div>
@@ -709,7 +709,7 @@ Comment le stocker ? Et comment savoir, à tout moment, où se trouve chaque mo
 # 🎯 Objectifs du chapitre
 
 <div class="card card-blue">
-<div class="card-title">À la fin de ce chapitre + EX/03, vous saurez…</div>
+<div class="card-title">À la fin de ce chapitre + son exercice, vous saurez…</div>
 
 - ✅ Expliquer pourquoi HDFS et comment il stocke (blocs, réplication)
 - ✅ Décrire l'architecture NameNode / DataNode / Secondary NameNode
@@ -787,7 +787,7 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 
 </div>
 
-> 📌 On verra à l'EX/03/`fsck` : la réplication se lit dans le listing HDFS (**le `1` après les droits**).
+> 📌 On verra à l'exercice (`fsck`) : la réplication se lit dans le listing HDFS (**le `1` après les droits**).
 
 ---
 
@@ -855,6 +855,22 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 ---
 
+# ⌨️ Les commandes HDFS
+
+| Commande | Rôle |
+|---|---|
+| `hdfs dfs -ls <dir>` | lister un répertoire |
+| `hdfs dfs -mkdir -p <dir>` | créer un répertoire (parents inclus) |
+| `hdfs dfs -put <src> <dest>` | déposer un fichier local sur HDFS |
+| `hdfs dfs -cat <fichier>` | afficher le contenu |
+| `hdfs dfs -get <hdfs> <local>` | récupérer depuis HDFS |
+| `hdfs dfs -rm -r <dir>` | supprimer (récursif) |
+
+> **2 syntaxes équivalentes** : `hadoop fs` ou `hdfs dfs` — comme le shell Linux.
+> ⚠️ **`-tail`** = 1024 **octets**, pas des lignes. Les N dernières : `hdfs dfs -cat … | tail -N`. ✅ Son usage légitime : **surveiller un fichier qui grossit**.
+
+---
+
 # 🧠 NameNode — l'annuaire
 
 <div class="card card-blue">
@@ -902,6 +918,20 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 ---
 
+# 🚨 Ne jamais relancer le format
+
+<div class="card card-red">
+<div class="card-title">`hdfs namenode -format` initialise, elle ne répare pas</div>
+
+- Elle **initialise le namespace** du NameNode : ce n'est pas un réglage que l'on relance
+- Relancée sur un cluster vivant : le namespace est **effacé**, le `clusterID` des DataNodes se désaligne → **données détruites**
+- Sur le cluster du cours le formatage est **déjà fait** : on repart par `./start-dfs.sh`, puis `jps`, le safe mode, les logs
+
+</div>
+
+> Question 7 de « Vérifiez vos acquis » : un collègue propose de re-formater « pour repartir proprement ». Que répondez-vous ?
+---
+
 # 🛠️ DataNode — les ouvriers
 
 <div class="card card-green">
@@ -927,22 +957,6 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
   <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 40vh; height: auto;" />
   <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
 </figure>
-
----
-
-# ⌨️ Les commandes HDFS
-
-| Commande | Rôle |
-|---|---|
-| `hdfs dfs -ls <dir>` | lister un répertoire |
-| `hdfs dfs -mkdir -p <dir>` | créer un répertoire (parents inclus) |
-| `hdfs dfs -put <src> <dest>` | déposer un fichier local sur HDFS |
-| `hdfs dfs -cat <fichier>` | afficher le contenu |
-| `hdfs dfs -get <hdfs> <local>` | récupérer depuis HDFS |
-| `hdfs dfs -rm -r <dir>` | supprimer (récursif) |
-
-> **2 syntaxes équivalentes** : `hadoop fs` ou `hdfs dfs` — comme le shell Linux.
-> ⚠️ **`-tail`** = 1024 **octets**, pas des lignes. Les N dernières : `hdfs dfs -cat … | tail -N`.
 
 ---
 
@@ -3212,7 +3226,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 > **Chaque commande du TP a déjà été faite dans un EX.** En cas de doute, le lien vers l'exercice d'origine est donné dans l'énoncé.
 
-- **II. HDFS** → EX/03 · **III-IV. MapReduce** → EX/04 · **V. Hive** → EX/05 + TD-02 · **VI. HBase** → EX/06 + TD-03 · **VII. NiFi** → EX/07 + TD-04 · **VIII. visu** → EX/06 IV · **chaîne** → TD-05
+- **II. HDFS** → Exercice 03 · **III-IV. MapReduce** → EX/04 · **V. Hive** → EX/05 + TD-02 · **VI. HBase** → EX/06 + TD-03 · **VII. NiFi** → EX/07 + TD-04 · **VIII. visu** → EX/06 IV · **chaîne** → TD-05
 
 </div>
 

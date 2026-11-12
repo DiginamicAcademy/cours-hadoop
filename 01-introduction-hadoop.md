@@ -73,7 +73,7 @@ Selon les besoins, Hadoop peut s’appuyer sur :
 
 L’ensemble de ces nœuds constitue le **socle de l’architecture distribuée d’Hadoop**, permettant de répartir le stockage et le calcul sur plusieurs machines afin de traiter efficacement de très grands volumes de données.
 
-![hadoop nodes](assets/namenode_datanode.png)
+![Le NameNode tient les métadonnées, les DataNodes portent les blocs](assets/hadoop-noeuds.svg)
 
 * **MasterNode** : nœud central chargé de la **coordination globale du cluster**, notamment la gestion du système de fichiers et l’orchestration des traitements.
 * **NameNode** : service exécuté sur le MasterNode, responsable de la **gestion des métadonnées HDFS** (emplacement des fichiers, découpage en blocs, réplication).

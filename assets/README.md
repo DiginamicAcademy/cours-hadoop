@@ -20,68 +20,65 @@ Captures et schémas du cours, et où ils servent :
 | `70percent.png` | `01-introduction-hadoop.md`, `slides.md` |
 | `8088.jpeg` | `02-presentation-env-hadoop.md`, `exercices/02-lancement-de-hadoop.md`, `slides.md` |
 | `9870.jpeg` | `02-presentation-env-hadoop.md`, `exercices/02-lancement-de-hadoop.md`, `slides.md` |
-| `block-size.jpeg` | `slides.md` |
-| `blocks.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `chain-complete.svg` | `07-nifi.md`, `slides.md` |
 | `cluster-docker.svg` | `02-presentation-env-hadoop.md`, `07-nifi.md`, `slides.md` |
 | `cluster.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
-| `create_vm.png` | orphelin (hygiène §5 du plan de refonte) |
-| `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
-| `dn-name-node.png` | orphelin (hygiène §5 du plan de refonte) |
-| `dn.jpeg` | orphelin (hygiène §5 du plan de refonte) |
+| `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `ecosystem-hadoop.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
-| `endpoints.png` | orphelin (hygiène §5 du plan de refonte) |
-| `fair-scheduler.jpeg` | `04-mapreduce-et-yarn.md`, `slides.md` |
-| `fsimages-edit.jpeg` | orphelin (remplacé par `hdfs-checkpoint.svg` dans le chap. 03) |
-| `hadoop-logo.png` | orphelin (hygiène §5 du plan de refonte) |
-| `hadoop-webviews.png` | orphelin (hygiène §5 du plan de refonte) |
-| `hadoop.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `03-hdfs.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
+| `fair-scheduler.jpeg` | `slides.md` |
+| `hadoop-noeuds.svg` | `01-introduction-hadoop.md`, `slides.md` |
+| `hadoop.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `happybase.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `hbase-cluster.jpeg` | `06-hbase-et-zookeeper.md` |
-| `hbase-list.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hbase-rdbms-compare.jpeg` | `06-hbase-et-zookeeper.md`, `slides.md` |
 | `hbase-row-compo.jpeg` | `06-hbase-et-zookeeper.md` |
 | `hbase-schema-stockage.png` | `06-hbase-et-zookeeper.md`, `slides.md` |
 | `hbase-shared-explain.jpeg` | `06-hbase-et-zookeeper.md` |
 | `hbase-shell.png` | `06-hbase-et-zookeeper.md`, `exercices/06-hbase.md` |
 | `hbase-table-model.jpeg` | `06-hbase-et-zookeeper.md`, `slides.md` |
-| `hbase-table.png` | orphelin (hygiène §5 du plan de refonte) |
 | `hbase.jpeg` | `exercices/06-hbase.md`, `td/TD03.md` |
 | `hdfs-architecture.svg` | `03-hdfs.md` |
 | `hdfs-checkpoint.svg` | `03-hdfs.md`, `slides.md` |
 | `hdfs-lecture-ecriture.svg` | `03-hdfs.md`, `slides.md` |
-| `hdfs-principe.svg` | `03-hdfs.md` |
-| `hidora.png` | orphelin (hygiène §5 du plan de refonte) |
+| `hdfs-principe.svg` | `03-hdfs.md`, `slides.md` |
 | `hive-architecture.svg` | `05-hive.md`, `slides.md` |
 | `logs-trajet.svg` | `slides.md` |
-| `managing-failures.jpeg` | orphelin (hygiène §5 du plan de refonte) |
-| `mapper.png` | orphelin (hygiène §5 du plan de refonte) |
 | `mapreduce-pipeline.svg` | `04-mapreduce-et-yarn.md`, `slides.md` |
 | `mapreduce_sort.png` | `04-mapreduce-et-yarn.md`, `exercices/04-mapreduce.md` |
 | `mapreduce_unsort.png` | `04-mapreduce-et-yarn.md` |
-| `marketplace.png` | orphelin (hygiène §5 du plan de refonte) |
 | `mr-process.jpeg` | `04-mapreduce-et-yarn.md`, `exercices/04-mapreduce.md` |
-| `mr-response.png` | `04-mapreduce-et-yarn.md` |
 | `mr-stats.jpeg` | `04-mapreduce-et-yarn.md`, `exercices/04-mapreduce.md` |
 | `mr-word-count-2.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
-| `mr-word-count.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `mr.png` | `04-mapreduce-et-yarn.md` |
-| `namenode_datanode.png` | `01-introduction-hadoop.md`, `slides.md` |
 | `nifi-flux-ex07.svg` | `07-nifi.md` |
 | `nifi-relationships.svg` | `07-nifi.md` |
-| `overview.png` | orphelin (hygiène §5 du plan de refonte) |
-| `ressourcemanger.jpeg` | `04-mapreduce-et-yarn.md` |
-| `scheduler.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
-| `scheduling-policies.jpeg` | `04-mapreduce-et-yarn.md` |
+| `politiques-ordonnancement.svg` | `04-mapreduce-et-yarn.md` |
+| `resourcemanger.jpeg` | `04-mapreduce-et-yarn.md` |
+| `scheduler.png` | `slides.md` |
 | `script-happybase-1.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `script-happybase-2.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `skills.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `sps.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
-| `start-hadoop.jpeg` | orphelin (hygiène §5 du plan de refonte) |
 | `start-thrift.png` | `06-hbase-et-zookeeper.md` |
 | `tail.jpeg` | `03-hdfs.md` |
-| `working-hdfs.jpeg` | `slides.md` |
+| `taille-bloc.svg` | `slides.md` |
 | `yarn-config.png` | `04-mapreduce-et-yarn.md`, `slides.md` |
+
+Les schémas en SVG sont dessinés à la maison, sur le cluster du cours et dans sa
+langue : `hdfs-principe`, `hdfs-architecture`, `hdfs-checkpoint`,
+`hdfs-lecture-ecriture`, `cluster-docker`, `mapreduce-pipeline`, `logs-trajet`,
+`hive-architecture`, `nifi-relationships`, `nifi-flux-ex07`, `chain-complete`,
+`hadoop-noeuds`, `taille-bloc`, `politiques-ordonnancement`. Les captures
+d'écran (`9870`, `8088`, `tail`, `yarn-config`, `hbase-shell`, `start-thrift`,
+`script-happybase-*`) gardent leur nature : elles prouvent un état réel.
+
+Vingt-deux visuels ont été retirés le 12/11/2026. Dix-huit n'étaient référencés
+par aucun document — figures héritées des versions d'avant, dont
+`fsimages-edit.jpeg` et `mr-word-count.jpeg`, depuis remplacées par des SVG
+maison. Quatre autres ont été remplacés par un schéma dessiné ici :
+`namenode_datanode.png` → `hadoop-noeuds.svg`, `block-size.jpeg` →
+`taille-bloc.svg`, `scheduling-policies.jpeg` → `politiques-ordonnancement.svg`,
+et `working-hdfs.jpeg`, dont le contenu faisait doublon avec `hdfs-principe.svg`.
 
 Les deux logos sont des copies du dépôt
 [PublicAssets](https://github.com/DiginamicInternal/PublicAssets). Le texte de

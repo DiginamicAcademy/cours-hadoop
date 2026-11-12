@@ -208,7 +208,7 @@ YARN propose plusieurs politiques d'allocation. Elles ne changent pas le résult
 
 **Capacity Scheduler est le défaut** dans Hadoop 3. La stratégie se configure dans `etc/hadoop/yarn-site.xml`, propriété `yarn.resourcemanager.scheduler.class`.
 
-![Scheduling policies](assets/scheduling-policies.jpeg)
+![Les trois politiques d'allocation YARN — FIFO, Capacity, Fair](assets/politiques-ordonnancement.svg)
 
 > **Scénario concret.** Trois jobs arrivent en même temps. En FIFO, le troisième attend que les deux premiers aient fini. En Capacity, chaque file avance selon sa capacité garantie. En Fair, les trois se partagent les ressources disponibles. Sur un cluster de cours à trois nœuds, l'effet est modeste — mais il explique pourquoi un job peut rester `ACCEPTED` alors que le cluster semble libre.
 

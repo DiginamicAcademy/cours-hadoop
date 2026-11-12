@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="Segoe UI, system-ui, Arial, sans-serif">
+  <defs>
+    <marker id="hn-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="32" text-anchor="middle" font-size="18" font-weight="600" fill="#0f172a">Le NameNode sait où est tout ; les DataNodes portent les octets</text>
+
+  <!-- Nœud maître -->
+  <rect x="330" y="58" width="300" height="128" rx="12" fill="#f8fafc" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="350" y="82" font-size="14" font-weight="600" fill="#0c4a6e">Nœud maître — master</text>
+  <rect x="352" y="94" width="120" height="42" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="412" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">NameNode</text>
+  <text x="412" y="128" text-anchor="middle" font-size="11" fill="#1e40af">métadonnées</text>
+  <text x="486" y="112" font-size="11" fill="#334155">arborescence + carte</text>
+  <text x="486" y="128" font-size="11" fill="#334155">« bloc → nœud »</text>
+  <text x="350" y="160" font-size="11" fill="#475569">tout en mémoire : ≈ 150 o par objet</text>
+
+  <!-- Liaisons -->
+  <g stroke="#334155" stroke-width="2" fill="none">
+    <line x1="400" y1="186" x2="190" y2="232" marker-end="url(#hn-arr)"/>
+    <line x1="480" y1="186" x2="480" y2="232" marker-end="url(#hn-arr)"/>
+    <line x1="560" y1="186" x2="770" y2="232" marker-end="url(#hn-arr)"/>
+  </g>
+  <text x="492" y="214" font-size="11" fill="#475569">adresse des blocs ↓ · heartbeat et rapport des blocs ↑</text>
+
+  <!-- Nœuds esclaves -->
+  <g>
+    <rect x="60" y="238" width="260" height="104" rx="12" fill="#f8fafc" stroke="#16a34a" stroke-width="2"/>
+    <text x="80" y="262" font-size="14" font-weight="600" fill="#14532d">Nœud esclave — slave1</text>
+    <rect x="80" y="274" width="110" height="42" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="135" y="292" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">DataNode</text>
+    <text x="135" y="308" text-anchor="middle" font-size="11" fill="#166534">blocs</text>
+    <text x="204" y="292" font-size="11" fill="#334155">disque local</text>
+    <text x="204" y="308" font-size="11" fill="#334155">+ calcul (conteneurs)</text>
+  </g>
+
+  <g>
+    <rect x="350" y="238" width="260" height="104" rx="12" fill="#f8fafc" stroke="#16a34a" stroke-width="2"/>
+    <text x="370" y="262" font-size="14" font-weight="600" fill="#14532d">Nœud esclave — slave2</text>
+    <rect x="370" y="274" width="110" height="42" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="425" y="292" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">DataNode</text>
+    <text x="425" y="308" text-anchor="middle" font-size="11" fill="#166534">blocs</text>
+    <text x="494" y="292" font-size="11" fill="#334155">disque local</text>
+    <text x="494" y="308" font-size="11" fill="#334155">+ calcul (conteneurs)</text>
+  </g>
+
+  <g>
+    <rect x="640" y="238" width="260" height="104" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="660" y="262" font-size="14" font-weight="600" fill="#475569">Nœud esclave — slave3</text>
+    <rect x="660" y="274" width="110" height="42" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="715" y="292" text-anchor="middle" font-size="13" font-weight="600" fill="#475569">DataNode</text>
+    <text x="715" y="308" text-anchor="middle" font-size="11" fill="#64748b">blocs</text>
+    <text x="784" y="292" font-size="11" fill="#64748b">le cluster grandit</text>
+    <text x="784" y="308" font-size="11" fill="#64748b">nœud par nœud</text>
+  </g>
+
+  <line x1="60" y1="360" x2="900" y2="360" stroke="#cbd5e1" stroke-width="1"/>
+
+  <rect x="60" y="376" width="250" height="76" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="76" y="398" font-size="13" font-weight="600" fill="#0f172a">Le maître ne transporte rien</text>
+  <text x="76" y="418" font-size="12" fill="#334155">Il donne des adresses. Les</text>
+  <text x="76" y="433" font-size="12" fill="#334155">octets vont du client au</text>
+  <text x="76" y="448" font-size="12" fill="#334155">DataNode, sans le traverser.</text>
+
+  <rect x="330" y="376" width="270" height="76" rx="10" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.2"/>
+  <text x="346" y="398" font-size="13" font-weight="600" fill="#1e3a8a">Cluster du cours</text>
+  <text x="346" y="418" font-size="12" fill="#1e40af">1 master + 2 slaves, en conteneurs</text>
+  <text x="346" y="433" font-size="12" fill="#1e40af">Docker : le troisième cadre est</text>
+  <text x="346" y="448" font-size="12" fill="#1e40af">pointillé parce qu'il n'existe pas ici.</text>
+
+  <rect x="620" y="376" width="300" height="76" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.2"/>
+  <text x="636" y="398" font-size="13" font-weight="600" fill="#991b1b">Point unique de défaillance</text>
+  <text x="636" y="418" font-size="12" fill="#7f1d1d">NameNode tombé, personne ne sait</text>
+  <text x="636" y="433" font-size="12" fill="#7f1d1d">plus où sont les blocs. La haute</text>
+  <text x="636" y="448" font-size="12" fill="#7f1d1d">disponibilité est hors périmètre.</text>
+</svg>

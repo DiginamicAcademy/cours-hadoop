@@ -2974,6 +2974,7 @@ C'est la **porte d'entrée** de toute plateforme data. Pour les **fichiers**, la
   - **Back pressure** — un maillon qui ralentit met le flux en pression, il ne déborde pas
   - **Data Provenance** — historique complet et requêtable de chaque événement
 - **Usages types** : logs · ingestion → datalake (**notre cas**) · ETL léger · IoT
+</div>
 
 ---
 
@@ -3054,7 +3055,8 @@ GetFile ──success──► ConvertRecord ──success──► PutFile
 </div>
 
 </div>
-
+> ⚠️ **2.x impose HTTPS** (autosigné) + login : couple dans `nifi/credentials.env`.
+<!-- Sinon : docker logs hadoop-nifi. Mot de passe < 12 caractères = rejet silencieux. -->
 > ⚠️ **2.x impose HTTPS** (autosigné) puis un login. Couple dans `nifi/credentials.env` (ou `docker logs hadoop-nifi`). Mot de passe < **12 caractères** = rejet silencieux.
 
 ---
@@ -3282,9 +3284,10 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-pink">
 <div class="card-title">Les pièges à rapporter à demain</div>
-
+1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer
 1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer (et une ligne de plus sur le fichier complet)
-2. **Ligne 576** : inexistante ici, mais le réflexe « protège `int()` » reste
+3. Le mini-jeu est un **échantillon local**
+<!-- Deux détails à garder en tête : la casse ajoute une ligne sur le fichier complet ; et le fichier complet change de tête par rapport au mini-jeu. -->
 3. Le mini-jeu est un **échantillon local** : le fichier complet change de tête
 
 </div>
@@ -3299,7 +3302,8 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-blue">
 <div class="card-title">Ce que vous savez faire, en une slide</div>
-
+- ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions
+<!-- Aussi dans la récap : ZooKeeper d'abord ; `put` ne confirme rien, vérifiez par `get`. -->
 - ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions (1 Go vs 128 Mio), ZooKeeper d'abord, `put` ne confirme rien — vérifiez par `get`
 - ✅ **NiFi** : FlowFile/processeur/connection, failure câblée, Data Provenance
 - ✅ **La chaîne** : NiFi → HDFS → MapReduce/Hive → HBase, **la même donnée** partout
@@ -3308,7 +3312,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-pink">
 <div class="card-title">⚡ Le fil d'Ariane</div>
-
+Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
 Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé à la main, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
 
 </div>

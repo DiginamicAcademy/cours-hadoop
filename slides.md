@@ -61,16 +61,13 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 - **III. HDFS** — blocs, réplication, commandes
 - **EX/02** — lancer le cluster
 - **EX/03** — HDFS
-- **TD-01** — premier contact MapReduce : le debug local avant le cluster (premier temps en autonomie)
+- **TD-01** — MapReduce en local, avant le cluster (premier temps en autonomie)
 
 </div>
 
 </div>
 
-<br>
-
-  <div class="tip-label">Objectif du jour</div>
-  Comprendre d'où vient Hadoop, démarrer son cluster et poser les premières données dans HDFS
+**Objectif du jour** — comprendre d'où vient Hadoop, démarrer son cluster et poser les premières données dans HDFS.
 
 <!-- Accueillir le groupe, présenter le déroulé et le fil rouge de la semaine (le CSV Spotify + le TP final). Annoncer le ratio cours/exercices. -->
 
@@ -173,13 +170,14 @@ Qu'est-ce qui pousse une entreprise web à concevoir son **propre système de fi
 <div class="card card-green">
 <div class="card-title">Google ne pouvait pas tout mettre sur un disque</div>
 
-- Le web crawlé, ce sont des **centaines de To** à stocker et à indexer : aucun **disque unique** ne suit, et la machine « toujours plus grosse » (**upsizing**) coûte de plus en plus cher
+- Le web crawlé : des **centaines de To**, aucun **disque unique** ne suit
+- La machine « toujours plus grosse » (**upsizing**) coûte de plus en plus cher
 - La parade : des **milliers de machines standard** qui partagent le stockage — le **scale-out**
-- À cette échelle, la **panne d'un disque est la norme**, pas l'exception : le **Google File System** (2003) **réplique** les blocs et **agrège** la bande passante de toutes les machines
+- La **panne d'un disque est la norme** : le **Google File System** (2003) **réplique** les blocs et **agrège** la bande passante
 
 </div>
 
-> C'est exactement le scénario que Hadoop généralisera quelques années plus tard : stocker de façon sûre sur du matériel bon marché, et traiter **là où sont les données**.
+> Ce scénario, Hadoop le généralisera : stocker de façon sûre sur du matériel bon marché, et traiter **là où sont les données**.
 
 ---
 
@@ -306,7 +304,7 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧩 L'écosystème Hadoop
 
 <div class="flex justify-center">
-<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 38vh; height: auto;" />
+<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 30vh; height: auto;" />
 </div>
 
 <div class="card card-blue">
@@ -323,7 +321,7 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-pink">
 <div class="card-title">Retirés du périmètre (plus maintenus)</div>
 
-- **Sqoop** (HDFS ↔ bases relationnelles) : à l'Attic d'Apache depuis 2021 → **Spark JDBC / Kafka Connect**
+- **Sqoop** (vers les bases SQL) : à l'Attic depuis 2021 → **Spark JDBC, Kafka Connect**
 - **Oozie** (ordonnanceur) : en maintenance depuis 2018 → **Airflow / Dagster / Prefect**
 - **Pig** (flux SQL-like) : supplanté par Spark et Hive
 
@@ -332,12 +330,12 @@ Selon les besoins, Hadoop s'appuie sur :
 <div class="card card-green">
 <div class="card-title">Toujours actifs — et couverts par le cours</div>
 
-- **Hive (4.x)** : évolue vers le **lakehouse** (Apache Iceberg) — toujours massivement déployé
+- **Hive (4.x)** : évolue vers le **lakehouse** (Iceberg), toujours très déployé
 - **NiFi** : la référence de l'ingestion visuelle multi-sources
 
 </div>
 
-> Comprendre Hadoop, c'est comprendre le **pourquoi** de tout ce qui l'a remplacé (Spark s'exécute sur YARN, les concepts de shuffle se retrouvent partout).
+> Les concepts survivent : Spark s'exécute sur YARN, le shuffle est partout.
 
 ---
 
@@ -472,7 +470,7 @@ Une machine unique ? Plusieurs machines virtuelles ? Docker ? Et pourquoi ?
 <div class="card card-pink">
 <div class="card-title">1 machine unique</div>
 
-Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** — et ne reproduit ni les pannes, ni le réseau, ni la coordination du réel.
+Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seule n'a **rien à distribuer** : ni pannes, ni réseau, ni coordination du réel.
 
 </div>
 
@@ -486,7 +484,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 <div class="card card-green">
 <div class="card-title">Docker ✅</div>
 
-4 **conteneurs légers** qui partagent le kernel de l'hôte : 1 master + 3 esclaves, reproductibles, démarrés en quelques secondes. Un **vrai cluster**, à l'échelle d'un portable.
+4 **conteneurs légers** qui partagent le kernel de l'hôte : 1 master + 3 esclaves, reproductibles, démarrés en quelques secondes.
 
 </div>
 
@@ -554,6 +552,8 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 # 🖥️ Les scripts : deux familles
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">Sur la machine hôte (Docker)</div>
 
@@ -578,6 +578,7 @@ Hadoop est un système **distribué** (NameNode, DataNodes…). Une machine seul
 
 </div>
 
+</div>
 ---
 
 # 🔍 `jps` : vérifier ce qui tourne

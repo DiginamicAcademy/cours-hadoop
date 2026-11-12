@@ -1010,12 +1010,12 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 **~30 min guidées — créez les deux squelettes, lancez les trois variants de pipe.**
 
-1. Écrire `mapper.py` (découpe les mots, émet `mot\t1`) et `reducer.py` (additionne les clés **regroupées**)
+1. Écrire `mapper.py` (émets `mot\t1`) et `reducer.py` (additionne les clés **regroupées**)
 2. `echo "bonjour bonsoir bonjour bonsoir" | python3 mapper.py` — une paire par mot
 3. `… | mapper.py | reducer.py` **sans tri** — sort **comme le mapper** : clés non regroupées, comptage faux
 4. `… | mapper.py | sort | reducer.py` — le `sort` **simule le shuffle** : `bonjour\t2, bonsoir\t2`
 
-> ⚠️ **La règle sonnante** : si ça marche avec `| sort |` en local, ça marchera sur le cluster. Un pipe sans tri cache un shuffle maladroit.
+> ⚠️ **Règle sonnante** : `| sort |` OK en local ⇒ job OK sur le cluster.
 > Windows : `python`, pas `python3` — `echo` ajoute des guillemets, préférez `type`.
 
 <!-- Tempo A guidé : on bloque jusqu'à ce que chaque finisher valide le variant 3. Les tempos B (questions) et Pour aller plus loin (CSV Spotify) partent ensuite en autonomie. Circuler. -->
@@ -1041,18 +1041,18 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card card-pink">
 <div class="card-title">Le variant 3 = la simulation du shuffle</div>
 
-- `sort` → regroupe les clés → le reducer additionne : `bonjour\t2, bonsoir\t2`
+- `sort` regroupe, le reducer additionne : `bonjour\t2, bonsoir\t2`
 - Sur le cluster, c'est Hadoop (shuffle + sort) qui fait exactement ça
 - **Règle** : `| sort |` OK en local ⇒ job OK sur le cluster
-- Question B : le reducer doit voir **chaque clé en un seul bloc** — jamais le contraire
+- Question B : **une clé, un seul bloc**
 
 </div>
 
 </div>
 
-> **Pour aller plus loin** : mapper Spotify (`released_year` col. 3, `streams` col. 8) — écarter l'**en-tête** par la valeur (`row[0] == 'track_name'`), protéger la **ligne 576**. Le debug local fait voir la panne **avant** le cluster : 50 années, total 489 458 828 542.
+> **Pour aller plus loin** : mapper Spotify (`released_year` col. 3, `streams` col. 8) — écarter l'**en-tête** par la valeur (`row[0] == 'track_name'`), protéger la **ligne 576**.
 
-<!-- Correction tempo B (variant 2 = clés non regroupées) et Pour aller plus loin (ligne 576 + en-tête). Le même geste se revoit au TD-02 (Hive), où la même requête passe en SQL. -->
+<!-- Correction tempo B (variant 2 = clés non regroupées) et Pour aller plus loin (ligne 576 + en-tête). Le même geste se revoit au TD-02 (Hive), où la même requête passe en SQL. Attendus du variant Spotify : 50 années, total 489 458 828 542. -->
 
 ---
 
@@ -1253,7 +1253,7 @@ Hadoop = l'**implémentation libre** du modèle (MapReduce 1.0) exécutée par *
 # 🎢 La pipeline complète
 
 <div class="flex justify-center">
-<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 40vh; height: auto;" />
+<img src="assets/mapreduce-pipeline.svg" style="max-width: 95%; max-height: 32vh; height: auto;" />
 </div>
 
 > Chaque étape est orchestrée par **YARN** sur l'un des nœuds du cluster.

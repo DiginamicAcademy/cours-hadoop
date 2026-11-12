@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="Segoe UI, system-ui, Arial, sans-serif">
+  <defs>
+    <marker id="le-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="le-arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#0284c7"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="28" text-anchor="middle" font-size="18" font-weight="600" fill="#0f172a">Le NameNode indique, les DataNodes transportent</text>
+  <text x="480" y="50" text-anchor="middle" font-size="12" fill="#475569">cluster du cours — réplication 1, deux DataNodes</text>
+
+  <!-- ECRIRE -->
+  <text x="60" y="84" font-size="13" font-weight="600" fill="#0f172a">ÉCRIRE — hdfs dfs -put</text>
+
+  <rect x="60" y="94" width="150" height="66" rx="10" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="135" y="120" text-anchor="middle" font-size="14" font-weight="600" fill="#0f172a">Client</text>
+  <text x="135" y="138" text-anchor="middle" font-size="10" fill="#475569">votre shell</text>
+
+  <rect x="400" y="94" width="190" height="66" rx="10" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+  <text x="495" y="120" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a8a">NameNode</text>
+  <text x="495" y="138" text-anchor="middle" font-size="10" fill="#1e40af">9870 · l'annuaire</text>
+
+  <rect x="720" y="94" width="180" height="66" rx="10" fill="#f8fafc" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="810" y="120" text-anchor="middle" font-size="13" font-weight="600" fill="#0c4a6e">DataNode — slave1</text>
+  <text x="810" y="138" text-anchor="middle" font-size="10" fill="#0369a1">écrit le bloc sur disque</text>
+
+  <line x1="210" y1="110" x2="396" y2="110" stroke="#334155" stroke-width="1.8" marker-end="url(#le-arr)"/>
+  <text x="303" y="102" text-anchor="middle" font-size="11" fill="#475569">1. où écrire ?</text>
+
+  <line x1="398" y1="136" x2="214" y2="136" stroke="#334155" stroke-width="1.8" marker-end="url(#le-arr)"/>
+  <text x="303" y="155" text-anchor="middle" font-size="11" fill="#475569">2. « écris chez slave1 »</text>
+
+  <path d="M135 160 L135 198 L802 198 L802 166" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#le-arr-b)"/>
+  <text x="470" y="188" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">3. le client écrit le bloc directement — les octets ne passent pas par le NameNode</text>
+
+  <!-- LIRE -->
+  <text x="60" y="258" font-size="13" font-weight="600" fill="#0f172a">LIRE — hdfs dfs -cat</text>
+
+  <rect x="60" y="268" width="150" height="66" rx="10" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="135" y="294" text-anchor="middle" font-size="14" font-weight="600" fill="#0f172a">Client</text>
+  <text x="135" y="312" text-anchor="middle" font-size="10" fill="#475569">votre shell</text>
+
+  <rect x="400" y="268" width="190" height="66" rx="10" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+  <text x="495" y="294" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a8a">NameNode</text>
+  <text x="495" y="312" text-anchor="middle" font-size="10" fill="#1e40af">9870 · l'annuaire</text>
+
+  <rect x="720" y="268" width="180" height="66" rx="10" fill="#f8fafc" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="810" y="294" text-anchor="middle" font-size="13" font-weight="600" fill="#0c4a6e">DataNode — slave1</text>
+  <text x="810" y="312" text-anchor="middle" font-size="10" fill="#0369a1">lit le bloc sur disque</text>
+
+  <line x1="210" y1="284" x2="396" y2="284" stroke="#334155" stroke-width="1.8" marker-end="url(#le-arr)"/>
+  <text x="303" y="276" text-anchor="middle" font-size="11" fill="#475569">1. où sont les blocs ?</text>
+
+  <line x1="398" y1="310" x2="214" y2="310" stroke="#334155" stroke-width="1.8" marker-end="url(#le-arr)"/>
+  <text x="303" y="329" text-anchor="middle" font-size="11" fill="#475569">2. « ils sont chez slave1 »</text>
+
+  <path d="M810 334 L810 372 L143 372 L143 340" fill="none" stroke="#0284c7" stroke-width="2.5" marker-end="url(#le-arr-b)"/>
+  <text x="470" y="362" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">3. le client lit les octets directement au DataNode</text>
+
+  <!-- notes -->
+  <line x1="60" y1="392" x2="900" y2="392" stroke="#cbd5e1" stroke-width="1"/>
+
+  <rect x="60" y="404" width="400" height="56" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="76" y="424" font-size="12" font-weight="600" fill="#9a3412">Réplication 1 sur ce cluster</text>
+  <text x="76" y="442" font-size="11" fill="#9a3412">Un seul destinataire à l'écriture. Avec 3, le client</text>
+  <text x="76" y="456" font-size="11" fill="#9a3412">écrirait en pipeline DN1 → DN2 → DN3 (défaut HDFS).</text>
+
+  <rect x="480" y="404" width="440" height="56" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="496" y="424" font-size="12" font-weight="600" fill="#0f172a">Ce que le NameNode ne voit jamais</text>
+  <text x="496" y="442" font-size="11" fill="#334155">Un seul octet de donnée : des noms et des adresses.</text>
+  <text x="496" y="456" font-size="11" fill="#334155">C'est ce qui le tient à ~150 octets par objet en RAM.</text>
+</svg>

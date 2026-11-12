@@ -2147,6 +2147,8 @@ STAGE DEPENDENCIES:
 
 # 🏭 La séparation calcul/stockage
 
+<div class="cols-2">
+
 <div class="card card-green">
 <div class="card-title">Le concept le plus durable de l'écosystème</div>
 
@@ -2162,6 +2164,8 @@ STAGE DEPENDENCIES:
 - HDFS → S3, formats ouverts (Parquet, ORC, **Iceberg**)
 - Plusieurs moteurs de calcul à la demande sur le même stockage
 - Apprendre Hive, c'est comprendre ce modèle
+
+</div>
 
 </div>
 
@@ -2208,6 +2212,8 @@ beeline -u jdbc:hive2://localhost:10000
 
 # 🛟 Hive en 2026 : datalake & lakehouse
 
+<div class="cols-2">
+
 <div class="card card-green">
 <div class="card-title">Hive 4.x = la génération du cluster (4.1.0)</div>
 
@@ -2223,6 +2229,8 @@ beeline -u jdbc:hive2://localhost:10000
 - Le SQL interactif rapide : **Spark SQL**, **Trino** ont pris le dessus sur les nouveaux projets
 - Mais ils **partagent le même modèle** (Metastore + fichiers) popularisé par Hive
 - Apprendre Hive = apprendre le **modèle**, pas un outil
+
+</div>
 
 </div>
 
@@ -2246,7 +2254,7 @@ FROM spotify_clean GROUP BY artist_name ORDER BY total DESC;
 SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 ```
 
-> ⚠️ Pour la question 1, **deux réponses sont justes** — selon votre convention de duos de l'EX/04. « Externe/managée » n'y change rien ; votre **convention**, si. Comparez vos chiffres.
+> ⚠️ Question 1 : **deux réponses sont justes**, selon votre convention de duos de l'EX/04 — « externe / managée » n'y change rien. Comparez vos chiffres.
 
 <!-- Laisser 2 h 30. L'objectif : Hive retrouve EXACTEMENT les valeurs des ex 1-3 de l'EX 04 (même convention). En cas d'écart > quelques %, chercher l'en-tête ou la ligne 576. -->
 
@@ -2264,7 +2272,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 </div>
 
-> 📅 **Demain (J4)** : **HBase** en détail (le temps réel, les exercices d'écriture HBase — EX 06 partie IV — devenus possibles), **NiFi** (l'ingestion visuelle — premier contact dès le matin), et la **chaîne complète** avant le TP final.
+> 📅 **Demain (J4)** : **HBase** en détail (EX 06 partie IV), **NiFi** (l'ingestion visuelle), et la **chaîne complète** avant le TP final.
 
 ---
 
@@ -2297,7 +2305,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card card-green">
 <div class="card-title">Le scan trié</div>
 
-- Le `scan 'chrono'` affiche **1975, 2021, 2023** — insertions 2023 → 1975 → 2021 : c'est le **rowkey qui trie**, pas l'ordre des `put`
+- Le `scan` affiche **1975, 2021, 2023** alors que les `put` sont dans un autre ordre : c'est le **rowkey qui trie**
 - `put 'chrono','1975','stats:total','4206105352'` → `0 row(s)`, **aucune confirmation** → `get'chrono','1975'` = la seule preuve
 - `count 'chrono'` : 3 lignes (chaque rowkey différent = 1 ligne)
 
@@ -2307,7 +2315,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 <div class="card-title">Les pièges</div>
 
 1. **`put` répond `0 row(s)`** — c'est aussi ce que HBase répond pour « table créée » : on ne croit pas la réponse, on **vérifie par `get`/`scan`**
-2. **Le tri est lexicographique** : `1975` avant `2023`, mais `99` passerait **après** `100` (le même piège que `sort` du TD01 et que le tri de MapReduce)
+2. **Le tri est lexicographique** : `99` passerait **après** `100` — comme au TD01 et en MapReduce
 3. **50 lignes attendues** si on recharge les années du TD02 : si 49, un `put` manqué, pas un bug HBase
 
 </div>
@@ -2338,6 +2346,8 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 # 🗓️ Programme du jour 4
 
+<div class="cols-2">
+
 <div class="card card-blue">
 <div class="card-title">🌅 Matin</div>
 
@@ -2354,6 +2364,8 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 - **II. NiFi** — l'usine à flux : le CSV entre tout seul dans HDFS
 - **EX/07** — flux complet CSV→TSV→HDFS + Data Provenance
 - **III. La chaîne complète** + **TD-05** (rejouer sur les ventes) — l'ouverture du **TP final**
+
+</div>
 
 </div>
 
@@ -2382,7 +2394,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 </div>
 
-> Deux mondes, un seul tri : le `sort` du TD01, le `scan` du TD-03, et le tri lexicographique de MapReduce sont le **même mécanisme** à trois endroits différents.
+> Un seul tri partout : `sort` du TD01, `scan` du TD-03, tri de MapReduce.
 
 ---
 
@@ -2436,6 +2448,8 @@ Comment lire une seule clé très vite dans un cluster ?
 
 # 😩 Les limites du modèle Hadoop classique
 
+<div class="cols-2">
+
 <div class="card card-pink">
 <div class="card-title">Hadoop est fait pour le batch</div>
 
@@ -2456,11 +2470,15 @@ Comment lire une seule clé très vite dans un cluster ?
 
 </div>
 
-> C'est exactement le créneau des bases **NoSQL** : lectures/écritures aléatoires à grande échelle. Et la version Hadoop de ce créneau s'appelle **HBase**.
+</div>
+
+> Le créneau des **NoSQL** : l'accès aléatoire à grande échelle. Chez Hadoop : **HBase**.
 
 ---
 
 # 🧭 NoSQL : les 4 familles
+
+<div class="cols-2">
 
 <div class="card card-yellow">
 <div class="card-title">« Not Only SQL » — pas une base unique, quatre familles</div>
@@ -2484,15 +2502,19 @@ Comment lire une seule clé très vite dans un cluster ?
 
 </div>
 
+</div>
+
 ---
 
 # 🍯 HBase, en une phrase
+
+<div class="cols-2">
 
 <div class="card card-blue">
 <div class="card-title">Une base distribuée, orientée colonnes, sur HDFS</div>
 
 - **Distribuée** : table fragmentée en **régions** réparties sur des RegionServers
-- **Orientée colonnes** : les données sont stockées **par familles de colonnes** (groupe par groupe), pas par ligne
+- **Orientée colonnes** : stockées **par familles de colonnes**, pas par ligne
 - **Sur HDFS** : la durabilité vient des HFiles posés sur le système de fichiers de la séquence 03
 - Conçue pour **haute disponibilité** et **temps quasi réel**
 
@@ -2504,6 +2526,8 @@ Comment lire une seule clé très vite dans un cluster ?
 > **HDFS = fichiers** · **MapReduce/Filer = batch (minutes)** · **Hive = SQL (secondes→minutes)** · **HBase = ligne isolée (millisecondes)**
 
 La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout un fichier.
+
+</div>
 
 </div>
 
@@ -2547,7 +2571,7 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card-title">Visualiser la compensation</div>
 
 <div class="flex justify-center">
-<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 42vh; height: auto;" />
+<img src="assets/hbase-rdbms-compare.jpeg" style="max-width: 92%; max-height: 32vh; height: auto;" />
 </div>
 
 - La table relationnelle impose **ligne + colonnes fixes** ; HBase tolère des lignes **clairsemées** et des colonnes **personnalisées par ligne**
@@ -2582,11 +2606,11 @@ La latence se commande : HBase lit/écrit **une ligne** quand Hive scanne tout 
 <div class="card card-yellow">
 <div class="card-title">Le client ne passe jamais par le Master</div>
 
-Le client demande à **ZooKeeper** où trouver le RegionServer, puis il parle **directement** au RegionServer. Le Master fait l'administration, pas le service des requêtes.
+Le client demande à **ZooKeeper** où est le RegionServer, puis lui parle **directement**. Le Master administre, il ne sert pas les requêtes.
 
 </div>
 
-> Il y a **un seul** ZoneKit dans notre stack : `QuorumPeerMain` (vu à `jps` en J1) — c'est lui que HBase utilise pour localiser les régions et garder un Master unique.
+> Un seul ZooKeeper ici : `QuorumPeerMain` — HBase s'en sert pour localiser les régions.
 
 ---
 
@@ -2611,7 +2635,7 @@ jps | grep Quorum        # → QuorumPeerMain
 ./start-hbase.sh
 ```
 
-> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → `./start-hbase.sh` **avec le `./`**, sinon le shell exécute le script d'HBase du même nom (`/opt/hbase/bin/start-hbase.sh`)… qui ne fait pas la même chose. **Règle : les scripts du cours se lancent toujours avec `./`.**
+> ⚠️ **Piège `PATH`** : `/home` n'est pas dans le `PATH` → lancez toujours **avec `./`**, sinon le shell exécute le script d'HBase du même nom.
 
 </div>
 

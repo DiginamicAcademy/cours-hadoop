@@ -448,7 +448,7 @@ Le flux des sections A et B se construit aussi par requêtes HTTP sur `https://l
 - **Scheduling** : NiFi 2.11 n'a **plus de mode `EVENT_DRIVEN`** (déprécié) — ne l'utilisez jamais dans un script REST, ce processeur restera `DISABLED` ou passera `Invalid`. Utilisez `TIMER_DRIVEN` (5 s), comme dans l'UI.
 - **Provenance** : la requête minimale `POST /nifi-api/provenance` avec `{"provenance":{"request":{"maxResults":N}}}` suffit ; certains serveurs rejettent les `/startDate` au format `MM/dd/yyyy HH:mm:ss.fff` par un `Message body is malformed` — laissez-les de côté, le tri par horodatage suffit.
 
-> Ces points sont intégrés au flux de référence du déploiement : scripts PowerShell `nifi-*.ps1` du dossier `VALIDATION/` du dépôt [Hadoop](https://github.com/robinhotton/Hadoop) (jouables contre l'API).
+> Ces points sont intégrés au flux de référence du déploiement : scripts PowerShell `nifi-*.ps1` du dossier `VALIDATION/` du dépôt [Hadoop](https://github.com/DiginamicAcademy/Hadoop) (jouables contre l'API).
 
 ### F. Pièges récurrents à anticiper
 

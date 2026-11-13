@@ -156,9 +156,9 @@
 
 ### Environnement technique
 
-Le cluster du cours (Hadoop 3.3.6, Hive 4.1.0, HBase, NiFi 2.11.0) est défini dans le dépôt **[Hadoop](https://github.com/robinhotton/Hadoop)** : `docker-compose.yml`, image `hadoop-cluster-base`, scripts `scripts/master/start-*`.
+Le cluster du cours (Hadoop 3.3.6, Hive 4.1.0, HBase, NiFi 2.11.0) est défini dans le dépôt **[Hadoop](https://github.com/DiginamicAcademy/Hadoop)** : `docker-compose.yml`, image `hadoop-cluster-base`, scripts `scripts/master/start-*`.
 
-- Procédure de déploiement : [`docs/deploiement-vm.md`](https://github.com/robinhotton/Hadoop/blob/main/docs/deploiement-vm.md) de ce dépôt, ainsi que `bash_hadoop_master.sh` pour l'accès hôte → master.
+- Procédure de déploiement : [`docs/deploiement-vm.md`](https://github.com/DiginamicAcademy/Hadoop/blob/main/docs/deploiement-vm.md) de ce dépôt, ainsi que `bash_hadoop_master.sh` pour l'accès hôte → master.
 - Identifiant et mot de passe de l'interface NiFi : `nifi/credentials.env` (auprès du formateur).
 
 ### Interfaces web du cluster

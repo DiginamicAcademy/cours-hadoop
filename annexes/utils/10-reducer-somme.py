@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# 10-reducer-ventes.py — TP final : reducer de structuration (idem
+# 10-reducer-somme.py — TP final : reducer de structuration (idem
 # 2-structure-reducer.py), utilisé par les questions 1 et 2.
 # Contrat Hadoop Streaming : le reducer lit sur stdin des paires
 # "clé\tvaleur" DÉJÀ TRIÉES par clé. Les valeurs d'une même clé arrivent
@@ -9,7 +9,8 @@
 # dernière clé est l'erreur classique).
 #
 # Usage (test local) :
-#   cat DATA/dataw_fro03_mini_1000.csv | python3 8-mapper-ventes.py | sort -t $'\t' -k1,1 | python3 10-reducer-ventes.py
+#   cat DATA/Spotify_Most_Streamed_Songs.csv | python3 8-mapper-streams-artiste.py \
+#     | sort -t $'\t' -k1,1 | python3 10-reducer-somme.py
 
 import sys
 

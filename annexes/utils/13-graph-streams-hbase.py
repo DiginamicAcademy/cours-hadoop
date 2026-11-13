@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# 13-graph-ventes-hbase.py — TP final, visualisation : lit la table HBase
-# 'ventes' (rowkey = ville, colonne stat:total) et produit le graphique PDF
-# des 10 villes qui achètent le plus, plus la liste sur stdout.
+# 13-graph-streams-hbase.py — TP final, visualisation : lit la table HBase
+# 'artistes' (rowkey = artiste, colonne stat:total) et produit le graphique
+# PDF des 10 artistes les plus streamés, plus la liste sur stdout.
 #
 # Two règles d'exécution (issues du chapitre 04) :
 #   1. matplotlib.use('Agg') AVANT d'importer pyplot : le cluster n'a pas
@@ -12,8 +12,8 @@
 #      ouvrir le Thrift (port 9090) et lire la table.
 #
 # Usage (depuis le master, Thrift démarré) :
-#   python3 13-graph-ventes-hbase.py
-# Résultat attendu (mini) : top 10 avec LE MANS (30 articles) en tête.
+#   python3 13-graph-streams-hbase.py
+# Résultat attendu : top 10 avec The Weeknd (14 185 552 870 streams) en tête.
 
 import sys
 
@@ -25,7 +25,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 conn = happybase.Connection('127.0.0.1', 9090)
-table = conn.table('ventes')
+table = conn.table('artistes')
 
 totaux = {}
 for key, cells in table.scan():
@@ -39,15 +39,16 @@ conn.close()
 top = sorted(totaux.items(), key=lambda kv: -kv[1])[:10]
 
 # sortie standard : la liste, pour la vérification / le rapport
-for ville, total in top:
-    print("%s\t%d" % (ville, total))
+for artiste, total in top:
+    print("%s\t%d" % (artiste, total))
 
 # graphique : seulement après la lecture complète de la table
 plt.figure(figsize=(10, 8))
 plt.bar([v for v, _ in top][::-1], [t for _, t in top][::-1])
-plt.xlabel('Ville')
-plt.ylabel('Articles vendus')
-plt.title('Top 10 des villes par articles vendus')
+plt.xlabel('Artiste')
+plt.ylabel('Streams cumulés')
+plt.title('Top 10 des artistes par streams cumulés')
+plt.xticks(rotation=30, ha='right')
 plt.tight_layout()
 plt.savefig('resultat.pdf')
-print("PDF genere : resultat.pdf (%d villes)" % len(top), file=sys.stderr)
+print("PDF genere : resultat.pdf (%d artistes)" % len(top), file=sys.stderr)

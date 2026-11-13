@@ -40,9 +40,44 @@ footer: "![height:20px](https://raw.githubusercontent.com/DiginamicInternal/Publ
 
 ## HDFS · MapReduce · Hive · HBase · NiFi
 
-**5 jours** — 4 jours de cours, 1 jour de TP · RNCP40573
+**5 jours**
 
 Robin Hotton · Diginamic
+
+---
+
+# 🧭 Le cours en un coup d'œil
+
+<div class="cols-2">
+
+<div class="card card-blue">
+<div class="card-title">📘 Quatre jours de cours</div>
+
+- **J1 · Les fondations** — pourquoi Hadoop, l'environnement de TP, HDFS
+- **J2 · Le modèle MapReduce** — le modèle, le contrat d'exécution, Hadoop Streaming
+- **J3 · YARN & Hive** — l'orchestrateur, le SQL sur HDFS
+- **J4 · HBase & NiFi** — le NoSQL temps réel, l'ingestion par flux, la chaîne complète
+
+</div>
+
+<div class="card card-pink">
+<div class="card-title">🏋️ Des exercices à chaque brique</div>
+
+- **EX 02 → EX 07** — un exercice par notion, dans les chapitres
+- **TD-01 → TD-05** — MapReduce en local, puis Hive, HBase, NiFi, et l'échauffement du TP
+- Un fil rouge du J1 au J4 : le **CSV Spotify**, posé, découpé, parallélisé, interrogé, stocké, ingéré
+- Une **annexe** — glossaire et ressources
+
+</div>
+
+</div>
+
+<div class="card card-green">
+<div class="card-title">🏁 Jour 5 — TP final, évalué</div>
+
+La chaîne entière refaite **seule et de bout en bout**, sur une donnée inédite : HDFS → MapReduce → Hive → HBase → NiFi, jusqu'au rapport documenté.
+
+</div>
 
 ---
 
@@ -150,8 +185,8 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 <div class="card-title">Un fil rouge, quatre jours</div>
 
 - Une **donnée réelle et modeste** pour éprouver toute la pipeline
-- Elle arrivera à l'**Exercice 03** et circulera dans les EX 04 à 07 — le **TP final** de vendredi enchaînera la même chaîne sur un autre jeu (les ventes `dataw_fro03`)
-- Objectif d'ici vendredi : la faire traverser **HDFS → MapReduce → Hive → HBase → NiFi**
+- Elle arrivera à l'**Exercice 03** et circulera dans les EX 04 à 07 — le **TP final** enchaînera la même chaîne sur un autre jeu de ventes
+- Objectif des quatre jours : la faire traverser **HDFS → MapReduce → Hive → HBase → NiFi**
 
 </div>
 
@@ -969,7 +1004,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 <figure style="text-align: center;">
   <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 32vh; height: auto;" />
-  <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
+  <figcaption style="font-size: 14px; margin-top: 4px;">Dessin maison, sur <b>notre</b> cluster : réplication 1, deux DataNodes</figcaption>
 </figure>
 
 ---
@@ -980,7 +1015,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card-title">Une seule donnée, toute la chaîne</div>
 
 - `data/Spotify_Most_Streamed_Songs.csv` — **155 593 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
-- **Seule donnée** des EX 04 à 07 (le TP final prend les ventes `dataw_fro03`)
+- **Seule donnée** des EX 04 à 07 (le TP final prend un jeu de ventes inédit)
 - Colonnes : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
 
 </div>
@@ -2412,7 +2447,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 > Depuis J1, chaque brique s'est ajoutée à la précédente. Aujourd'hui on les **assemble**.
 
-<!-- TD-04 (NiFi) est un premier contact posé à la pause de midi : GetFile→PutFile + Data Provenance. Il arrive AVANT le cours NiFi (II), pour que les apprenants aient déjà touché la donnée qui bouge. TD-05 (replay ventes) termine la journée : le mini-jeu dataw_fro03_mini, même geste que toute la semaine.-->
+<!-- TD-04 (NiFi) est un premier contact posé à la pause de midi : GetFile→PutFile + Data Provenance. Il arrive AVANT le cours NiFi (II), pour que les apprenants aient déjà touché la donnée qui bouge. TD-05 (replay ventes) termine la journée : le mini-jeu de ventes du TP, même geste que toute la semaine.-->
 
 ---
 
@@ -3169,7 +3204,7 @@ L'image officielle `apache/nifi:2.x` embarque **aucun NAR Hadoop** : `PutHDFS`/
 
 # III. La chaîne complète
 
-## L'assemblage de la semaine, et le TP de vendredi
+## L'assemblage de la semaine, et le TP final
 
 ---
 
@@ -3229,7 +3264,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 ---
 
-# 🏁 Le TP final : vendredi
+# 🏁 Le TP final
 
 <div class="card card-pink">
 <div class="card-title">TP — Analyse des ventes par ville</div>
@@ -3237,7 +3272,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 - Une **journée (4 à 5 h)** : le TP de synthèse évalué du cursus
 - **Une seule donnée** traverse toute la chaîne : HDFS → MapReduce → Hive → HBase → NiFi → visualisation → **documentation**
 - **Plusieurs questions** : Q1 villes · Q2 clé composite ville#année · Q3 Hive (validation croisée MR ↔ SQL) · Q4 HBase (rowkey ville) · Q5 NiFi · graphique du top 10
-- Donnée : `dataw_fro03_mini_1000.csv` (mini dans l'énoncé, fichier complet ~135 000 lignes en bonus)
+- Donnée : un jeu de commandes inédit (mini dans l'énoncé, fichier complet en bonus)
 
 </div>
 
@@ -3268,10 +3303,10 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 # 🏋️ TD-05 — Le pré-échauffement du TP (~15 min)
 
-**La chaîne entière, encore une fois, sur la donnée du TP** (`data/dataw_fro03_mini_1000.csv`).
+**La chaîne entière, encore une fois, sur la donnée du TP** (le mini-jeu de ventes, 1 000 lignes).
 
-1. Le pipe complet : `cat dataw_fro03_mini_1000.csv | python3 ANNEXES/utils/8-mapper-ventes.py | sort | python3 ANNEXES/utils/2-structure-reducer.py`
-2. Top 5 des villes — notez `LE MANS` (30) en tête
+1. Le pipe complet : `cat <ventes-mini>.csv | python3 ANNEXES/utils/8-mapper-ventes.py | sort | python3 ANNEXES/utils/2-structure-reducer.py`
+2. Top 5 des villes — notez la ville en tête, et son total
 3. Même classement en sqlite3 (GROUP BY ville) — **les deux sont d'accord**
 
 > Le TP de demain fait **exactement ça** — mais sur le cluster (HDFS → MapReduce → Hive → HBase → NiFi). Rien de nouveau à inventer : chaque commande a déjà été faite.
@@ -3288,8 +3323,8 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 <div class="card card-green">
 <div class="card-title">Le pipe sur les ventes</div>
 
-- LE MANS 30 · MAMERS 18 · DOMFRONT EN POIRAIE 16 · LAVAL 15 · DOUDEVILLE 15
-- Le mapper extrait villecli (col 5) et qte (col 15) ; le reducer additionne
+- Le top 5 des villes se dégage — relevez-le avec les apprenants
+- Le mapper extrait la ville client et la quantité ; le reducer additionne
 - La requête sqlite `GROUP BY ville` rend le **même** classement
 
 </div>
@@ -3314,7 +3349,6 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-blue">
 <div class="card-title">Ce que vous savez faire, en une slide</div>
-- ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions
 <!-- Aussi dans la récap : ZooKeeper d'abord ; `put` ne confirme rien, vérifiez par `get`. -->
 - ✅ **HBase** : rowkey qui trie, familles dynamiques, WAL→MemStore→HFile, régions (1 Go vs 128 Mio), ZooKeeper d'abord, `put` ne confirme rien — vérifiez par `get`
 - ✅ **NiFi** : FlowFile/processeur/connection, failure câblée, Data Provenance
@@ -3324,8 +3358,7 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 <div class="card card-pink">
 <div class="card-title">⚡ Le fil d'Ariane</div>
-Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
-Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé à la main, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Vendredi, à vous.
+Depuis J1 : le **CSV Spotify**, une brique de plus à chaque séquence — **posé à la main, découpé en blocs, parallélisé, interrogé en SQL, stocké en NoSQL, ingéré par flux**. Jour 5, à vous.
 
 </div>
 

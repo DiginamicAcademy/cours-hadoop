@@ -22,7 +22,7 @@ Captures et schémas du cours, et où ils servent :
 | `9870.jpeg` | `02-presentation-env-hadoop.md`, `exercices/02-lancement-de-hadoop.md`, `slides.md` |
 | `chain-complete.svg` | `07-nifi.md`, `slides.md` |
 | `cluster-docker.svg` | `02-presentation-env-hadoop.md`, `07-nifi.md`, `slides.md` |
-| `cluster.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
+| `cluster.jpeg` | `01-introduction-hadoop.md` |
 | `diginamic.png` | `01-introduction-hadoop.md`, `02-presentation-env-hadoop.md`, `04-mapreduce-et-yarn.md`, `05-hive.md`, `06-hbase-et-zookeeper.md`, `07-nifi.md`, `A-Glossaire-et-ressources.md`, `exercices/02-lancement-de-hadoop.md`, `exercices/04-mapreduce.md`, `exercices/05-hive.md`, `exercices/06-hbase.md`, `exercices/07-nifi.md`, `td/TD01.md`, `td/TD02.md`, `td/TD03.md`, `td/TD04.md`, `td/TD05.md`, `tp/TP-01-enonce.md` |
 | `ecosystem-hadoop.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
 | `fair-scheduler.jpeg` | `slides.md` |
@@ -54,6 +54,7 @@ Captures et schémas du cours, et où ils servent :
 | `nifi-relationships.svg` | `07-nifi.md` |
 | `politiques-ordonnancement.svg` | `04-mapreduce-et-yarn.md` |
 | `resourcemanger.jpeg` | `04-mapreduce-et-yarn.md` |
+| `scale-up-scale-out.svg` | `slides.md` |
 | `scheduler.png` | `slides.md` |
 | `script-happybase-1.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `script-happybase-2.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |

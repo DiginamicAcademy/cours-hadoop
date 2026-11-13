@@ -173,6 +173,10 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 
 </div>
 
+<div class="flex justify-center">
+<img src="assets/scale-up-scale-out.svg" style="max-width: 88%; max-height: 30vh; height: auto;" />
+</div>
+
 
 ---
 
@@ -201,23 +205,23 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 
 # 🤔 D'après vous…
 
-**En 2003, Google a publié un article décrivant son « Google File System ».**
+**Vous avez tranché : le stockage sera réparti sur mille machines standard. Statistiquement, l'une d'elles tombera cette semaine.**
 
-Qu'est-ce qui pousse une entreprise web à concevoir son **propre système de fichiers**, sur des **milliers de machines** ?
+Comment ne **pas perdre de données** — et que fait-on du calcul, quand les données sont éparpillées là-bas ?
 
-<!-- Laisser 30-45 s. Recueillir 2-3 réponses. Relancer si la salle est muette : "vous stockeriez 300 To/mois sur le disque C: ". Amorcer vers le scale-out. -->
+<!-- Laisser 30-45 s. Recueillir 2-3 hypothèses (copies, RAID, sauvegardes...). Confirmer : la réplication, et le calcul qui voyage vers les données. Amorcer vers le GFS. -->
 
 ---
 
-# 💡 Réponse : scale-out, pas scale-up
+# 💡 Réponse : la panne est prévue, le calcul voyage
 
 <div class="card card-green">
-<div class="card-title">Google ne pouvait pas tout mettre sur un disque</div>
+<div class="card-title">Google ne pouvait pas se permettre de perdre un bloc</div>
 
-- Le web crawlé : des **centaines de To**, aucun **disque unique** ne suit
-- La machine « toujours plus grosse » (**upsizing**) coûte de plus en plus cher
-- La parade : des **milliers de machines standard** qui partagent le stockage — le **scale-out**
-- La **panne d'un disque est la norme** : le **Google File System** (2003) **réplique** les blocs et **agrège** la bande passante
+- Sur du matériel bon marché, la panne est **la norme**, pas l'exception
+- Le **Google File System** (2003) : chaque bloc est **répliqué** sur plusieurs machines — une panne ne coûte aucune donnée
+- Déplacer des centaines de To vers le calcul est **impossible** : c'est le **calcul qui voyage vers les données**
+- Deux règles simples, dix mille machines : **répliquer** et **traiter sur place**
 
 </div>
 
@@ -281,10 +285,6 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 
 </div>
 
-<div class="flex justify-center">
-<img src="assets/cluster.jpeg" style="max-width: 50%; max-height: 28vh; height: auto;" />
-</div>
-
 ---
 
 # 🗄️ Où stocker les données ?
@@ -329,7 +329,7 @@ Selon les besoins, Hadoop s'appuie sur :
 
 ---
 
-# 🧱 Les 4 acteurs en détail
+# 🧱 Master et ouvriers
 
 <div class="cols-2">
 
@@ -363,11 +363,13 @@ Selon les besoins, Hadoop s'appuie sur :
 
 # 🧩 Les 7 briques du cours
 
-<div class="card card-blue">
-
-**HDFS** (stockage) · **YARN** (ressources) · **MapReduce** (calcul) · **ZooKeeper** (coordination) · **Hive** (SQL) · **HBase** (NoSQL colonnes) · **NiFi** (ingestion)
-
-</div>
+- **HDFS** — stockage
+- **YARN** — ressources
+- **MapReduce** — calcul
+- **ZooKeeper** — coordination
+- **Hive** — SQL
+- **HBase** — NoSQL en colonnes
+- **NiFi** — ingestion
 
 ---
 

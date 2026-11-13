@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" font-family="Segoe UI, system-ui, Arial, sans-serif">
+  <defs>
+    <marker id="sd-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <text x="480" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#0f172a">Le stockage suit le calcul : il se répartit</text>
+
+  <!-- Ancien monde : un serveur central -->
+  <g>
+    <rect x="40" y="58" width="330" height="300" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+    <text x="60" y="84" font-size="14" font-weight="600" fill="#7f1d1d">Un seul serveur — l'upsizing</text>
+
+    <rect x="120" y="104" width="170" height="64" rx="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="205" y="130" text-anchor="middle" font-size="13" font-weight="600" fill="#7f1d1d">Serveur central</text>
+    <text x="205" y="150" text-anchor="middle" font-size="11" fill="#991b1b">calcul + stockage</text>
+
+    <ellipse cx="205" cy="200" rx="46" ry="12" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="159" y="200" width="92" height="34" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+    <ellipse cx="205" cy="234" rx="46" ry="12" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="205" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="#7f1d1d">SGBDR</text>
+
+    <text x="60" y="286" font-size="12" fill="#7f1d1d">La croissance impose de « grossir »</text>
+    <text x="60" y="306" font-size="12" fill="#7f1d1d">le serveur : capacité, performances,</text>
+    <text x="60" y="326" font-size="12" font-weight="600" fill="#b91c1c">limites physiques atteintes</text>
+  </g>
+
+  <!-- Flèche scaling out -->
+  <g>
+    <line x1="380" y1="205" x2="470" y2="205" stroke="#334155" stroke-width="2.5" marker-end="url(#sd-arr)"/>
+    <text x="425" y="192" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">scaling out</text>
+    <text x="425" y="228" text-anchor="middle" font-size="11" fill="#475569">ajouter des nœuds</text>
+  </g>
+
+  <!-- Nouveau monde : nœuds standards -->
+  <g>
+    <rect x="485" y="58" width="435" height="300" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+    <text x="505" y="84" font-size="14" font-weight="600" fill="#14532d">Des machines standards — le cluster</text>
+
+    <g>
+      <rect x="510" y="104" width="180" height="70" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="600" y="128" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Nœud 1</text>
+      <text x="600" y="146" text-anchor="middle" font-size="11" fill="#166534">stockage + calcul</text>
+
+      <rect x="710" y="104" width="180" height="70" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="800" y="128" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Nœud 2</text>
+      <text x="800" y="146" text-anchor="middle" font-size="11" fill="#166534">stockage + calcul</text>
+
+      <rect x="510" y="192" width="180" height="70" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="600" y="216" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Nœud 3</text>
+      <text x="600" y="234" text-anchor="middle" font-size="11" fill="#166534">stockage + calcul</text>
+
+      <rect x="710" y="192" width="180" height="70" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="800" y="216" text-anchor="middle" font-size="12" font-weight="600" fill="#15803d">+ un nœud…</text>
+      <text x="800" y="234" text-anchor="middle" font-size="11" fill="#166534">capacité de plus</text>
+    </g>
+
+    <text x="505" y="296" font-size="12" fill="#14532d">Chaque bloc est répliqué sur plusieurs nœuds :</text>
+    <text x="505" y="316" font-size="12" font-weight="600" fill="#15803d">la panne d'un nœud n'est pas la perte des données</text>
+  </g>
+
+  <text x="480" y="398" text-anchor="middle" font-size="12" fill="#475569">C'est le principe d'HDFS : un stockage distribué sur des machines ordinaires</text>
+</svg>

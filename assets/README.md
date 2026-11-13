@@ -58,7 +58,8 @@ Captures et schémas du cours, et où ils servent :
 | `script-happybase-1.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `script-happybase-2.png` | `06-hbase-et-zookeeper.md`, `td/TD03.md` |
 | `skills.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
-| `sps.jpeg` | `01-introduction-hadoop.md`, `slides.md` |
+| `sps.jpeg` | `01-introduction-hadoop.md` |
+| `stockage-distribue.svg` | `slides.md` |
 | `start-thrift.png` | `06-hbase-et-zookeeper.md` |
 | `tail.jpeg` | `03-hdfs.md` |
 | `taille-bloc.svg` | `slides.md` |

@@ -173,9 +173,6 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 
 </div>
 
-<div class="flex justify-center">
-<img src="assets/cluster.jpeg" style="max-width: 55%; max-height: 22vh; height: auto;" />
-</div>
 
 ---
 
@@ -262,6 +259,8 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 
 # 🏛️ Origines : de l'upsizing au cluster
 
+<div class="cols-2">
+
 <div class="card card-pink">
 <div class="card-title">L'ancien monde</div>
 
@@ -277,6 +276,8 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 - Baisse du coût des ordinateurs standards
 - **Cluster de machines standards** : stockage **distribué**, traitement **parallélisé**
 - Hadoop = l'implémentation la plus mature de cette stratégie
+
+</div>
 
 </div>
 
@@ -298,7 +299,7 @@ Hadoop peut s'utiliser avec plusieurs langages. **Python** s'impose en Big Data 
 </div>
 
 <div class="flex justify-center">
-<img src="assets/sps.jpeg" style="max-width: 65%; max-height: 24vh; height: auto;" />
+<img src="assets/stockage-distribue.svg" style="max-width: 88%; max-height: 30vh; height: auto;" />
 </div>
 
 ---
@@ -323,8 +324,12 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧱 L'architecture en 4 acteurs
 
 <div class="flex justify-center">
-<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 28vh; height: auto;" />
+<img src="assets/hadoop-noeuds.svg" style="max-width: 92%; max-height: 55vh; height: auto;" />
 </div>
+
+---
+
+# 🧱 Les 4 acteurs en détail
 
 <div class="cols-2">
 
@@ -351,11 +356,14 @@ Selon les besoins, Hadoop s'appuie sur :
 # 🧩 L'écosystème Hadoop
 
 <div class="flex justify-center">
-<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 24vh; height: auto;" />
+<img src="assets/ecosystem-hadoop.jpeg" style="max-width: 85%; max-height: 55vh; height: auto;" />
 </div>
 
+---
+
+# 🧩 Les 7 briques du cours
+
 <div class="card card-blue">
-<div class="card-title">Les 7 briques du cours</div>
 
 **HDFS** (stockage) · **YARN** (ressources) · **MapReduce** (calcul) · **ZooKeeper** (coordination) · **Hive** (SQL) · **HBase** (NoSQL colonnes) · **NiFi** (ingestion)
 
@@ -472,7 +480,7 @@ Le langage commun des data engineers : tant qu'on maîtrise HDFS, le shuffle, l
 
 <div class="flex justify-center" style="gap: 1rem;">
 <img src="assets/70percent.png" style="max-width: 45%; max-height: 18vh; height: auto;" />
-<img src="assets/skills.jpeg" style="max-width: 45%; max-height: 18vh; height: auto;" />
+<img src="assets/skills.jpeg" style="max-width: 30%; max-height: 13vh; height: auto;" />
 </div>
 
 ---
@@ -863,8 +871,12 @@ On n'interroge **pas** HDFS en direct : **MapReduce** le lit, **Hive** le requ�
 
 </div>
 
+---
+
+# 📐 Le découpage en blocs, en image
+
 <div class="flex justify-center">
-<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 30vh; height: auto;" />
+<img src="assets/taille-bloc.svg" style="max-width: 92%; max-height: 55vh; height: auto;" />
 </div>
 
 ---
@@ -931,8 +943,12 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 </div>
 
+---
+
+# 🧠 NameNode et DataNodes, en image
+
 <div class="flex justify-center">
-<img src="assets/hdfs-principe.svg" style="max-width: 88%; max-height: 30vh; height: auto;" />
+<img src="assets/hdfs-principe.svg" style="max-width: 92%; max-height: 55vh; height: auto;" />
 </div>
 
 ---
@@ -960,8 +976,12 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 
 </div>
 
+---
+
+# 🛡️ Le checkpoint du Secondary, en image
+
 <div class="flex justify-center">
-<img src="assets/hdfs-checkpoint.svg" style="max-width: 78%; max-height: 22vh; height: auto;" />
+<img src="assets/hdfs-checkpoint.svg" style="max-width: 88%; max-height: 50vh; height: auto;" />
 </div>
 
 ---
@@ -999,8 +1019,6 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 ---
 
 # 🔁 Une requête : qui parle à qui ?
-
-**Le NameNode indique l'adresse (un annuaire), les DataNodes transportent les données — la donnée ne passe jamais par le NameNode.**
 
 <figure style="text-align: center;">
   <img src="assets/hdfs-lecture-ecriture.svg" style="max-width: 88%; max-height: 32vh; height: auto;" />

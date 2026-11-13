@@ -147,12 +147,12 @@
 
 **Scripts de référence — `annexes/utils/`**
 
-- [`0-job.sh`](annexes/utils/0-job.sh) — version outillée : arguments, vérifications, enchaînement démarrage des services, préparation HDFS, soumission du job, contrôle `_SUCCESS` et lecture du résultat.
+- [`0-job.sh`](annexes/utils/0-job.sh) — version outillée : arguments, vérifications, enchaînement démarrage des services, préparation HDFS, soumission du job, contrôle `_SUCCESS` et lecture du résultat.
 - [`1-structure-mapper.py`](annexes/utils/1-structure-mapper.py), [`2-structure-reducer.py`](annexes/utils/2-structure-reducer.py) — squelettes commentés d'un mapper et d'un reducer.
 - [`3-mapper-txt.py`](annexes/utils/3-mapper-txt.py), [`4-mapper-csv-reader.py`](annexes/utils/4-mapper-csv-reader.py) — mapper sur texte simple, puis mapper avec lecture CSV protégée.
 - [`5-reducer-hbase.py`](annexes/utils/5-reducer-hbase.py), [`6-reducer-matplotlib-pdf.py`](annexes/utils/6-reducer-matplotlib-pdf.py) — reducer qui écrit dans HBase, reducer qui produit un graphique PDF.
 - [`7-prepare-spotify-tsv.py`](annexes/utils/7-prepare-spotify-tsv.py) — préparation du jeu Spotify pour les tables Hive (CSV → TSV).
-- [`8-mapper-ventes.py`](annexes/utils/8-mapper-ventes.py), [`9-mapper-ventes-annee.py`](annexes/utils/9-mapper-ventes-annee.py), [`10-reducer-ventes.py`](annexes/utils/10-reducer-ventes.py), [`11-reducer-ventes-hbase.py`](annexes/utils/11-reducer-ventes-hbase.py), [`12-prepare-ventes-tsv.py`](annexes/utils/12-prepare-ventes-tsv.py), [`13-graph-ventes-hbase.py`](annexes/utils/13-graph-ventes-hbase.py) — les scripts du TP final, de la question 1 à la visualisation.
+- [`8-mapper-streams-artiste.py`](annexes/utils/8-mapper-streams-artiste.py), [`9-mapper-streams-annee.py`](annexes/utils/9-mapper-streams-annee.py), [`10-reducer-somme.py`](annexes/utils/10-reducer-somme.py), [`11-reducer-streams-hbase.py`](annexes/utils/11-reducer-streams-hbase.py), [`12-prepare-streams-tsv.py`](annexes/utils/12-prepare-streams-tsv.py), [`13-graph-streams-hbase.py`](annexes/utils/13-graph-streams-hbase.py) — les scripts du TP final, de la question 1 à la visualisation.
 
 ### Environnement technique
 
@@ -173,8 +173,7 @@ Le cluster du cours (Hadoop 3.3.6, Hive 4.1.0, HBase, NiFi 2.11.0) est défini d
 
 ### Jeux de données
 
-- `data/Spotify_Most_Streamed_Songs.csv` — fil rouge des exercices 03 à 07.
-- `data/dataw_fro03_mini_1000.csv` — support du TP final ; `data/dataw_fro03.csv` (complet) en bonus.
+- `data/Spotify_Most_Streamed_Songs.csv` — support des EX 03 à 07 et du TP final (953 chansons, 644 artistes, une ligne corrompue : la 576).
 
 ### Liens externes cités dans les chapitres
 

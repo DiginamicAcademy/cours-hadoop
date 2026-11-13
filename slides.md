@@ -75,7 +75,7 @@ Robin Hotton · Diginamic
 <div class="card card-green">
 <div class="card-title">🏁 Jour 5 — TP final, évalué</div>
 
-La chaîne entière refaite **seule et de bout en bout**, sur une donnée inédite : HDFS → MapReduce → Hive → HBase → NiFi, jusqu'au rapport documenté.
+La chaîne entière refaite **seule et de bout en bout**, sur la donnée du fil rouge, questions inédites : HDFS → MapReduce → Hive → HBase → NiFi, jusqu'au rapport documenté.
 
 </div>
 
@@ -185,7 +185,7 @@ Que se passe-t-il ? Elle tient le coup ? Pourquoi ?
 <div class="card-title">Un fil rouge, quatre jours</div>
 
 - Une **donnée réelle et modeste** pour éprouver toute la pipeline
-- Elle arrivera à l'**Exercice 03** et circulera dans les EX 04 à 07 — le **TP final** enchaînera la même chaîne sur un autre jeu de ventes
+- Elle arrivera à l'**Exercice 03** et circulera dans les EX 04 à 07 — le **TP final** reprendra la même chaîne, sur la même donnée, avec des questions inédites
 - Objectif des quatre jours : la faire traverser **HDFS → MapReduce → Hive → HBase → NiFi**
 
 </div>
@@ -1015,7 +1015,7 @@ hdfs fsck /user/root/input/Spotify_Most_Streamed_Songs.csv -files -blocks
 <div class="card-title">Une seule donnée, toute la chaîne</div>
 
 - `data/Spotify_Most_Streamed_Songs.csv` — **155 593 octets**, **954 lignes** (1 en-tête + 953 titres), **25 colonnes**
-- **Seule donnée** des EX 04 à 07 (le TP final prend un jeu de ventes inédit)
+- **Seule donnée** des EX 04 à 07 (le TP final reprend la même donnée, sous un autre angle)
 - Colonnes : `track_name (0)`, `artist(s)_name (1)`, `released_year (3)`, `streams (8)`
 
 </div>
@@ -2447,7 +2447,7 @@ SELECT released_year, AVG(streams) FROM spotify_clean GROUP BY released_year;
 
 > Depuis J1, chaque brique s'est ajoutée à la précédente. Aujourd'hui on les **assemble**.
 
-<!-- TD-04 (NiFi) est un premier contact posé à la pause de midi : GetFile→PutFile + Data Provenance. Il arrive AVANT le cours NiFi (II), pour que les apprenants aient déjà touché la donnée qui bouge. TD-05 (replay ventes) termine la journée : le mini-jeu de ventes du TP, même geste que toute la semaine.-->
+<!-- TD-04 (NiFi) est un premier contact posé à la pause de midi : GetFile→PutFile + Data Provenance. Il arrive AVANT le cours NiFi (II), pour que les apprenants aient déjà touché la donnée qui bouge. TD-05 (replay Spotify) termine la journée : la donnée du fil rouge, même geste que toute la semaine.-->
 
 ---
 
@@ -3267,12 +3267,13 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 # 🏁 Le TP final
 
 <div class="card card-pink">
-<div class="card-title">TP — Analyse des ventes par ville</div>
+<div class="card-title">TP — Analyse des streams par artiste</div>
 
 - Une **journée (4 à 5 h)** : le TP de synthèse évalué du cursus
 - **Une seule donnée** traverse toute la chaîne : HDFS → MapReduce → Hive → HBase → NiFi → visualisation → **documentation**
-- **Plusieurs questions** : Q1 villes · Q2 clé composite ville#année · Q3 Hive (validation croisée MR ↔ SQL) · Q4 HBase (rowkey ville) · Q5 NiFi · graphique du top 10
-- Donnée : un jeu de commandes inédit (mini dans l'énoncé, fichier complet en bonus)
+- **Plusieurs questions** : Q1 artistes par streams cumulés · Q2 clé composite artiste#année · Q3 Hive (validation croisée MR ↔ SQL) · Q4 HBase (rowkey artiste) · Q5 NiFi · graphique du top 10
+- Donnée : le CSV Spotify du fil rouge (953 chansons, dont une ligne corrompue — la 576)
+- **Bonus** : changement de dimension, le top des titres
 
 </div>
 
@@ -3303,11 +3304,11 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 
 # 🏋️ TD-05 — Le pré-échauffement du TP (~15 min)
 
-**La chaîne entière, encore une fois, sur la donnée du TP** (le mini-jeu de ventes, 1 000 lignes).
+**La chaîne entière, encore une fois, sur la donnée du fil rouge** (le CSV Spotify, 953 chansons).
 
-1. Le pipe complet : `cat <ventes-mini>.csv | python3 ANNEXES/utils/8-mapper-ventes.py | sort | python3 ANNEXES/utils/2-structure-reducer.py`
-2. Top 5 des villes — notez la ville en tête, et son total
-3. Même classement en sqlite3 (GROUP BY ville) — **les deux sont d'accord**
+1. Le pipe complet : `cat data/Spotify_Most_Streamed_Songs.csv | python3 annexes/utils/8-mapper-streams-artiste.py | sort -t $'\t' -k1,1 | python3 annexes/utils/10-reducer-somme.py`
+2. Top 5 des artistes — notez The Weeknd en tête (14 185 552 870 streams)
+3. Même classement en sqlite3 (GROUP BY artiste) — **les deux sont d'accord**
 
 > Le TP de demain fait **exactement ça** — mais sur le cluster (HDFS → MapReduce → Hive → HBase → NiFi). Rien de nouveau à inventer : chaque commande a déjà été faite.
 
@@ -3321,21 +3322,19 @@ Par où passe une donnée, de son arrivée jusqu'à son affichage ?
 <div class="cols-2">
 
 <div class="card card-green">
-<div class="card-title">Le pipe sur les ventes</div>
+<div class="card-title">Le pipe sur les streams par artiste</div>
 
-- Le top 5 des villes se dégage — relevez-le avec les apprenants
-- Le mapper extrait la ville client et la quantité ; le reducer additionne
-- La requête sqlite `GROUP BY ville` rend le **même** classement
+- The Weeknd 14,185 Md · Taylor Swift 14,054 Md · Ed Sheeran 13,909 Md — 644 artistes au total
+- Le mapper extrait l'artiste (col 1) et les streams (col 8) ; le reducer additionne
+- La requête sqlite `GROUP BY artiste` rend le **même** classement
 
 </div>
 
 <div class="card card-pink">
 <div class="card-title">Les pièges à rapporter à demain</div>
-1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer
-1. **Casse** : `LE MANS` ≠ `Le Mans` — deux clés pour le reducer (et une ligne de plus sur le fichier complet)
-3. Le mini-jeu est un **échantillon local**
-<!-- Deux détails à garder en tête : la casse ajoute une ligne sur le fichier complet ; et le fichier complet change de tête par rapport au mini-jeu. -->
-3. Le mini-jeu est un **échantillon local** : le fichier complet change de tête
+1. **Guillemets CSV** : « Latto, Jung Kook » est UN champ — un `split` naïf sur les virgules casse les colonnes (538 clés au lieu de 644)
+2. **Ligne 576** : champ `streams` corrompu — sans `try/except`, le job ÉCHOUE
+3. **Dernière clé du reducer** : oublier le flush final perd le dernier artiste (488 931 795 453 au lieu de 489 458 828 542)
 
 </div>
 

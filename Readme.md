@@ -11,7 +11,7 @@
 
 > **Hadoop n'est pas un outil, c'est un étage.** Avant de toucher aux promesses du Big Data, il faut comprendre l'étage de base : un fichier coupé en blocs, répliqué sur des machines ordinaires, calculé là où il repose. Le cours prend le temps de lire l'architecture (HDFS, YARN) avant de faire tourner quoi que ce soit, puis traverse les briques qui ont survécu à l'usage — MapReduce, Hive, HBase, NiFi — sans occulter celles qui n'ont pas survécu (Pig, Sqoop, Oozie) et ce qui les a remplacées.
 
-Fil rouge des exercices : le jeu de données **Spotify** (`data/Spotify_Most_Streamed_Songs.csv`), le même du chapitre 03 au chapitre 07. Le **TP final** change de donnée — un jeu de ventes (`data/dataw_fro03_mini_1000.csv`, version complète en bonus) — pour que la chaîne soit refaite seule, sans filets.
+Fil rouge des exercices : le jeu de données **Spotify** (`data/Spotify_Most_Streamed_Songs.csv`), le même du chapitre 03 au chapitre 07. Le **TP final** garde cette donnée mais change de regard — classement des artistes par streams cumulés, clé composite `artiste#année`, bonus sur le top des titres — pour que la chaîne soit refaite seule, sans filets.
 
 ## Objectifs pédagogiques
 
@@ -32,4 +32,4 @@ Ligne de commande Linux (shell, droits, processus) ; SQL ; Python de base. Doc
 | [05](05-hive.md) | Hive | 4 h | tables externes, partitions, `EXPLAIN` — EX 05, TD 02 |
 | [06](06-hbase-et-zookeeper.md) | HBase & ZooKeeper | 2 h | modèle clé/valeur, shell, HappyBase — EX 06, TD 03 |
 | [07](07-nifi.md) | NiFi | 3 h | FlowFiles, processeurs, provenance, ingestion vers HDFS — EX 07, TD 04 |
-| [TP-01](tp/TP-01-enonce.md) | TP final — analyse des ventes par ville | 1 jour | toute la chaîne sur une donnée, rapport et livrables — TD 05 en échauffement |
+| [TP-01](tp/TP-01-enonce.md) | TP final — analyse des streams par artiste | 1 jour | toute la chaîne sur une donnée, rapport et livrables — TD 05 en échauffement |

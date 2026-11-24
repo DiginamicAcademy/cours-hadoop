@@ -387,16 +387,18 @@ jobs:
       # dans `build/` : Marp résout les chemins des images par rapport au
       # fichier Markdown, et `./res/logo.png` doit y désigner la même image.
       #
-      # `WHITE_STYLE` ne porte que ce qui ne dépend pas du fond (tailles de
-      # police, encadré des citations…) : les couleurs restent celles du thème
-      # par défaut. La bordure verte des citations fait exception, lisible sur
-      # les deux fonds. Une règle de ce genre ajoutée au style de `slides.md`
-      # doit donc être reportée ici, à l'identique.
+      # Le bloc `style:` de `slides.md` est CONSERVÉ intégralement ; `WHITE_STYLE`
+      # est ajouté à sa fin, donc il ne porte plus que les couleurs illisibles sur
+      # blanc, réécrites pour le fond clair (arbitrage Robin 23/11 : « style White
+      # comme Black mais avec couleurs White » — compléter, pas recopier). Une
+      # règle de mise en page ajoutée au style de `slides.md` survit ainsi
+      # d'office à la version white, sans report manuel ici ; seule une nouvelle
+      # couleur dépendante du fond sombre devrait y être ajoutée.
       #
-      # Le remplacement du style est borné au front matter — le premier bloc
-      # `---` du fichier. Sans cette borne, un bloc `style:` cité en exemple dans
-      # une diapositive serait vidé lui aussi, et la diapositive qui explique le
-      # gabarit se contredirait d'une version à l'autre.
+      # L'insertion est bornée au front matter — le premier bloc `---` du
+      # fichier. Sans cette borne, un bloc `style:` cité en exemple dans une
+      # diapositive recevrait ses surcouches blanc lui aussi, et la diapositive
+      # qui explique le gabarit se contredirait d'une version à l'autre.
       #
       # L'échange de logo, lui, reste global : une diapositive qui affiche le
       # logo sombre dans son corps doit passer au logo couleur comme le pied de
@@ -405,40 +407,32 @@ jobs:
         if: hashFiles('slides.md') != ''
         env:
           WHITE_STYLE: |
-            style: |
-              section {font-size: 20px}
-              section table {font-size: 0.85em}
-              blockquote {border: 2px green solid; border-left-width: 15px; padding: 0.5em 15px;font-style: italic }
-              section.lead {text-align: center}
-              section.lead h1 {font-size: 2em}
-              section.section {text-align: center}
-              section.statement {text-align: center}
-              section.exercise {border-top: 10px solid #4a90d9}
-              section.correction {border-top: 10px solid #67b26f}
-              .card {border: 2px solid #888; border-radius: 10px; padding: 0.4em 0.8em; margin: 0.3em 0}
-              .card-title {font-weight: bolder; margin-bottom: 0.2em}
-              .card-blue {border-color: #4a90d9}
-              .card-pink {border-color: #d966a8}
-              .card-green {border-color: #67b26f}
-              .card-yellow, .card-amber {border-color: #e8b93e}
-              .card-red {border-color: #d9534f}
-              .card-purple {border-color: #8393f0}
-              .cols-2 {display: grid; grid-template-columns: 1fr 1fr; gap: 1em}
-              .cols-3 {display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em}
-              .cols-2 > div, .cols-3 > div {min-width: 0}
-              .flex {display: flex}
-              .justify-center {justify-content: center; align-items: center}
+            section {background-color: #ffffff}
+            h1,h2,h3 {color: #3a4bb5}
+            p,ul,li,td,th {color: #1f2328}
+            section table td {background-color: #ffffff}
+            section table th {background-color: #eceff4}
+            pre {background-color: #f6f8fa; color: #1f2328}
+            .card {border-color: #c9ced6}
+            .card-title {color: #3a4bb5}
         run: |
           awk '
+            function emit(  n, i, a) {
+              n = split(ENVIRON["WHITE_STYLE"], a, "\n")
+              for (i = 1; i <= n; i++)
+                if (a[i] ~ /[^[:space:]]/) { sub(/^[[:space:]]*/, "", a[i]); print "  " a[i] }
+            }
             NR == 1 && $0 == "---" { fm = 1; print; next }
-            fm && $0 == "---"      { fm = 0; skip = 0; printf "%s", ENVIRON["WHITE_STYLE"]; print; next }
-            fm && $0 ~ /^style:[[:space:]]*[|>]/ { skip = 1; next }
-            skip && $0 ~ /^[[:space:]]/ { next }
-            skip { skip = 0 }
+            fm && $0 == "---"      { fm = 0; if (instyle) { instyle = 0; emit() } print; next }
+            fm && $0 ~ /^style:[[:space:]]*[|>]/ { instyle = 1; print; next }
+            instyle && ($0 ~ /^[[:space:]]/ || $0 == "") { print; next }
+            instyle { instyle = 0; emit(); print; next }
             { print }
           ' slides.md \
           | sed 's|Logo-diginamic-color-blk\.png|Logo-diginamic-color.svg|g' \
           > slides-white.md
+          sed -n '1,/^---$/p' slides-white.md | grep -q 'background-color: #ffffff' \
+            || { echo 'version white sans surcouche claire : le style a ete remplace, pas complete'; exit 1; }
           sed -n '1,/^---$/p' slides-white.md
           grep -n Logo-diginamic slides-white.md
 

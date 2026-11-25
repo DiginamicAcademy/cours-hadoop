@@ -11,7 +11,7 @@ name: Qualité
 # request, en commentaire. Les erreurs bloquent le run ; les avertissements
 # documentent. Le rapport complet est téléchargeable en artefact.
 #
-# Règles maison : references/analyses/checklist-markdown.md (workspace Yuto).
+# Règles maison détaillées : voir l'en-tête de .github/scripts/qualite.py.
 
 on:
   push:
